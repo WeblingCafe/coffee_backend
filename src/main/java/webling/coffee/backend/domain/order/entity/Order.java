@@ -2,6 +2,7 @@ package webling.coffee.backend.domain.order.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -16,7 +17,7 @@ import webling.coffee.backend.global.base.BaseTime;
 public class Order extends BaseTime {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long orderId;
 
 }

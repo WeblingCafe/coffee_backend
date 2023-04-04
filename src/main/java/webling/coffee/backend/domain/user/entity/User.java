@@ -1,9 +1,6 @@
 package webling.coffee.backend.domain.user.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import webling.coffee.backend.domain.coupon.entity.Coupon;
@@ -21,7 +18,7 @@ import java.util.List;
 public class User extends BaseTime {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long userId;
     private String email;
     private String username;
@@ -33,4 +30,9 @@ public class User extends BaseTime {
 
     @OneToMany
     private List<Coupon> coupons;
+
+    public User(String email, String username) {
+        this.email = email;
+        this.username = username;
+    }
 }
