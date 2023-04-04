@@ -18,7 +18,7 @@ public class UserFacade {
 
     private final UserService userService;
 
-    public UserResponseDto register(UserRequestDto.Register request) {
+    public UserResponseDto.Register register(UserRequestDto.Register request) {
 
         if (userService.checkDuplicationUser(request)) {
             throw new RestBusinessException(UserErrorCode.USER_DUPLICATION);

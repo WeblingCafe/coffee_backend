@@ -16,15 +16,15 @@ spring:
 
   jpa:
     open-in-view: false
-    generate-ddl: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    show-sql: true
     properties:
       hibernate:
-        enable_lazy_load_no_trans: true
         format_sql: true
 
   main:
@@ -32,10 +32,5 @@ spring:
 
 logging:
   level:
-    org:
-      hibernate:
-        SQL: debug
-        type:
-          descriptor:
-            sql:
-              BasicBinder: trace
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace

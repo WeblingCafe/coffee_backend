@@ -6,8 +6,10 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import webling.coffee.backend.domain.coupon.entity.Coupon;
 import webling.coffee.backend.domain.order.entity.Order;
+import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.global.base.BaseTime;
 import webling.coffee.backend.global.enums.Team;
+import webling.coffee.backend.global.utils.EncodingUtils;
 
 import java.util.List;
 
@@ -15,12 +17,14 @@ import java.util.List;
 @Setter(AccessLevel.PRIVATE)
 @SuperBuilder
 @Entity
+@Table(name = "user_mst")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends BaseTime {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID")
     private Long userId;
 
     @Column(unique = true)
@@ -32,14 +36,19 @@ public class User extends BaseTime {
 
     @Enumerated(EnumType.STRING)
     private Team teamName;
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<Order> orders;
-
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<Coupon> coupons;
 
-    public User(String email, String username) {
-        this.email = email;
-        this.username = username;
+
+    public static User register(UserRequestDto.Register request) {
+        return User.builder()
+                .email(request.getEmail())
+                .username(request.getUsername())
+                .password(EncodingUtils.encode(request.getPassword()))
+                .isManager(request.getIsManager())
+                .teamName(request.getTeam())
+                .build();
     }
 }

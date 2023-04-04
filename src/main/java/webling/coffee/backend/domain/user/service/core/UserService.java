@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
+import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.repository.UserRepository;
 
 @Slf4j
@@ -16,11 +17,12 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserResponseDto register(UserRequestDto.Register request) {
-        return null;
-    }
-
     public boolean checkDuplicationUser (UserRequestDto.Register request) {
         return false;
     }
+
+    public UserResponseDto.Register register(UserRequestDto.Register request) {
+        return UserResponseDto.Register.toDto(userRepository.save(User.register(request)));
+    }
+
 }
