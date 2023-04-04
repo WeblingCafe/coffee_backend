@@ -1,11 +1,9 @@
 package webling.coffee.backend.domain.coupon.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.global.base.BaseTime;
 
 
@@ -13,6 +11,7 @@ import webling.coffee.backend.global.base.BaseTime;
 @Setter(AccessLevel.PRIVATE)
 @SuperBuilder
 @Entity
+@Table(name = "coupon_mst")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Coupon extends BaseTime {
@@ -20,4 +19,8 @@ public class Coupon extends BaseTime {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long couponId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "USER_ID")
+    private User user;
 }

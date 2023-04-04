@@ -1,34 +1,30 @@
 package webling.coffee.backend.domain.order.entity;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import webling.coffee.backend.domain.user.entity.User;
+import webling.coffee.backend.domain.menu.entity.Menu;
 import webling.coffee.backend.global.base.BaseTime;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
-@Setter (AccessLevel.PRIVATE)
+@Setter(AccessLevel.PRIVATE)
 @SuperBuilder
 @Entity
-@Table(name = "order_mst")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Order extends BaseTime {
+public class OrderMenu extends BaseTime {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column(name = "ORDER_ID")
-    private Long orderId;
+    private Long orderMenuId;
 
     @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "USER_ID")
-    private User user;
+    @JoinColumn(name = "ORDER_ID")
+    private Order order;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderMenu> orderMenus = new ArrayList<>();
-
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "MENU_ID")
+    private Menu menu;
 
 }
