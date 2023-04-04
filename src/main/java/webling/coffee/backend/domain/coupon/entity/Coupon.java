@@ -1,4 +1,4 @@
-package webling.coffee.backend.domain.order.entity;
+package webling.coffee.backend.domain.coupon.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,16 +7,16 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import webling.coffee.backend.global.base.BaseTime;
 
+
 @Getter
-@Setter (AccessLevel.PRIVATE)
+@Setter(AccessLevel.PRIVATE)
 @SuperBuilder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Order extends BaseTime {
+public class Coupon extends BaseTime {
 
     @Id
     @GeneratedValue
-    private Long orderId;
-
+    private Long couponId;
 }
