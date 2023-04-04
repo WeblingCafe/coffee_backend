@@ -18,7 +18,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public boolean checkDuplicationUser (UserRequestDto.Register request) {
-        return false;
+        return userRepository.checkDuplicationUser(request.getEmail());
     }
 
     public UserResponseDto.Register register(UserRequestDto.Register request) {
