@@ -18,4 +18,15 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
                 .fetchOne()
                 ;
     }
+
+    @Override
+    public boolean checkDuplicationUser(final String email) {
+        return jpaQueryFactory.selectFrom(user)
+                .where(
+                        user.email.eq(email)
+                )
+                .fetchOne() != null
+                ;
+    }
+
 }
