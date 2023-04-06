@@ -6,7 +6,7 @@ on:
 
 env:
   NGINX_INIT : yes
-  APPLICATION_YML_PATH : ./coffee_backend/src/main/resources/application-prd.yml
+  APPLICATION_YML_PATH : ./src/main/resources/application-prd.yml
   NGINX_DOCKER_FILE_PATH : ./nginx/Dockerfile-nginx
   DOCKER_FILE_PATH : ./Dockerfile
   TASK_DEFINITION: ./.coffee_tasks/task-definition.json
