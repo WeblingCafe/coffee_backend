@@ -88,7 +88,7 @@ jobs:
         ECR_REGISTRY: ${{ secrets.API_ECR_REGISTRY }}
         ECR_REPOSITORY: ${{ secrets.API_ECR_REPOSITORY }}
         TASK_DEFINITION: ${{ env.TASK_DEFINITION }}
-        CONTAINER_NAME: ${{ inputs.CONTAINER_NAME }}
+        CONTAINER_NAME: ${{ env.CONTAINER_NAME }}
       with:
         task-definition: ${{ env.TASK_DEFINITION }}
         container-name: ${{ env.CONTAINER_NAME }}
@@ -102,8 +102,8 @@ jobs:
         cluster: ${{ secrets.ECS_CLUSTER }}
         wait-for-service-stability: true
         codedeploy-appspec: ./appspec.yml
-        codedeploy-application: ${{ inputs.CODE_DEPLOY_APPLICATION }}
-        codedeploy-deployment-group: ${{ inputs.CODE_DEPLOY_DEPLOYMENT_GROUP }}
+        codedeploy-application: ${{ secrets.CODE_DEPLOY_APPLICATION }}
+        codedeploy-deployment-group: ${{ secrets.CODE_DEPLOY_DEPLOYMENT_GROUP }}
 
   cleanup:
     needs: coffee-deploy
