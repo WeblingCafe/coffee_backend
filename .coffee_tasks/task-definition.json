@@ -27,7 +27,7 @@
       ],
       "dependsOn": [
         {
-          "containerName": "api",
+          "containerName": "coffee-backend",
           "condition": "START"
         }
       ],
@@ -43,7 +43,7 @@
           "awslogs-stream-prefix": "ecs"
         }
       },
-      "name": "coffee-api",
+      "name": "coffee-backend",
       "image": "012152056735.dkr.ecr.ap-northeast-2.amazonaws.com/cf-api:latest",
       "portMappings": [
         {
