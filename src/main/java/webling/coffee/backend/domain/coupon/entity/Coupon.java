@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.global.base.BaseTime;
+import webling.coffee.backend.global.enums.CouponType;
 
 
 @Getter
@@ -19,6 +20,8 @@ public class Coupon extends BaseTime {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long couponId;
+
+    private CouponType couponType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "USER_ID")

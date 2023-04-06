@@ -33,6 +33,7 @@ public class User extends BaseTime {
     @JsonIgnore
     private String password;
     private Boolean isManager;
+    private Boolean isAvailable;
 
     @Enumerated(EnumType.STRING)
     private Team teamName;
@@ -41,13 +42,13 @@ public class User extends BaseTime {
     @OneToMany(mappedBy = "user")
     private List<Coupon> coupons;
 
-
     public static User register(UserRequestDto.Register request) {
         return User.builder()
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .password(EncodingUtils.encode(request.getPassword()))
                 .isManager(request.getIsManager())
+                .isAvailable(true)
                 .teamName(request.getTeam())
                 .build();
     }

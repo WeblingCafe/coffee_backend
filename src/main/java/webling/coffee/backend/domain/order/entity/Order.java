@@ -3,8 +3,10 @@ package webling.coffee.backend.domain.order.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import webling.coffee.backend.domain.cart.entity.Cart;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.global.base.BaseTime;
+import webling.coffee.backend.global.enums.OrderStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +28,13 @@ public class Order extends BaseTime {
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "USER_ID")
     private User user;
+    private Long totalPrice;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     @OneToMany(mappedBy = "order")
-    private List<OrderMenu> orderMenus = new ArrayList<>();
+    private List<Cart> orderMenus = new ArrayList<>();
 
 
 }

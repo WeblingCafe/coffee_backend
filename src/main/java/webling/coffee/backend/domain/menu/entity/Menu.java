@@ -3,7 +3,7 @@ package webling.coffee.backend.domain.menu.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import webling.coffee.backend.domain.order.entity.OrderMenu;
+import webling.coffee.backend.domain.cart.entity.Cart;
 import webling.coffee.backend.global.base.BaseTime;
 import webling.coffee.backend.global.enums.MenuCategory;
 
@@ -28,10 +28,11 @@ public class Menu extends BaseTime {
     private String menuName;
     private MenuCategory menuCategory;
     private Long price;
+    private String menuUrl;
     private boolean hotAvailable;
     private boolean coldAvailable;
     private boolean isAvailable;
     @OneToMany (mappedBy = "menu")
-    private List<OrderMenu> orderMenus = new ArrayList<>();
+    private List<Cart> orderMenus = new ArrayList<>();
 
 }
