@@ -1,0 +1,63 @@
+{
+  "family": "cf-backend-task-definition",
+  "containerDefinitions": [
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": null,
+        "options": {
+          "awslogs-group": "/ecs/cf-nginx",
+          "awslogs-region": "ap-northeast-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "name": "coffee-backend-nginx",
+      "image": "012152056735.dkr.ecr.ap-northeast-2.amazonaws.com/cf-nginx:latest",
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 80,
+          "protocol": "tcp"
+        },
+        {
+          "containerPort": 443,
+          "hostPort": 443,
+          "protocol": "tcp"
+        }
+      ],
+      "dependsOn": [
+        {
+          "containerName": "api",
+          "condition": "START"
+        }
+      ],
+      "essential": true
+    },
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": null,
+        "options": {
+          "awslogs-group": "/ecs/cf-api",
+          "awslogs-region": "ap-northeast-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "name": "coffee-api",
+      "image": "012152056735.dkr.ecr.ap-northeast-2.amazonaws.com/cf-api:latest",
+      "portMappings": [
+        {
+          "containerPort": 8080
+        }
+      ],
+      "essential": true
+    }
+  ],
+  "executionRoleArn": "ecsTaskExecutionRole",
+  "cpu": "1024",
+  "memory": "2048",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ]
+}

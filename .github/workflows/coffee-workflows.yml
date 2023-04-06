@@ -1,0 +1,119 @@
+name: Coffee Backend CI / CD Workflow
+
+on:
+  push:
+    branches: [ "prd" ]
+
+env:
+  NGINX_INIT : yes
+  APPLICATION_YML_PATH : ./coffee_backend/src/main/resources/application-prd.yml
+  NGINX_DOCKER_FILE_PATH : ./nginx/Dockerfile-nginx
+  DOCKER_FILE_PATH : ./Dockerfile
+  TASK_DEFINITION: ./.coffee_tasks/task-definition.json
+  CONTAINER_NAME: coffee-backend
+
+jobs:
+  build:
+    name: BUILD
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+
+    - name: Touch PRD Application Property
+      run: touch ${{ env.APPLICATION_YML_PATH }}
+
+    - name: Get Application Content From Github Actions Secrets
+      run: echo "${{ secrets.APPLICATION_YML }}" > ${{ env.APPLICATION_YML_PATH }}
+
+    - name: Upload Artifact for PRD Application Property
+      uses: actions/upload-artifact@v3
+      with:
+        name: application-prd.yml
+        path: ${{ env.APPLICATION_YML_PATH }}
+        
+    - name: Add permission to gradlew
+      run: chmod +x ./gradlew
+      shell: bash
+
+    - name: Build with Gradle
+      run: ./gradlew clean build bootJar -x test --no-daemon --parallel
+
+    - name: Set up Docker Buildx for Caching
+      uses: docker/setup-buildx-action@v2
+
+    - name: aws configure
+      uses: aws-actions/configure-aws-credentials@v1.7.0
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Login to ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1.5.3
+
+    - name: build nginx docker file and push
+      if: "contains(env.NGINX_INIT, 'yes')"
+      id: build-nginx-docker-image
+      env:
+        NGINX_ECR_REGISTRY: ${{ secrets.NGINX_ECR_REGISTRY }}
+        NGINX_ECR_REPOSITORY: ${{ secrets.NGINX_ECR_REPOSITORY }}
+      run: |
+        docker build -t $NGINX_ECR_REPOSITORY:latest -f ${{ env.NGINX_DOCKER_FILE_PATH }} .
+        docker tag $NGINX_ECR_REPOSITORY:latest $NGINX_ECR_REGISTRY/$NGINX_ECR_REPOSITORY:latest
+        docker push $NGINX_ECR_REGISTRY/$NGINX_ECR_REPOSITORY:latest
+
+    - name: build coffee api docker file and push
+      id: build-docker-image
+      env:
+        ECR_REGISTRY: ${{ secrets.API_ECR_REGISTRY }}
+        ECR_REPOSITORY: ${{ secrets.API_ECR_REPOSITORY }}
+      run: |
+        docker build -t $ECR_REPOSITORY:latest -f ${{ env.DOCKER_FILE_PATH }} .
+        docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:latest" >> $GITHUB_OUTPUT
+
+    - name: Render ECS Task Definition for Container
+      id: render-module-container
+      uses: aws-actions/amazon-ecs-render-task-definition@v1.1.2
+      env:
+        ECR_REGISTRY: ${{ secrets.API_ECR_REGISTRY }}
+        ECR_REPOSITORY: ${{ secrets.API_ECR_REPOSITORY }}
+        TASK_DEFINITION: ${{ env.TASK_DEFINITION }}
+        CONTAINER_NAME: ${{ inputs.CONTAINER_NAME }}
+      with:
+        task-definition: ${{ env.TASK_DEFINITION }}
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ steps.build-docker-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1.4.10
+      with:
+        task-definition: ${{ steps.render-module-container.outputs.task-definition }}
+        service: ${{ secrets.ECS_SERVICE }}
+        cluster: ${{ secrets.ECS_CLUSTER }}
+        wait-for-service-stability: true
+        codedeploy-appspec: ./appspec.yml
+        codedeploy-application: ${{ inputs.CODE_DEPLOY_APPLICATION }}
+        codedeploy-deployment-group: ${{ inputs.CODE_DEPLOY_DEPLOYMENT_GROUP }}
+
+  cleanup:
+    needs: aws-ecs-deploy-api
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete artifacts
+        env:
+          FOR_WEBHOOKS_SECRET: ${{ secrets.ACTIONS_TOKEN }}
+        run: |
+          echo "::add-mask::$FOR_WEBHOOKS_SECRET"
+          curl --verbose --fail --show-error --location --request POST "https://api.github.com/repos/$GITHUB_REPOSITORY/dispatches" --header "Authorization: token $FOR_WEBHOOKS_SECRET" --header 'Content-Type: application/json' --header 'Accept: application/vnd.github.everest-preview+json' --data-raw "{ \"event_type\": \"Delete_Artifacts\", \"client_payload\": {\"parent_runid\": \"$GITHUB_RUN_ID\", \"parent_repo\": \"$GITHUB_REPOSITORY\"} }"
