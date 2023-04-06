@@ -5,6 +5,6 @@ Resources:
       Properties:
         TaskDefinition: <TASK_DEFINITION>
         LoadBalancerInfo:
-          ContainerName: "nginx"
+          ContainerName: "coffee-backend-nginx"
           ContainerPort: 80
         PlatformVersion: "LATEST"
