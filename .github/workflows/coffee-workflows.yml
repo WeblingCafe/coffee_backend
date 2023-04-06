@@ -13,7 +13,7 @@ env:
   CONTAINER_NAME: coffee-backend
 
 jobs:
-  build:
+  coffee-deploy:
     name: BUILD
     runs-on: ubuntu-latest
 
@@ -106,7 +106,7 @@ jobs:
         codedeploy-deployment-group: ${{ inputs.CODE_DEPLOY_DEPLOYMENT_GROUP }}
 
   cleanup:
-    needs: aws-ecs-deploy-api
+    needs: coffee-deploy
     if: always()
     runs-on: ubuntu-latest
     steps:
