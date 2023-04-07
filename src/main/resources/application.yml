@@ -20,17 +20,23 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         format_sql: true
+    generate-ddl: true
 
   main:
     allow-bean-definition-overriding: true
 
 logging:
   level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql:
+              BasicBinder: trace

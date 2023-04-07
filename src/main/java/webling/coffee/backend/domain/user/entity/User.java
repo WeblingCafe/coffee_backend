@@ -2,6 +2,9 @@ package webling.coffee.backend.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import webling.coffee.backend.domain.coupon.entity.Coupon;
@@ -27,12 +30,22 @@ public class User extends BaseTime {
     @Column(name = "USER_ID")
     private Long userId;
 
+    @NotNull
+    @Email
     @Column(unique = true)
     private String email;
+
+    @NotNull
     private String username;
+
+    @NotNull
     @JsonIgnore
     private String password;
+
+    @NotNull
     private Boolean isManager;
+
+    @NotNull
     private Boolean isAvailable;
 
     @Enumerated(EnumType.STRING)

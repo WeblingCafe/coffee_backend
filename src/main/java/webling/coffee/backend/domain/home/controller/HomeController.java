@@ -11,7 +11,7 @@ public class HomeController {
 
     @GetMapping("/")
     @ResponseBody
-    public String home () {
-        return "home";
+    public String nginxHealthCheckController () {
+        return "healthy";
     }
 }

@@ -28,7 +28,7 @@ public class RequestLogInterceptor implements HandlerInterceptor {
                         .append("--------------------------------------------------\n")
                         .append("Request URL : " + request.getRequestURL().toString() + "\n").append("Method : " + request.getMethod() + "\n")
                         .append("HTTP Status : " + response.getStatus() + "\n").append("Session ID : " + request.getSession().getId() + "\n")
-                        .append("\n\nHeaders : ★★★★★★★★★★★★★★★★★★★★★★\n");
+                        .append("\n\n[Headers] : ★★★★★★★★★★★★★★★★★★★★★★\n");
 
                 Enumeration<String> headerNames = request.getHeaderNames();
                 while (headerNames.hasMoreElements()) {
@@ -38,7 +38,7 @@ public class RequestLogInterceptor implements HandlerInterceptor {
                 }
 
                 if (!isMultipart(request)) {
-                    buffer.append("\n\nParameters : ★★★★★★★★★★★★★★★★★★★★★★\n");
+                    buffer.append("\n\n[Parameters] : ★★★★★★★★★★★★★★★★★★★★★★\n");
 
                     Enumeration<String> parameterNames = request.getParameterNames();
 
