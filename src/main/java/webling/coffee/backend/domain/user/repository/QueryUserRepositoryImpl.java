@@ -1,6 +1,7 @@
 package webling.coffee.backend.domain.user.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import webling.coffee.backend.domain.user.entity.User;
 
@@ -12,15 +13,7 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
     private final JPAQueryFactory jpaQueryFactory ;
 
     @Override
-    public User findByUsername(String username) {
-        return jpaQueryFactory.selectFrom(user)
-                .where(user.username.eq(username))
-                .fetchOne()
-                ;
-    }
-
-    @Override
-    public boolean checkDuplicationUser(final String email) {
+    public boolean checkUserByEmail(final @NotBlank String email) {
         return jpaQueryFactory.selectFrom(user)
                 .where(
                         user.email.eq(email)

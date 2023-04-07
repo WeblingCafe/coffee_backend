@@ -66,7 +66,7 @@ public class SwaggerConfig {
                 .info(new Info().title("Webling Coffee API")
                         .description("Webling Coffee Application Backend API")
                         .version("v1.0")
-                        .license(new License().name("Springdoc").url("http://springdoc.org")))
+                        .license(new License().name("Springdoc").url("https://springdoc.org")))
                 .externalDocs(new ExternalDocumentation()
                         .description("Webling Coffee Application Backend Swagger Documentation")
                         .url("https://github.com/mingj7235/coffee_backend"));

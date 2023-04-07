@@ -1,11 +1,9 @@
 package webling.coffee.backend.domain.user.repository;
 
-import webling.coffee.backend.domain.user.entity.User;
+import jakarta.validation.constraints.NotBlank;
 
 public interface QueryUserRepository {
 
-    User findByUsername (String username);
-
-    boolean checkDuplicationUser(String email);
+    boolean checkUserByEmail(final @NotBlank String email);
 
 }

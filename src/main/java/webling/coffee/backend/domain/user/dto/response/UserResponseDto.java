@@ -35,4 +35,19 @@ public class UserResponseDto {
                     .build();
         }
     }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class Login {
+        private String email;
+        private String username;
+
+        public static Login toDto(final @NotNull User user) {
+            return Login.builder()
+                    .email(user.getEmail())
+                    .username(user.getUsername())
+                    .build();
+        }
+    }
 }

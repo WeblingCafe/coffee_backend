@@ -25,4 +25,12 @@ public class UserRequestDto {
         private UserRole userRole;
         private Team team;
     }
+
+    @Getter
+    @Setter
+    public static class Login {
+        private String email;
+        private String password;
+    }
+
 }
