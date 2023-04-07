@@ -12,8 +12,10 @@ import webling.coffee.backend.domain.order.entity.Order;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.global.base.BaseTime;
 import webling.coffee.backend.global.enums.Team;
+import webling.coffee.backend.global.enums.UserRole;
 import webling.coffee.backend.global.utils.EncodingUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -43,7 +45,14 @@ public class User extends BaseTime {
     private String password;
 
     @NotNull
-    private Boolean isManager;
+    private String phoneNumber;
+
+    @NotNull
+    private LocalDate birthDate;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
     @NotNull
     private Boolean isAvailable;
@@ -60,7 +69,9 @@ public class User extends BaseTime {
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .password(EncodingUtils.encode(request.getPassword()))
-                .isManager(request.getIsManager())
+                .phoneNumber(request.getPhoneNumber())
+                .birthDate(request.getBirthDate())
+                .userRole(request.getUserRole())
                 .isAvailable(true)
                 .teamName(request.getTeam())
                 .build();

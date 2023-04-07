@@ -1,6 +1,7 @@
 package webling.coffee.backend.domain.menu.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import webling.coffee.backend.domain.cart.entity.Cart;
@@ -24,11 +25,14 @@ public class Menu extends BaseTime {
     @Column(name = "MENU_ID")
     private Long menuId;
 
+    @NotNull
     @Column(unique = true)
     private String menuName;
     private MenuCategory menuCategory;
+
+    @NotNull
     private Long price;
-    private String menuUrl;
+    private String menuPhotoUrl;
     private boolean hotAvailable;
     private boolean coldAvailable;
     private boolean isAvailable;
