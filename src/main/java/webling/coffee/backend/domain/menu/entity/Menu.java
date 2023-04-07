@@ -36,6 +36,8 @@ public class Menu extends BaseTime {
     private boolean hotAvailable;
     private boolean coldAvailable;
     private boolean isAvailable;
+
+    @Builder.Default
     @OneToMany (mappedBy = "menu")
     private List<Cart> orderMenus = new ArrayList<>();
 

@@ -37,6 +37,7 @@ public class Order extends BaseTime {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+    @Builder.Default
     @OneToMany(mappedBy = "order")
     private List<Cart> orderMenus = new ArrayList<>();
 }
