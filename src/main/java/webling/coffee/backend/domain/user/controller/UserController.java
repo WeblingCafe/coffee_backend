@@ -25,7 +25,7 @@ public class UserController {
                     * email : unique 값 잆니다. 중복일 경우, 예외를 반환합니다.
                     * userRole : 회원의 역할입니다. enum 으로 관리되며 [매니저, 일반회원, 게스트, 개발자] 로 나뉩니다.
                     * team : 팀 이름은 enum 으로 관리됩니다.""",
-            externalDocs = @ExternalDocumentation (description = "ENUM 정보", url = "https://www.notion.so/COFFEE_WEBLING-feb6ad0af4c04ffeb104f9fce1849b51")
+            externalDocs = @ExternalDocumentation (description = "ENUM 정보", url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee")
     )
     @PostMapping("")
     public ResponseEntity<UserResponseDto.Register> register (final @RequestBody UserRequestDto.Register request) {
