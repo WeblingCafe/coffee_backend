@@ -5,7 +5,7 @@ on:
     branches: [ "prd" ]
 
 env:
-  NGINX_INIT : yes
+  NGINX_INIT : no
   APPLICATION_YML_PATH : ./src/main/resources/application-prd.yml
   NGINX_DOCKER_FILE_PATH : ./nginx/Dockerfile-nginx
   DOCKER_FILE_PATH : ./Dockerfile
