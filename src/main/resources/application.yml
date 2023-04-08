@@ -10,9 +10,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/coffee_backend?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3307/coffee_backend?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: root
-    password: 1234
+    password: mariadb
 
   jpa:
     open-in-view: false
@@ -40,3 +40,12 @@ logging:
           descriptor:
             sql:
               BasicBinder: trace
+
+jwt:
+  issuer: coffee
+  secret: coffee-secret
+  access:
+    timeout-of-minutes: 5
+  refresh:
+    timeout-of-minutes: 525600
+
