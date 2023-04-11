@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.service.UserFacade;
-import webling.coffee.backend.global.errors.response.ErrorResponse;
 
 @Slf4j
 @RestController
@@ -53,8 +52,7 @@ public class UserController {
                             content = @Content(schema = @Schema(implementation = UserResponseDto.Register.class))),
                     @ApiResponse(
                             responseCode = "U002",
-                            description = "USER_DUPLICATION, 중복된 email 이 존재합니다.",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+                            description = "USER_DUPLICATION, 중복된 email 이 존재합니다.")
             }
 
     )
@@ -85,12 +83,10 @@ public class UserController {
                             content = @Content(schema = @Schema(implementation = UserResponseDto.Login.class))),
                     @ApiResponse(
                             responseCode = "U001",
-                            description = "USER_NOT_FOUND, 로그인에 시도한 email 로 가입된 회원을 찾을 수 없습니다.",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                            description = "USER_NOT_FOUND, 로그인에 시도한 email 로 가입된 회원을 찾을 수 없습니다."),
                     @ApiResponse(
                             responseCode = "U003",
-                            description = "PASSWORD_MISMATCH, 비밀번호가 일치하지 않습니다.",
-                            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+                            description = "PASSWORD_MISMATCH, 비밀번호가 일치하지 않습니다.")
             }
     )
     @PostMapping("/login")
