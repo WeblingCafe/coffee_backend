@@ -57,6 +57,8 @@ public class User extends BaseTime {
     @NotNull
     private Boolean isAvailable;
 
+    private Integer stamps;
+
     @Enumerated(EnumType.STRING)
     private Team teamName;
     @OneToMany(mappedBy = "user")
@@ -73,6 +75,7 @@ public class User extends BaseTime {
                 .birthDate(request.getBirthDate())
                 .userRole(request.getUserRole())
                 .isAvailable(true)
+                .stamps(0)
                 .teamName(request.getTeam())
                 .build();
     }

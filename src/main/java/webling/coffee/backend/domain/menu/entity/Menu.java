@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import webling.coffee.backend.domain.cart.entity.Cart;
+import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
 import webling.coffee.backend.global.base.BaseTime;
-import webling.coffee.backend.global.enums.MenuCategory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,10 @@ public class Menu extends BaseTime {
     @NotNull
     @Column(unique = true)
     private String menuName;
-    private MenuCategory menuCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "CATEGORY_ID")
+    private MenuCategory category;
 
     @NotNull
     private Long price;

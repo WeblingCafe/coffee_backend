@@ -33,6 +33,7 @@ public class Order extends BaseTime {
     @NotNull
     private Long totalPrice;
     private boolean isPersonalCup;
+    private String request;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
