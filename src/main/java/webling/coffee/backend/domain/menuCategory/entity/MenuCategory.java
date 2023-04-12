@@ -24,6 +24,8 @@ public class MenuCategory {
 
     private String categoryName;
 
+    private boolean isAvailable;
+
     @OneToMany(mappedBy = "category")
     private List<Menu> menuList = new ArrayList<>();
 
