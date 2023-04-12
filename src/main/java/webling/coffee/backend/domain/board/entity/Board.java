@@ -3,6 +3,7 @@ package webling.coffee.backend.domain.board.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import webling.coffee.backend.global.base.BaseTime;
 import webling.coffee.backend.global.enums.BoardCategory;
 
 @Getter
@@ -12,7 +13,7 @@ import webling.coffee.backend.global.enums.BoardCategory;
 @Table(name = "board_mst")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Board {
+public class Board extends BaseTime {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
