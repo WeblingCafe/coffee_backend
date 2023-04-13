@@ -34,4 +34,5 @@ public class UserService {
     public User findByEmail(final String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new RestBusinessException(UserErrorCode.USER_NOT_FOUND));
     }
+
 }

@@ -1,4 +1,4 @@
-package webling.coffee.backend.domain.user.service;
+package webling.coffee.backend.domain.authentication.service;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -13,23 +13,22 @@ import webling.coffee.backend.global.errors.codes.UserErrorCode;
 import webling.coffee.backend.global.errors.exceptions.RestBusinessException;
 import webling.coffee.backend.global.utils.EncodingUtils;
 
-import static webling.coffee.backend.domain.user.dto.response.UserResponseDto.*;
-
 @Slf4j
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 @Service
-public class UserFacade {
+public class AuthenticationFacade {
 
     private final UserService userService;
 
-    public Register register(final @NotNull UserRequestDto.Register request) {
+    public UserResponseDto.Login login(final @NotNull UserRequestDto.Login request) {
 
-        if (userService.checkDuplicationUser(request)) {
-            throw new RestBusinessException(UserErrorCode.USER_DUPLICATION);
+        User user = userService.findByEmail(request.getEmail());
+
+        if(EncodingUtils.isNotMatches(request.getPassword(), user.getPassword())) {
+            throw new RestBusinessException(UserErrorCode.PASSWORD_MISMATCH);
         }
 
-        return userService.register(request);
+        return UserResponseDto.Login.toDto (user);
     }
-
 }

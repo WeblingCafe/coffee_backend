@@ -22,6 +22,14 @@ public class SwaggerConfig {
     private String prdDomain;
 
     @Bean
+    public GroupedOpenApi authApi() {
+        return GroupedOpenApi.builder()
+                .group("권환 API")
+                .pathsToMatch("/v1/auth/**")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi userApi() {
         return GroupedOpenApi.builder()
                 .group("사용자 API")

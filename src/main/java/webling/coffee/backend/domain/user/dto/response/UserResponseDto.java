@@ -40,11 +40,13 @@ public class UserResponseDto {
     @Setter
     @Builder
     public static class Login {
+        private Long userId;
         private String email;
         private String username;
 
         public static Login toDto(final @NotNull User user) {
             return Login.builder()
+                    .userId(user.getUserId())
                     .email(user.getEmail())
                     .username(user.getUsername())
                     .build();

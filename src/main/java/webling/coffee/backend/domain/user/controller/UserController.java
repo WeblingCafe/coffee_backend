@@ -62,37 +62,4 @@ public class UserController {
         return new ResponseEntity<>(userFacade.register(request), HttpStatus.CREATED);
     }
 
-    @Operation(
-            summary = "로그인",
-            description = """
-                    ## [로그인 API]
-                    ### 이메일과 패스워드를 통해 로그인을 진행합니다.
-                    """,
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = """
-                            ## [REQUEST BODY]
-                            ### email : 가입된 회원의 이메일 주소입니다.
-                            ### password : 가입된 회원의 비밀번호입니다.
-                            ### 로그인에 성공하면 회원의 이메일과 이름을 반환합니다.
-                            """
-            ),
-            responses = {
-                    @ApiResponse(
-                            responseCode = "201",
-                            description = "회원가입 성공",
-                            content = @Content(schema = @Schema(implementation = UserResponseDto.Login.class))),
-                    @ApiResponse(
-                            responseCode = "U001",
-                            description = "USER_NOT_FOUND, 로그인에 시도한 email 로 가입된 회원을 찾을 수 없습니다."),
-                    @ApiResponse(
-                            responseCode = "U003",
-                            description = "PASSWORD_MISMATCH, 비밀번호가 일치하지 않습니다.")
-            }
-    )
-    @PostMapping("/login")
-    public ResponseEntity<UserResponseDto.Login> login (final @RequestBody UserRequestDto.Login request) {
-
-        return ResponseEntity.ok()
-                .body(userFacade.login(request));
-    }
 }
