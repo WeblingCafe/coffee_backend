@@ -44,17 +44,7 @@ public class UserController {
                             ### userRole : 회원의 역할입니다. enum 으로 관리되며 [매니저, 일반회원, 게스트, 개발자] 로 나뉩니다.
                             ### team : 팀 이름은 enum 으로 관리됩니다.
                             """
-            ),
-            responses = {
-                    @ApiResponse(
-                            responseCode = "201",
-                            description = "회원가입 성공",
-                            content = @Content(schema = @Schema(implementation = UserResponseDto.Register.class))),
-                    @ApiResponse(
-                            responseCode = "U002",
-                            description = "USER_DUPLICATION, 중복된 email 이 존재합니다.")
-            }
-
+            )
     )
     @PostMapping("")
     public ResponseEntity<UserResponseDto.Register> register (final @RequestBody UserRequestDto.Register request) {
