@@ -1,6 +1,7 @@
 package webling.coffee.backend.domain.authentication.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,8 +45,8 @@ public class AuthenticationController {
             ),
             responses = {
                     @ApiResponse(
-                            responseCode = "201",
-                            description = "회원가입 성공",
+                            responseCode = "200",
+                            description = "로그인 성공",
                             content = @Content(schema = @Schema(implementation = UserResponseDto.Login.class))),
                     @ApiResponse(
                             responseCode = "U001",
