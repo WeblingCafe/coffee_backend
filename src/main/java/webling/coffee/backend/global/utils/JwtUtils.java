@@ -2,6 +2,7 @@ package webling.coffee.backend.global.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -67,6 +68,14 @@ public class JwtUtils {
 
     private Algorithm getAlgorithm(String secret) {
         return Algorithm.HMAC512(secret);
+    }
+
+    public String getAccessToken(HttpServletRequest request) {
+        return request.getHeader(AUTHORIZATION);
+    }
+
+    public String getRefreshToken(HttpServletRequest request) {
+        return request.getHeader(REFRESH_AUTHORIZATION);
     }
 
 }
