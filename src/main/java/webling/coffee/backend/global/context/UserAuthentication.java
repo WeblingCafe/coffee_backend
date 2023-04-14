@@ -2,17 +2,14 @@ package webling.coffee.backend.global.context;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import webling.coffee.backend.domain.user.entity.User;
 
 import java.time.LocalDate;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserAuthentication {
 
     private Long userId;

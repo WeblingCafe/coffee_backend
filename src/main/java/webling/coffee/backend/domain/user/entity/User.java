@@ -3,10 +3,9 @@ package webling.coffee.backend.domain.user.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicUpdate;
 import webling.coffee.backend.domain.coupon.entity.Coupon;
 import webling.coffee.backend.domain.order.entity.Order;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
@@ -22,6 +21,7 @@ import java.util.List;
 @Setter(AccessLevel.PRIVATE)
 @SuperBuilder
 @Entity
+@DynamicUpdate
 @Table(name = "user_mst")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

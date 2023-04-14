@@ -2,9 +2,7 @@ package webling.coffee.backend.domain.user.controller;
 
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,6 +19,7 @@ import webling.coffee.backend.domain.user.service.UserFacade;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/users")
+@Valid
 public class UserController {
 
     private final UserFacade userFacade;
@@ -33,8 +32,8 @@ public class UserController {
                     """,
             externalDocs = @ExternalDocumentation (
                     description = """
-                            # [ENUM]
-                            ## 노션 링크를 참고해주세요.
+                            ## [ENUM]
+                            ### 노션 링크를 참고해주세요.
                             """,
                     url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee"),
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -47,9 +46,11 @@ public class UserController {
             )
     )
     @PostMapping("")
-    public ResponseEntity<UserResponseDto.Register> register (final @RequestBody UserRequestDto.Register request) {
+    public ResponseEntity<UserResponseDto.Register> register (final @RequestBody UserRequestDto.@Valid Register request) {
 
-        return new ResponseEntity<>(userFacade.register(request), HttpStatus.CREATED);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userFacade.register(request));
     }
 
 }
