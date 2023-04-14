@@ -4,15 +4,14 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import webling.coffee.backend.global.validator.EnumValidator;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
-@Constraint(validatedBy = EnumValidator.class)
+@Documented
+@Constraint(validatedBy = {EnumValidator.class})
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface VerifyEnum {
+    String message() default "유효하지 않은 ENUM 값 입니다. 다시 확인해주세요.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     Class<? extends java.lang.Enum<?>> enumClass();

@@ -19,7 +19,6 @@ import webling.coffee.backend.domain.user.service.UserFacade;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/users")
-@Valid
 public class UserController {
 
     private final UserFacade userFacade;
@@ -46,7 +45,7 @@ public class UserController {
             )
     )
     @PostMapping("")
-    public ResponseEntity<UserResponseDto.Register> register (final @RequestBody UserRequestDto.@Valid Register request) {
+    public ResponseEntity<UserResponseDto.Register> register (@RequestBody UserRequestDto.@Valid Register request) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

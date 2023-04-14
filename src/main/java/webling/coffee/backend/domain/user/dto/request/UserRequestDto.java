@@ -5,13 +5,15 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.validation.annotation.Validated;
 import webling.coffee.backend.global.annotation.VerifyEnum;
 import webling.coffee.backend.global.enums.Team;
 import webling.coffee.backend.global.enums.UserRole;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
+@Valid
 public class UserRequestDto {
 
     @Getter
