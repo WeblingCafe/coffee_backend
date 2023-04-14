@@ -11,6 +11,4 @@ import java.lang.annotation.*;
 public @interface AuthRequired {
 
     UserRole[] roles() default {MANAGER, EMPLOYEE, GUEST, DEVELOPER};
-
-    boolean without() default false;
 }

@@ -2,7 +2,9 @@ package webling.coffee.backend.global.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.JWTVerifier;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +44,11 @@ public class JwtUtils {
         return headers;
     }
 
-    private String generateAccessToken(Long id, String email) {
+    public void setAuthorization(HttpServletResponse response, String retrieveAccessToken) {
+        response.setHeader(AUTHORIZATION, retrieveAccessToken);
+    }
+
+    public String generateAccessToken(Long id, String email) {
         return generateToken(id,
                 email,
                 accessTokenTimeout);
@@ -52,6 +58,16 @@ public class JwtUtils {
         return generateToken(id,
                 email,
                 refreshTokenTimeout);
+    }
+
+    public static Long getMemberIdByToken (String token) {
+        return JWT.decode(getToken(token))
+                .getClaim("id").asLong();
+    }
+
+    public static String getMemberEmailByToken (String token) {
+        return JWT.decode(getToken(token))
+                .getAudience().get(0);
     }
 
     private String generateToken(Long id, String email, long timeout) {
@@ -77,5 +93,20 @@ public class JwtUtils {
     public String getRefreshToken(HttpServletRequest request) {
         return request.getHeader(REFRESH_AUTHORIZATION);
     }
+
+    public void verifyToken (String token) {
+        getRequireToken().verify(getToken(token));
+    }
+
+    private JWTVerifier getRequireToken () {
+        return JWT.require(getAlgorithm(secret))
+                .withIssuer(issuer)
+                .build();
+    }
+
+    private static String getToken(String token) {
+        return token.substring(BEARER_TOKEN_PREFIX.length());
+    }
+
 
 }

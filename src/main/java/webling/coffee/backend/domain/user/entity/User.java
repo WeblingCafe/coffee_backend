@@ -32,29 +32,28 @@ public class User extends BaseTime {
     @Column(name = "USER_ID")
     private Long userId;
 
-    @NotNull
     @Email
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @NotNull
+    @Column(nullable = false)
     private String username;
 
-    @NotNull
     @JsonIgnore
+    @Column(nullable = false)
     private String password;
 
-    @NotNull
+    @Column(nullable = false)
     private String phoneNumber;
 
-    @NotNull
+    @Column(nullable = false)
     private LocalDate birthDate;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private UserRole userRole;
 
-    @NotNull
+    @Column(nullable = false)
     private Boolean isAvailable;
 
     private Integer stamps;

@@ -1,16 +1,28 @@
 package webling.coffee.backend.global.interceptors;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+import webling.coffee.backend.domain.user.entity.User;
+import webling.coffee.backend.domain.user.service.core.UserService;
 import webling.coffee.backend.global.annotation.AuthRequired;
+import webling.coffee.backend.global.context.UserAuthentication;
+import webling.coffee.backend.global.context.UserContext;
+import webling.coffee.backend.global.enums.UserRole;
 import webling.coffee.backend.global.errors.codes.AuthenticationErrorCode;
 import webling.coffee.backend.global.errors.exceptions.RestBusinessException;
 import webling.coffee.backend.global.utils.JwtUtils;
+
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,11 +31,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     private final JwtUtils jwtUtils;
 
+    private final UserService userService;
+
     @Override
-    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) throws Exception {
+    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
 
         if (isAuthRequired(handler)) {
-            AuthRequired authRequired = ((HandlerMethod) handler).getMethodAnnotation(AuthRequired.class);
+            AuthRequired authRequired = Objects.requireNonNull((HandlerMethod) handler).getMethodAnnotation(AuthRequired.class);
 
             String accessToken = jwtUtils.getAccessToken(request);
             String refreshToken = jwtUtils.getRefreshToken(request);
@@ -32,21 +46,65 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 throw new RestBusinessException(AuthenticationErrorCode.INVALID_TOKEN);
             }
 
+            try {
+                jwtUtils.verifyToken(accessToken);
 
+            } catch (TokenExpiredException e) {
+                log.debug("Access Token is Expired");
 
+                try {
+                    jwtUtils.verifyToken(refreshToken);
+                    accessToken = retrieveAccessToken(response, refreshToken);
+
+                } catch (JWTVerificationException e1) {
+                    log.error("Refresh Token is Invalid");
+                    throw new RestBusinessException(AuthenticationErrorCode.INVALID_TOKEN);
+
+                }
+
+            } catch (JWTVerificationException e) {
+                log.error("Access Token is Invalid");
+                throw new RestBusinessException(AuthenticationErrorCode.INVALID_TOKEN);
+            }
+
+            User user = userService.findById(JwtUtils.getMemberIdByToken(accessToken));
+
+            if (isInvalidRole(authRequired, user.getUserRole())) {
+                throw new RestBusinessException(AuthenticationErrorCode.ACCESS_DENIED);
+            }
+
+            UserContext.setAuthentication(UserAuthentication.from(user));
         }
-
-
-        return false;
+        return true;
     }
 
     private boolean isAuthRequired(final Object handler) {
         return handler instanceof HandlerMethod && ((HandlerMethod)handler).hasMethodAnnotation(AuthRequired.class);
     }
 
+    private boolean isInvalidRole (final AuthRequired authRequired,
+                                   final UserRole userRole) {
+        return !userRole.contains(authRequired.roles());
+    }
+
     private boolean isTokenEmpty(final String token) {
         return token == null || token.isBlank();
     }
 
+    private String retrieveAccessToken (final @NotNull HttpServletResponse response,
+                                        final @NotBlank String token) {
 
+        String retrieveAccessToken = jwtUtils.generateAccessToken(
+                JwtUtils.getMemberIdByToken(token),
+                JwtUtils.getMemberEmailByToken(token));
+
+        jwtUtils.setAuthorization (response, retrieveAccessToken);
+
+        return retrieveAccessToken;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+        UserContext.clearAuthentication();
+    }
 }

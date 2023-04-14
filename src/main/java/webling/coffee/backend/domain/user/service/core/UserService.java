@@ -1,5 +1,6 @@
 package webling.coffee.backend.domain.user.service.core;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,4 +36,8 @@ public class UserService {
         return userRepository.findByEmail(email).orElseThrow(() -> new RestBusinessException(UserErrorCode.USER_NOT_FOUND));
     }
 
+    public User findById(final @NotNull Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RestBusinessException(UserErrorCode.USER_NOT_FOUND));
+    }
 }
