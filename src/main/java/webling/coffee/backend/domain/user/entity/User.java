@@ -72,10 +72,10 @@ public class User extends BaseTime {
                 .password(EncodingUtils.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
                 .birthDate(request.getBirthDate())
-                .userRole(request.getUserRole())
+                .userRole(UserRole.of(request.getUserRole()))
                 .isAvailable(true)
                 .stamps(0)
-                .teamName(request.getTeam())
+                .teamName(Team.of(request.getTeam()))
                 .build();
     }
 }

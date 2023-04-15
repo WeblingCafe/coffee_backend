@@ -2,6 +2,8 @@ package webling.coffee.backend.global.enums;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import webling.coffee.backend.global.errors.codes.UserErrorCode;
+import webling.coffee.backend.global.errors.exceptions.RestBusinessException;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -23,7 +25,11 @@ public enum UserRole {
     }
 
     public static UserRole of(@NotBlank final String name) {
-        return UserRole.valueOf(name.toUpperCase(Locale.ROOT));
+        try {
+            return UserRole.valueOf(name.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException e) {
+            throw new RestBusinessException(UserErrorCode.USER_ROLE_VALUE_INVALID);
+        }
     }
 
     public static boolean isAllMatch(@NotBlank final String roles) {

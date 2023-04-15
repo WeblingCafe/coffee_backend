@@ -30,10 +30,10 @@ public class UserRequestDto {
         private LocalDate birthDate;
 
         @VerifyEnum(enumClass = UserRole.class, ignoreCase = true)
-        private UserRole userRole;
+        private String userRole;
 
         @VerifyEnum(enumClass = Team.class, ignoreCase = true)
-        private Team team;
+        private String team;
     }
 
     @Getter
