@@ -31,4 +31,9 @@ public class AuthenticationFacade {
 
         return UserResponseDto.Login.toDto (user);
     }
+
+    public void logout(final Long userId) {
+        User user = userService.findById(userId);
+    }
+
 }

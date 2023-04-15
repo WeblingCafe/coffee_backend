@@ -43,12 +43,24 @@ public class UserResponseDto {
         private Long userId;
         private String email;
         private String username;
+        private String phoneNumber;
+
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate birthDate;
+        private String userRole;
+        private Integer stamps;
+        private String teamName;
 
         public static Login toDto(final @NotNull User user) {
             return Login.builder()
                     .userId(user.getUserId())
                     .email(user.getEmail())
                     .username(user.getUsername())
+                    .phoneNumber(user.getPhoneNumber())
+                    .birthDate(user.getBirthDate())
+                    .userRole(user.getUserRole().name())
+                    .stamps(user.getStamps())
+                    .teamName(user.getTeamName().name())
                     .build();
         }
     }

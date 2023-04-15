@@ -2,7 +2,7 @@ package webling.coffee.backend.global.enums;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import webling.coffee.backend.global.errors.codes.UserErrorCode;
+import webling.coffee.backend.global.errors.codes.EnumValueErrorCode;
 import webling.coffee.backend.global.errors.exceptions.RestBusinessException;
 
 import java.util.Arrays;
@@ -28,7 +28,7 @@ public enum UserRole {
         try {
             return UserRole.valueOf(name.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
-            throw new RestBusinessException(UserErrorCode.USER_ROLE_VALUE_INVALID);
+            throw new RestBusinessException(EnumValueErrorCode.USER_ROLE_VALUE_INVALID);
         }
     }
 

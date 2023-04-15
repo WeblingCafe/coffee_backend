@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import webling.coffee.backend.domain.authentication.service.AuthenticationFacade;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
+import webling.coffee.backend.global.annotation.AuthRequired;
+import webling.coffee.backend.global.annotation.AuthUser;
+import webling.coffee.backend.global.context.UserAuthentication;
 import webling.coffee.backend.global.utils.JwtUtils;
 
 @Slf4j
@@ -46,5 +49,24 @@ public class AuthenticationController {
         return ResponseEntity.ok()
                 .headers(jwtUtils.getAuthHeaders(memberDto.getUserId(), memberDto.getEmail()))
                 .body(memberDto);
+    }
+
+    @Operation(
+            summary = "로그아웃",
+            description = """
+                    ## [로그아웃 API]
+                    ### UserAuthentication 객체를 통해 로그아웃을 진행합니다.
+                    """,
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = """
+                            ## [REQUEST BODY]
+                            """
+            )
+    )
+    @AuthRequired
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout (final @AuthUser UserAuthentication authentication) {
+//        authenticationFacade.logout(authentication.getUserId()); // FIXME : 로그아웃을 앞단에서 헤더에 있는 토큰 삭제로 ?
+        return ResponseEntity.noContent().build();
     }
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import webling.coffee.backend.domain.user.entity.User;
+import webling.coffee.backend.global.annotation.VerifyEnum;
 import webling.coffee.backend.global.base.BaseTime;
 import webling.coffee.backend.global.enums.CouponType;
 
@@ -21,6 +22,8 @@ public class Coupon extends BaseTime {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long couponId;
 
+    @Enumerated(EnumType.STRING)
+    @VerifyEnum(enumClass = CouponType.class)
     private CouponType couponType;
 
     @ManyToOne(fetch = FetchType.LAZY)
