@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import webling.coffee.backend.domain.cart.entity.Cart;
+import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
 import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
 import webling.coffee.backend.global.base.BaseTime;
 
@@ -44,4 +45,15 @@ public class Menu extends BaseTime {
     @OneToMany (mappedBy = "menu")
     private List<Cart> orderMenus = new ArrayList<>();
 
+    public static Menu create(MenuCategory category, MenuRequestDto.Create request) {
+        return Menu.builder()
+                .menuName(request.getMenuName())
+                .category(category)
+                .price(request.getPrice())
+                .menuPhotoUrl(request.getMenuPhotoUrl())
+                .hotAvailable(request.isHotAvailable())
+                .coldAvailable(request.isColdAvailable())
+                .isAvailable(true)
+                .build();
+    }
 }

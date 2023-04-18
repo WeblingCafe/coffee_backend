@@ -13,6 +13,23 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Arrays;
 
 @Configuration
+//@SecuritySchemes(
+//        {
+//                @SecurityScheme(
+//                        name = "Bearer Authentication",
+//                        type = SecuritySchemeType.HTTP,
+//                        bearerFormat = "JWT",
+//                        scheme = "bearer"
+//                ),
+//                @SecurityScheme(
+//                        name = "Bearer Refresh Authentication",
+//                        paramName = "Refresh-Token",
+//                        type = SecuritySchemeType.HTTP,
+//                        bearerFormat = "JWT",
+//                        scheme = "bearer"
+//                )
+//        }
+//)
 public class SwaggerConfig {
 
     @Value("${swagger.servers.domain.local}")

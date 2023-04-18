@@ -20,6 +20,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Configuration
 public class JwtUtils {
 
+    public static final String ACCESS_AUTHORIZATION = "Access-" + AUTHORIZATION;
     public static final String REFRESH_AUTHORIZATION = "Refresh-" + AUTHORIZATION;
     public static final String BEARER_TOKEN_PREFIX = "Bearer ";
     private final String issuer;
@@ -39,13 +40,13 @@ public class JwtUtils {
 
     public HttpHeaders getAuthHeaders(Long id, String email) {
         HttpHeaders headers = new HttpHeaders();
-        headers.add(AUTHORIZATION, generateAccessToken(id, email));
+        headers.add(ACCESS_AUTHORIZATION, generateAccessToken(id, email));
         headers.add(REFRESH_AUTHORIZATION, generateRefreshToken(id, email));
         return headers;
     }
 
     public void setAuthorization(HttpServletResponse response, String retrieveAccessToken) {
-        response.setHeader(AUTHORIZATION, retrieveAccessToken);
+        response.setHeader(ACCESS_AUTHORIZATION, retrieveAccessToken);
     }
 
     public String generateAccessToken(Long id, String email) {
@@ -87,7 +88,7 @@ public class JwtUtils {
     }
 
     public String getAccessToken(HttpServletRequest request) {
-        return request.getHeader(AUTHORIZATION);
+        return request.getHeader(ACCESS_AUTHORIZATION);
     }
 
     public String getRefreshToken(HttpServletRequest request) {

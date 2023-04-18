@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
+import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.service.core.UserService;
 import webling.coffee.backend.global.errors.codes.UserErrorCode;
 import webling.coffee.backend.global.errors.exceptions.RestBusinessException;
@@ -23,10 +24,10 @@ public class UserFacade {
     public Register register(final @NotNull UserRequestDto.Register request) {
 
         if (userService.checkDuplicationUser(request)) {
-            throw new RestBusinessException(UserErrorCode.USER_DUPLICATION);
+            throw new RestBusinessException(UserErrorCode.DUPLICATION);
         }
 
-        return userService.register(request);
+        return UserResponseDto.Register.toDto(userService.register(request));
     }
 
 }

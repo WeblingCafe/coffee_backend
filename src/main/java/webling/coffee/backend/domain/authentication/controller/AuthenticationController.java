@@ -12,8 +12,6 @@ import webling.coffee.backend.domain.authentication.service.AuthenticationFacade
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.global.annotation.AuthRequired;
-import webling.coffee.backend.global.annotation.AuthUser;
-import webling.coffee.backend.global.context.UserAuthentication;
 import webling.coffee.backend.global.utils.JwtUtils;
 
 @Slf4j
@@ -65,8 +63,7 @@ public class AuthenticationController {
     )
     @AuthRequired
     @PostMapping("/logout")
-    public ResponseEntity<?> logout (final @AuthUser UserAuthentication authentication) {
-//        authenticationFacade.logout(authentication.getUserId()); // FIXME : 로그아웃을 앞단에서 헤더에 있는 토큰 삭제로 ?
+    public ResponseEntity<?> logout () {
         return ResponseEntity.noContent().build();
     }
 }

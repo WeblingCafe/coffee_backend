@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class UserAuthentication {
 
     private Long userId;
