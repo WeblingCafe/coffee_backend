@@ -18,6 +18,7 @@ public class UserResponseDto {
     public static class Register {
         private String email;
         private String username;
+        private String nickname;
         private String phoneNumber;
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate birthDate;
@@ -28,6 +29,7 @@ public class UserResponseDto {
             return Register.builder()
                     .email(entity.getEmail())
                     .username(entity.getUsername())
+                    .nickname(entity.getNickname())
                     .phoneNumber(entity.getPhoneNumber())
                     .birthDate(entity.getBirthDate())
                     .userRole(entity.getUserRole().name())
@@ -43,8 +45,8 @@ public class UserResponseDto {
         private Long userId;
         private String email;
         private String username;
+        private String nickname;
         private String phoneNumber;
-
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate birthDate;
         private String userRole;
@@ -56,6 +58,7 @@ public class UserResponseDto {
                     .userId(user.getUserId())
                     .email(user.getEmail())
                     .username(user.getUsername())
+                    .nickname(user.getNickname())
                     .phoneNumber(user.getPhoneNumber())
                     .birthDate(user.getBirthDate())
                     .userRole(user.getUserRole().name())

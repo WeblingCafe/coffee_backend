@@ -39,6 +39,9 @@ public class User extends BaseTime {
     @Column(nullable = false)
     private String username;
 
+    @Column(nullable = false)
+    private String nickname;
+
     @JsonIgnore
     @Column(nullable = false)
     private String password;
@@ -69,6 +72,7 @@ public class User extends BaseTime {
         return User.builder()
                 .email(request.getEmail())
                 .username(request.getUsername())
+                .nickname(request.getNickname())
                 .password(EncodingUtils.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
                 .birthDate(request.getBirthDate())
