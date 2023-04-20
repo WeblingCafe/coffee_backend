@@ -9,8 +9,8 @@ import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
-import webling.coffee.backend.global.errors.codes.UserErrorCode;
-import webling.coffee.backend.global.errors.exceptions.RestBusinessException;
+import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
+import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 import webling.coffee.backend.global.utils.EncodingUtils;
 
 @Slf4j

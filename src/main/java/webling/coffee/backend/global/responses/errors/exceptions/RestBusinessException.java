@@ -1,8 +1,8 @@
-package webling.coffee.backend.global.errors.exceptions;
+package webling.coffee.backend.global.responses.errors.exceptions;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import webling.coffee.backend.global.errors.codes.ErrorCode;
+import webling.coffee.backend.global.responses.errors.codes.ErrorCode;
 
 @Getter
 public class RestBusinessException extends RuntimeException{

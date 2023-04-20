@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.StringUtils;
 import webling.coffee.backend.domain.cart.entity.Cart;
 import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
 import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
@@ -55,5 +56,15 @@ public class Menu extends BaseTime {
                 .coldAvailable(request.isColdAvailable())
                 .isAvailable(true)
                 .build();
+    }
+
+    public static Menu update(Menu menu, MenuRequestDto.Update request) {
+
+        return null;
+    }
+
+    public static Menu soldOut(Menu menu) {
+        menu.setAvailable(false);
+        return menu;
     }
 }

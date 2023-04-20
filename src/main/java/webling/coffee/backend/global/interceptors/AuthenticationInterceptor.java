@@ -18,8 +18,8 @@ import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.context.UserAuthentication;
 import webling.coffee.backend.global.context.UserContext;
 import webling.coffee.backend.global.enums.UserRole;
-import webling.coffee.backend.global.errors.codes.AuthenticationErrorCode;
-import webling.coffee.backend.global.errors.exceptions.RestBusinessException;
+import webling.coffee.backend.global.responses.errors.codes.AuthenticationErrorCode;
+import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 import webling.coffee.backend.global.utils.JwtUtils;
 
 import java.util.Objects;

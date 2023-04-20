@@ -1,4 +1,4 @@
-package webling.coffee.backend.global.errors.codes;
+package webling.coffee.backend.global.responses.errors.codes;
 
 import org.springframework.http.HttpStatus;
 

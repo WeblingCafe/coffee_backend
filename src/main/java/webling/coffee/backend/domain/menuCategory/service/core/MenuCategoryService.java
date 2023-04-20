@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
 import webling.coffee.backend.domain.menuCategory.repository.MenuCategoryRepository;
-import webling.coffee.backend.global.errors.codes.MenuCategoryErrorCode;
-import webling.coffee.backend.global.errors.exceptions.RestBusinessException;
+import webling.coffee.backend.global.responses.errors.codes.MenuCategoryErrorCode;
+import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
 @Slf4j
 @Transactional

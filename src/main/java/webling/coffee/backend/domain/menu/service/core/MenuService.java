@@ -10,6 +10,8 @@ import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
 import webling.coffee.backend.domain.menu.entity.Menu;
 import webling.coffee.backend.domain.menu.repository.MenuRepository;
 import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
+import webling.coffee.backend.global.responses.errors.codes.MenuErrorCode;
+import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
 @Slf4j
 @Service
@@ -19,12 +21,19 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
 
-    public boolean isDuplicate(final @NotBlank String menuName) {
+    public boolean isDuplicationByMenuName(final @NotBlank String menuName) {
         return menuRepository.existsByMenuName(menuName);
     }
 
     public Menu create(final @NotNull MenuCategory category,
                        final @NotNull MenuRequestDto.Create request) {
         return menuRepository.save(Menu.create(category, request));
+    }
+
+    @Transactional(readOnly = true)
+    public Menu findById(final @NotNull Long id) {
+
+        return menuRepository.findById(id)
+                .orElseThrow(() -> new RestBusinessException(MenuErrorCode.NOT_FOUND));
     }
 }

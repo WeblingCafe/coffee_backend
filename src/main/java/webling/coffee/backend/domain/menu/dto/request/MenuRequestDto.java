@@ -19,4 +19,15 @@ public class MenuRequestDto {
         private boolean coldAvailable;
     }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class Update {
+        private String menuName;
+        private Long menuCategoryId;
+        private Long price;
+        private String menuPhotoUrl;
+        private boolean hotAvailable;
+        private boolean coldAvailable;
+    }
 }

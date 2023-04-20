@@ -1,4 +1,4 @@
-package webling.coffee.backend.global.errors.handler;
+package webling.coffee.backend.global.responses.errors.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import webling.coffee.backend.global.errors.codes.CommonErrorCode;
-import webling.coffee.backend.global.errors.exceptions.RestBusinessException;
-import webling.coffee.backend.global.errors.response.ErrorResponse;
+import webling.coffee.backend.global.responses.errors.codes.CommonErrorCode;
+import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
+import webling.coffee.backend.global.responses.errors.response.ErrorResponse;
 
 @Slf4j
 @RestControllerAdvice

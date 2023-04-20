@@ -2,8 +2,8 @@ package webling.coffee.backend.global.enums;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import webling.coffee.backend.global.errors.codes.EnumValueErrorCode;
-import webling.coffee.backend.global.errors.exceptions.RestBusinessException;
+import webling.coffee.backend.global.responses.errors.codes.EnumValueErrorCode;
+import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
 import java.util.Arrays;
 import java.util.Locale;

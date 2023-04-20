@@ -1,7 +1,7 @@
 package webling.coffee.backend.global.enums;
 
-import webling.coffee.backend.global.errors.codes.EnumValueErrorCode;
-import webling.coffee.backend.global.errors.exceptions.RestBusinessException;
+import webling.coffee.backend.global.responses.errors.codes.EnumValueErrorCode;
+import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
 import java.util.Locale;
 

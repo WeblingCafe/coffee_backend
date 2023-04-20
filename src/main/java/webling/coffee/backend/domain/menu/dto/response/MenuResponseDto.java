@@ -39,4 +39,19 @@ public class MenuResponseDto {
         }
     }
 
+    @Getter
+    @Setter
+    @Builder
+    public static class Update {
+
+        public static Update toDto(Menu update) {
+            return null;
+        }
+    }
+
+    public static class SoldOut {
+        public static SoldOut toDto(Menu soldOut) {
+            return null;
+        }
+    }
 }

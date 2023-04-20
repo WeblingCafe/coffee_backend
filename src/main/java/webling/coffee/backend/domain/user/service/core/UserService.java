@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.repository.UserRepository;
-import webling.coffee.backend.global.errors.codes.UserErrorCode;
-import webling.coffee.backend.global.errors.exceptions.RestBusinessException;
+import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
+import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
 @Slf4j
 @RequiredArgsConstructor
