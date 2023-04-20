@@ -13,7 +13,7 @@ import org.springframework.data.redis.core.TimeToLive;
 @Getter
 @Setter
 @NoArgsConstructor
-@RedisHash("RefreshToken")
+@RedisHash("CoffeeRefreshToken")
 public class RefreshToken {
     @Id
     private String refreshTokenKey;

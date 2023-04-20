@@ -12,8 +12,9 @@ import webling.coffee.backend.domain.menu.dto.response.MenuResponseDto;
 import webling.coffee.backend.domain.menu.service.MenuFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
 
-import static webling.coffee.backend.global.enums.UserRole.DEVELOPER;
-import static webling.coffee.backend.global.enums.UserRole.MANAGER;
+import java.util.List;
+
+import static webling.coffee.backend.global.enums.UserRole.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,6 +34,22 @@ public class MenuController {
                 .body(menuFacade.createMenu(request));
     }
 
+    @AuthRequired(roles = {MANAGER, EMPLOYEE, GUEST, DEVELOPER})
+    @Operation (summary = "메뉴 단일 조회")
+    @GetMapping ("/{id}")
+    public ResponseEntity<MenuResponseDto.Find> findById (final @NotNull @PathVariable Long id) {
+        return ResponseEntity.ok()
+                .body(menuFacade.findById(id));
+    }
+
+    @AuthRequired(roles = {MANAGER, EMPLOYEE, GUEST, DEVELOPER})
+    @Operation (summary = "메뉴 전체 조회")
+    @GetMapping ("")
+    public ResponseEntity<List<MenuResponseDto.Find>> findAll() {
+        return ResponseEntity.ok()
+                .body(menuFacade.findAll());
+    }
+
     @AuthRequired (roles = {MANAGER, DEVELOPER})
     @Operation (summary = "메뉴 수정")
     @PatchMapping ("/{id}")
@@ -50,5 +67,4 @@ public class MenuController {
         return ResponseEntity.ok()
                 .body(menuFacade.soldOut(id));
     }
-
 }

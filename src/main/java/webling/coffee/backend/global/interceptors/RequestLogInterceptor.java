@@ -77,6 +77,7 @@ public class RequestLogInterceptor implements HandlerInterceptor {
                 !request.getRequestURL().toString().contains(CSS) &&
                 !request.getRequestURL().toString().contains(JS) &&
                 !request.getRequestURL().toString().contains(HTML) &&
+                !request.getRequestURL().toString().contains(SWAGGER) &&
                 !request.getHeader("user-agent").contains("ELB-HealthChecker");
     }
 

@@ -49,8 +49,20 @@ public class MenuResponseDto {
         }
     }
 
+    @Getter
+    @Setter
+    @Builder
     public static class SoldOut {
         public static SoldOut toDto(Menu soldOut) {
+            return null;
+        }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class Find {
+        public static Find toDto(Menu byId) {
             return null;
         }
     }

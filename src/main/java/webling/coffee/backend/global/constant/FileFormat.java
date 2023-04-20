@@ -6,4 +6,5 @@ public class FileFormat {
     public static String CSS = ".css";
     public static String IMG = ".img";
     public static String HTML = ".html";
+    public static String SWAGGER = "api-docs";
 }

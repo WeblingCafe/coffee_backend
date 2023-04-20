@@ -14,6 +14,8 @@ import webling.coffee.backend.domain.menuCategory.service.core.MenuCategoryServi
 import webling.coffee.backend.global.responses.errors.codes.MenuErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
+import java.util.List;
+
 @Slf4j
 @Transactional
 @RequiredArgsConstructor
@@ -46,5 +48,13 @@ public class MenuFacade {
         Menu menu = menuService.findById(id);
 
         return MenuResponseDto.SoldOut.toDto(Menu.soldOut (menu));
+    }
+
+    public MenuResponseDto.Find findById(Long id) {
+        return MenuResponseDto.Find.toDto (menuService.findById(id));
+    }
+
+    public List<MenuResponseDto.Find> findAll() {
+        return null;
     }
 }
