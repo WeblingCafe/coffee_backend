@@ -38,18 +38,22 @@ public class MenuFacade {
 
     public MenuResponseDto.Update updateMenu(final @NotNull Long id, final @NotNull MenuRequestDto.Update request) {
 
-        Menu menu = menuService.findById(id);
-
-        return MenuResponseDto.Update.toDto(Menu.update(menu, request));
-    }
-
-    public MenuResponseDto.SoldOut soldOut(Long id) {
+        if (menuService.isDuplicationByMenuName(request.getMenuName())) {
+            throw new RestBusinessException(MenuErrorCode.DUPLICATION);
+        }
 
         Menu menu = menuService.findById(id);
 
-        return MenuResponseDto.SoldOut.toDto(Menu.soldOut (menu));
+        if (request.getMenuCategoryId() != null) {
+            MenuCategory menuCategory = menuCategoryService.findById(request.getMenuCategoryId());
+            return MenuResponseDto.Update.toDto(menuService.updateMenuWithCategory(menu, menuCategory, request));
+        }
+
+        return MenuResponseDto.Update.toDto(menuService.updateMenu(menu, request));
+
     }
 
+    @Transactional (readOnly = true)
     public MenuResponseDto.Find findByIdAndAvailable(Long id) {
         Menu menu = menuService.findById(id);
 
@@ -60,7 +64,30 @@ public class MenuFacade {
         return MenuResponseDto.Find.toDto (menu);
     }
 
+    @Transactional (readOnly = true)
     public List<MenuResponseDto.Find> findAllAndAvailable() {
         return menuService.findAllAvailable();
+    }
+
+    public MenuResponseDto.SoldOut soldOut(Long id) {
+
+        Menu menu = menuService.findById(id);
+
+        if (!menu.isAvailable()) {
+            throw new RestBusinessException(MenuErrorCode.NOT_AVAILABLE);
+        }
+
+        return MenuResponseDto.SoldOut.toDto(menuService.soldOut(menu));
+    }
+
+    public MenuResponseDto.Restore restore(Long id) {
+
+        Menu menu = menuService.findById(id);
+
+        if (menu.isAvailable()) {
+            throw new RestBusinessException(MenuErrorCode.ALREADY_AVAILABLE);
+        }
+
+        return MenuResponseDto.Restore.toDto(menuService.restore(menu));
     }
 }

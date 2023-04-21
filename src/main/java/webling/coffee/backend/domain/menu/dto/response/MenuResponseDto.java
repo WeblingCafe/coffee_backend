@@ -45,17 +45,30 @@ public class MenuResponseDto {
     @Builder
     public static class Update {
 
-        public static Update toDto(Menu update) {
-            return null;
-        }
-    }
+        private Long menuId;
 
-    @Getter
-    @Setter
-    @Builder
-    public static class SoldOut {
-        public static SoldOut toDto(Menu soldOut) {
-            return null;
+        private String menuName;
+
+        private String menuCategoryName;
+
+        private Long price;
+
+        private String menuPhotoUrl;
+
+        private boolean hotAvailable;
+
+        private boolean coldAvailable;
+
+        public static Update toDto(Menu menu) {
+            return Update.builder()
+                    .menuId(menu.getMenuId())
+                    .menuName(menu.getMenuName())
+                    .menuCategoryName(menu.getCategory().getCategoryName())
+                    .price(menu.getPrice())
+                    .menuPhotoUrl(menu.getMenuPhotoUrl())
+                    .hotAvailable(menu.isHotAvailable())
+                    .coldAvailable(menu.isColdAvailable())
+                    .build();
         }
     }
 
@@ -98,6 +111,40 @@ public class MenuResponseDto {
             this.menuPhotoUrl = menuPhotoUrl;
             this.hotAvailable = hotAvailable;
             this.coldAvailable = coldAvailable;
+        }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class SoldOut {
+        private Long menuId;
+        private String menuName;
+        private boolean isAvailable;
+
+        public static SoldOut toDto(Menu menu) {
+            return SoldOut.builder()
+                    .menuId(menu.getMenuId())
+                    .menuName(menu.getMenuName())
+                    .isAvailable(menu.isAvailable())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class Restore {
+        private Long menuId;
+        private String menuName;
+        private boolean isAvailable;
+
+        public static Restore toDto(Menu menu) {
+            return Restore.builder()
+                    .menuId(menu.getMenuId())
+                    .menuName(menu.getMenuName())
+                    .isAvailable(menu.isAvailable())
+                    .build();
         }
     }
 }

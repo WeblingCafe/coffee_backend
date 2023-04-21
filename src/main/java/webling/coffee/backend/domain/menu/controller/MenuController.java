@@ -69,4 +69,14 @@ public class MenuController {
         return ResponseEntity.ok()
                 .body(menuFacade.soldOut(id));
     }
+
+    @AuthRequired (roles = {MANAGER, DEVELOPER})
+    @Operation (summary = "판매 가능 처리")
+    @PatchMapping ("/restore/{id}")
+    public ResponseEntity<MenuResponseDto.Restore> restore (final @NotNull @PathVariable Long id) {
+
+        return ResponseEntity.ok()
+                .body(menuFacade.restore(id));
+    }
+
 }

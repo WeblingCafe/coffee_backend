@@ -14,7 +14,7 @@ public enum MenuErrorCode implements ErrorCode{
 
     NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "M003", "해당 메뉴는 현재 판매 가능하지 않습니다."),
 
-    ;
+    ALREADY_AVAILABLE(HttpStatus.BAD_REQUEST, "M004", "해당 메뉴는 이미 판매 가능 상태입니다.");
 
     private final HttpStatus httpStatus;
 

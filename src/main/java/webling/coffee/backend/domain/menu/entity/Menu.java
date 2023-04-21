@@ -58,13 +58,40 @@ public class Menu extends BaseTime {
                 .build();
     }
 
-    public static Menu update(Menu menu, MenuRequestDto.Update request) {
+    public static Menu update (Menu menu, MenuRequestDto.Update request) {
 
-        return null;
+        if (StringUtils.hasText(request.getMenuName()))
+            menu.setMenuName(request.getMenuName());
+
+        if (request.getPrice() != null)
+            menu.setPrice(request.getPrice());
+
+        if (StringUtils.hasText(request.getMenuPhotoUrl()))
+            menu.setMenuPhotoUrl(request.getMenuPhotoUrl());
+
+        menu.setColdAvailable(request.isColdAvailable());
+
+        menu.setHotAvailable(request.isHotAvailable());
+
+        return menu;
+    }
+
+    public static Menu updateWithCategory(Menu menu, MenuCategory menuCategory, MenuRequestDto.Update request) {
+
+        Menu updateMenu = Menu.update(menu, request);
+
+        updateMenu.setCategory(menuCategory);
+
+        return updateMenu;
     }
 
     public static Menu soldOut(Menu menu) {
         menu.setAvailable(false);
+        return menu;
+    }
+
+    public static Menu restore(Menu menu) {
+        menu.setAvailable(true);
         return menu;
     }
 }

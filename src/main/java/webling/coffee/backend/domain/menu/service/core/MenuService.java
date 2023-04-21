@@ -44,4 +44,20 @@ public class MenuService {
     public List<MenuResponseDto.Find> findAllAvailable() {
         return menuRepository.findAllAvailable();
     }
+
+    public Menu updateMenuWithCategory(Menu menu, MenuCategory menuCategory, MenuRequestDto.Update request) {
+        return menuRepository.save(Menu.updateWithCategory(menu, menuCategory, request));
+    }
+
+    public Menu updateMenu(Menu menu, MenuRequestDto.Update request) {
+        return menuRepository.save(Menu.update(menu, request));
+    }
+
+    public Menu soldOut(Menu menu) {
+        return Menu.soldOut(menu);
+    }
+
+    public Menu restore(Menu menu) {
+        return Menu.restore(menu);
+    }
 }
