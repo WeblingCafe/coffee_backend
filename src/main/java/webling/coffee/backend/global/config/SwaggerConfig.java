@@ -1,10 +1,13 @@
 package webling.coffee.backend.global.config;
 
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springdoc.core.customizers.OperationCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,24 +15,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
 
+import static webling.coffee.backend.global.utils.JwtUtils.ACCESS_AUTHORIZATION;
+import static webling.coffee.backend.global.utils.JwtUtils.REFRESH_AUTHORIZATION;
+
 @Configuration
-//@SecuritySchemes(
-//        {
-//                @SecurityScheme(
-//                        name = "Bearer Authentication",
-//                        type = SecuritySchemeType.HTTP,
-//                        bearerFormat = "JWT",
-//                        scheme = "bearer"
-//                ),
-//                @SecurityScheme(
-//                        name = "Bearer Refresh Authentication",
-//                        paramName = "Refresh-Token",
-//                        type = SecuritySchemeType.HTTP,
-//                        bearerFormat = "JWT",
-//                        scheme = "bearer"
-//                )
-//        }
-//)
 public class SwaggerConfig {
 
     @Value("${swagger.servers.domain.local}")
@@ -51,6 +40,7 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("사용자 API")
                 .pathsToMatch("/v1/users/**")
+                .addOperationCustomizer(operationCustomizer())
                 .build();
     }
 
@@ -59,6 +49,7 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("주문 API")
                 .pathsToMatch("/v1/orders/**")
+                .addOperationCustomizer(operationCustomizer())
                 .build();
     }
 
@@ -67,6 +58,7 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("메뉴 API")
                 .pathsToMatch("/v1/menus/**")
+                .addOperationCustomizer(operationCustomizer())
                 .build();
     }
 
@@ -75,7 +67,27 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("쿠폰 API")
                 .pathsToMatch("/v1/coupons/**")
+                .addOperationCustomizer(operationCustomizer())
                 .build();
+    }
+
+    @Bean
+    public OperationCustomizer operationCustomizer () {
+        return (operation, handlerMethod) -> {
+            Parameter accessAuthorization = new Parameter()
+                    .in(ParameterIn.HEADER.toString())
+                    .name(ACCESS_AUTHORIZATION)
+                    .required(true);
+
+            Parameter refreshAuthorization = new Parameter()
+                    .in(ParameterIn.HEADER.toString())
+                    .name(REFRESH_AUTHORIZATION)
+                    .required(true);
+
+            operation.addParametersItem(accessAuthorization);
+            operation.addParametersItem(refreshAuthorization);
+            return operation;
+        };
     }
 
     @Bean
@@ -94,7 +106,7 @@ public class SwaggerConfig {
                         .license(new License().name("Springdoc").url("https://springdoc.org")))
                 .externalDocs(new ExternalDocumentation()
                         .description("Webling Coffee Application Backend Swagger Documentation")
-                        .url("https://github.com/mingj7235/coffee_backend"));
+                        .url("https://github.com/WeblingCafe/coffee_backend"));
 
         openAPI.setServers(Arrays.asList(local, prd));
 
