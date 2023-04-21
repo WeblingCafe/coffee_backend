@@ -50,11 +50,17 @@ public class MenuFacade {
         return MenuResponseDto.SoldOut.toDto(Menu.soldOut (menu));
     }
 
-    public MenuResponseDto.Find findById(Long id) {
-        return MenuResponseDto.Find.toDto (menuService.findById(id));
+    public MenuResponseDto.Find findByIdAndAvailable(Long id) {
+        Menu menu = menuService.findById(id);
+
+        if (!menu.isAvailable()) {
+            throw new RestBusinessException(MenuErrorCode.NOT_AVAILABLE);
+        }
+
+        return MenuResponseDto.Find.toDto (menu);
     }
 
-    public List<MenuResponseDto.Find> findAll() {
-        return null;
+    public List<MenuResponseDto.Find> findAllAndAvailable() {
+        return menuService.findAllAvailable();
     }
 }

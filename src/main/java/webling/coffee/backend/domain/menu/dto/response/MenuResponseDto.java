@@ -1,5 +1,6 @@
 package webling.coffee.backend.domain.menu.dto.response;
 
+import com.querydsl.core.annotations.QueryProjection;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -62,8 +63,41 @@ public class MenuResponseDto {
     @Setter
     @Builder
     public static class Find {
-        public static Find toDto(Menu byId) {
-            return null;
+
+        private Long menuId;
+
+        private String menuName;
+
+        private String menuCategoryName;
+
+        private Long price;
+
+        private String menuPhotoUrl;
+
+        private boolean hotAvailable;
+
+        private boolean coldAvailable;
+        public static Find toDto(Menu menu) {
+            return Find.builder()
+                    .menuId(menu.getMenuId())
+                    .menuName(menu.getMenuName())
+                    .menuCategoryName(menu.getCategory().getCategoryName())
+                    .price(menu.getPrice())
+                    .menuPhotoUrl(menu.getMenuPhotoUrl())
+                    .hotAvailable(menu.isHotAvailable())
+                    .coldAvailable(menu.isColdAvailable())
+                    .build();
+        }
+
+        @QueryProjection
+        public Find(Long menuId, String menuName, String menuCategoryName, Long price, String menuPhotoUrl, boolean hotAvailable, boolean coldAvailable) {
+            this.menuId = menuId;
+            this.menuName = menuName;
+            this.menuCategoryName = menuCategoryName;
+            this.price = price;
+            this.menuPhotoUrl = menuPhotoUrl;
+            this.hotAvailable = hotAvailable;
+            this.coldAvailable = coldAvailable;
         }
     }
 }

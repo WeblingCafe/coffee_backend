@@ -7,11 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
+import webling.coffee.backend.domain.menu.dto.response.MenuResponseDto;
 import webling.coffee.backend.domain.menu.entity.Menu;
 import webling.coffee.backend.domain.menu.repository.MenuRepository;
 import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
 import webling.coffee.backend.global.responses.errors.codes.MenuErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -35,5 +38,10 @@ public class MenuService {
 
         return menuRepository.findById(id)
                 .orElseThrow(() -> new RestBusinessException(MenuErrorCode.NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public List<MenuResponseDto.Find> findAllAvailable() {
+        return menuRepository.findAllAvailable();
     }
 }

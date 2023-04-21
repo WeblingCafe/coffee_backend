@@ -35,19 +35,21 @@ public class MenuController {
     }
 
     @AuthRequired(roles = {MANAGER, EMPLOYEE, GUEST, DEVELOPER})
-    @Operation (summary = "메뉴 단일 조회")
+    @Operation (summary = "메뉴 단일 조회 (판매 가능한 메뉴만 조회)")
     @GetMapping ("/{id}")
     public ResponseEntity<MenuResponseDto.Find> findById (final @NotNull @PathVariable Long id) {
+
         return ResponseEntity.ok()
-                .body(menuFacade.findById(id));
+                .body(menuFacade.findByIdAndAvailable(id));
     }
 
     @AuthRequired(roles = {MANAGER, EMPLOYEE, GUEST, DEVELOPER})
-    @Operation (summary = "메뉴 전체 조회")
+    @Operation (summary = "메뉴 전체 조회 (판매 가능한 메뉴들만 조회)")
     @GetMapping ("")
     public ResponseEntity<List<MenuResponseDto.Find>> findAll() {
+
         return ResponseEntity.ok()
-                .body(menuFacade.findAll());
+                .body(menuFacade.findAllAndAvailable());
     }
 
     @AuthRequired (roles = {MANAGER, DEVELOPER})
