@@ -29,5 +29,4 @@ public class UserFacade {
 
         return UserResponseDto.Register.toDto(userService.register(request));
     }
-
 }

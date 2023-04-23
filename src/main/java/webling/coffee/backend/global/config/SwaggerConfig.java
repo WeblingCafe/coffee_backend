@@ -40,6 +40,7 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("사용자 API")
                 .pathsToMatch("/v1/users/**")
+                .addOperationCustomizer(operationCustomizer())
                 .build();
     }
 
