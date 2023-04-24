@@ -35,13 +35,13 @@ public class RefreshTokenRedisService {
     }
 
     @Transactional(readOnly = true)
-    public RefreshToken findByUsername (String username) {
-        return refreshTokenRedisRepository.findById(username)
+    public RefreshToken findByEmail (String email) {
+        return refreshTokenRedisRepository.findById(email)
                 .orElseThrow(() -> new RestBusinessException.NotFound(AuthenticationErrorCode.REFRESH_TOKEN_NOT_FOUND));
     }
 
     @Transactional
-    public void deleteById (final @NotBlank String username) {
-        refreshTokenRedisRepository.deleteById(username);
+    public void deleteById (final @NotBlank String email) {
+        refreshTokenRedisRepository.deleteById(email);
     }
 }
