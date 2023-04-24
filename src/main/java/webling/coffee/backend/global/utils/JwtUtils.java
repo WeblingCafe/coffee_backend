@@ -55,7 +55,7 @@ public class JwtUtils {
                 accessTokenTimeout);
     }
 
-    private String generateRefreshToken(Long id, String email) {
+    public String generateRefreshToken(Long id, String email) {
         return generateToken(id,
                 email,
                 refreshTokenTimeout);

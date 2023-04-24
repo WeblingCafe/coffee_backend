@@ -16,6 +16,7 @@ import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.service.UserFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
+import webling.coffee.backend.global.redis.service.RefreshTokenRedisService;
 import webling.coffee.backend.global.utils.JwtUtils;
 
 @Slf4j
@@ -26,7 +27,6 @@ public class AuthenticationController {
 
     private final AuthenticationFacade authenticationFacade;
     private final UserFacade userFacade;
-
     private final JwtUtils jwtUtils;
 
     @Operation(
