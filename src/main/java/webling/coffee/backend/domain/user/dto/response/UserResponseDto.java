@@ -1,6 +1,7 @@
 package webling.coffee.backend.domain.user.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,8 +53,9 @@ public class UserResponseDto {
         private String userRole;
         private Integer stamps;
         private String teamName;
+        private String refreshToken;
 
-        public static Login toDto(final @NotNull User user) {
+        public static Login toDto(final @NotNull User user, final @NotBlank String refreshToken) {
             return Login.builder()
                     .userId(user.getUserId())
                     .email(user.getEmail())
@@ -64,6 +66,7 @@ public class UserResponseDto {
                     .userRole(user.getUserRole().name())
                     .stamps(user.getStamps())
                     .teamName(user.getTeamName().name())
+                    .refreshToken(refreshToken)
                     .build();
         }
     }

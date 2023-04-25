@@ -10,6 +10,7 @@ import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
+import webling.coffee.backend.global.redis.entity.RefreshToken;
 import webling.coffee.backend.global.redis.service.RefreshTokenRedisService;
 import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
@@ -37,9 +38,9 @@ public class AuthenticationFacade {
             throw new RestBusinessException(UserErrorCode.PASSWORD_MISMATCH);
         }
 
-        refreshTokenRedisService.save(user.getUserId(), user.getEmail(), refreshTokenExpirationTime);
+        RefreshToken refreshToken = refreshTokenRedisService.save(user.getUserId(), user.getEmail(), refreshTokenExpirationTime);
 
-        return UserResponseDto.Login.toDto (user);
+        return UserResponseDto.Login.toDto (user, refreshToken.getRefreshTokenValue());
     }
 
     public void logout(final Long userId) {

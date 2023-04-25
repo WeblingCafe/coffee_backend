@@ -15,6 +15,8 @@ import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.service.UserFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
+import webling.coffee.backend.global.annotation.AuthUser;
+import webling.coffee.backend.global.context.UserAuthentication;
 
 @Slf4j
 @RestController
@@ -38,7 +40,7 @@ public class UserController {
     )
     @AuthRequired
     @PostMapping("/logout")
-    public ResponseEntity<?> logout () {
+    public ResponseEntity<?> logout (@AuthUser UserAuthentication authentication) {
         return ResponseEntity.noContent().build();
     }
 

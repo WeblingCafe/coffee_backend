@@ -38,10 +38,10 @@ public class JwtUtils {
         this.accessTokenTimeout = accessTokenTimeout;
     }
 
-    public HttpHeaders getAuthHeaders(Long id, String email) {
+    public HttpHeaders getAuthHeaders(Long id, String email, String refreshToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(ACCESS_AUTHORIZATION, generateAccessToken(id, email));
-        headers.add(REFRESH_AUTHORIZATION, generateRefreshToken(id, email));
+        headers.add(REFRESH_AUTHORIZATION, refreshToken);
         return headers;
     }
 
@@ -108,6 +108,4 @@ public class JwtUtils {
     private static String getToken(String token) {
         return token.substring(BEARER_TOKEN_PREFIX.length());
     }
-
-
 }

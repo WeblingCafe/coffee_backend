@@ -18,6 +18,8 @@ import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.context.UserAuthentication;
 import webling.coffee.backend.global.context.UserContext;
 import webling.coffee.backend.global.enums.UserRole;
+import webling.coffee.backend.global.redis.entity.RefreshToken;
+import webling.coffee.backend.global.redis.service.RefreshTokenRedisService;
 import webling.coffee.backend.global.responses.errors.codes.AuthenticationErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 import webling.coffee.backend.global.utils.JwtUtils;
@@ -32,6 +34,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private final JwtUtils jwtUtils;
 
     private final UserService userService;
+
+    private final RefreshTokenRedisService refreshTokenRedisService;
 
     @Override
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
@@ -53,10 +57,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 log.debug("Access Token is Expired");
 
                 try {
-                    jwtUtils.verifyToken(refreshToken);
-                    accessToken = retrieveAccessToken(response, refreshToken);
+                    RefreshToken refreshTokenFromRedis = refreshTokenRedisService.findByEmail(JwtUtils.getMemberEmailByToken(refreshToken));
 
-                } catch (JWTVerificationException e1) {
+                    if (!isRefreshTokenValid(refreshToken, refreshTokenFromRedis.getRefreshTokenValue())) {
+                        throw new RestBusinessException(AuthenticationErrorCode.REFRESH_TOKEN_NOT_FOUND);
+                    }
+
+                    accessToken = retrieveAccessToken(response, refreshTokenFromRedis.getRefreshTokenValue());
+
+                } catch (RestBusinessException.NotFound e1) {
                     log.error("Refresh Token is Invalid");
                     throw new RestBusinessException(AuthenticationErrorCode.INVALID_TOKEN);
 
@@ -101,6 +110,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         jwtUtils.setAuthorization (response, retrieveAccessToken);
 
         return retrieveAccessToken;
+    }
+
+    private boolean isRefreshTokenValid (String refreshToken, String refreshTokenFromRedis) {
+        return refreshToken.equals(refreshTokenFromRedis);
     }
 
     @Override
