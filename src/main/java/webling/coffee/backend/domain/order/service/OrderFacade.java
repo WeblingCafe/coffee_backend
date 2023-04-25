@@ -1,4 +1,30 @@
 package webling.coffee.backend.domain.order.service;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
+import webling.coffee.backend.domain.order.dto.response.OrderResponseDto;
+import webling.coffee.backend.domain.order.service.core.OrderService;
+import webling.coffee.backend.domain.user.entity.User;
+import webling.coffee.backend.domain.user.service.core.UserService;
+
+@Slf4j
+@Transactional
+@Service
+@RequiredArgsConstructor
 public class OrderFacade {
+
+    private final OrderService orderService;
+    private final UserService userService;
+
+    public OrderResponseDto.Create create(final @NotNull Long userId,
+                                          final @NotNull OrderRequestDto.Create request) {
+
+        User user = userService.findById(userId);
+
+        return null;
+    }
 }
