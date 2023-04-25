@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import webling.coffee.backend.domain.user.entity.User;
-import webling.coffee.backend.global.enums.UserRole;
 
 import java.time.LocalDate;
 
@@ -81,5 +80,14 @@ public class UserResponseDto {
         private String nickname;
         private String phoneNumber;
 
+        public static Update toDto(User user) {
+            return Update.builder()
+                    .userId(user.getUserId())
+                    .email(user.getEmail())
+                    .username(user.getUsername())
+                    .nickname(user.getNickname())
+                    .phoneNumber(user.getPhoneNumber())
+                    .build();
+        }
     }
 }

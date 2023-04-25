@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
-import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.repository.UserRepository;
 import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
@@ -41,6 +40,6 @@ public class UserService {
     }
 
     public User update(final @NotNull User user, final @NotNull UserRequestDto.Update request) {
-        return User.update(user, request);
+        return userRepository.save(User.update(user, request));
     }
 }

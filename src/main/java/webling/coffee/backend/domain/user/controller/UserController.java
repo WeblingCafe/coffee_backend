@@ -39,7 +39,7 @@ public class UserController {
 
         /**
          * 백엔드 로그아웃 설계
-         * 1. redis 에 저장된 refresh token 값을 logout 값으로 변경
+         * 1. redis 에 저장된 refresh token 값을 logout 값으로 변경?
          * 2. 프론트에 맡기기..?
          */
 
@@ -51,8 +51,13 @@ public class UserController {
             description = """
                     ## [내 정보 수정 API]
                     ### UserAuthentication 객체를 통해 현재 로그인 한 회원의 정보를 바탕으로 정보를 수정합니다.
-                    ### 수정할 수 있는 필드는 다음과 같습니다.
-                    ### - 이름, 닉네임, 패스워드, 전화번호
+                    ### 변경가능한 내용은 request 필드를 참고해주세요.
+                    
+                    ## [호출 권한]
+                    ### 접속한 UserAuthentication 객체
+                    
+                    ## [Exceptions]
+                    ### UserErrorCode.NOT_FOUND : UserAuthentication 을 바탕으로 얻은 시퀀스로 조회한 유저가 없을 경우 예외를 리턴합니다.
                     """
     )
     @AuthRequired

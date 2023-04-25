@@ -36,6 +36,6 @@ public class UserFacade {
 
         User user = userService.findById(userId);
 
-        return UserRequestDto.Update.toDto(userService.update(user, request));
+        return UserResponseDto.Update.toDto(userService.update(user, request));
     }
 }
