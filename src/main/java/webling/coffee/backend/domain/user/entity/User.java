@@ -3,9 +3,11 @@ package webling.coffee.backend.domain.user.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.util.StringUtils;
 import webling.coffee.backend.domain.coupon.entity.Coupon;
 import webling.coffee.backend.domain.order.entity.Order;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
@@ -81,5 +83,23 @@ public class User extends BaseTime {
                 .stamps(0)
                 .teamName(Team.of(request.getTeam()))
                 .build();
+    }
+
+    public static User update(final @NotNull User user,
+                              final @NotNull UserRequestDto.Update request) {
+
+        if (StringUtils.hasText(request.getUsername()))
+            user.setUsername(request.getUsername());
+
+        if (StringUtils.hasText(request.getNickname()))
+            user.setNickname(request.getNickname());
+
+        if (StringUtils.hasText(request.getPhoneNumber()))
+            user.setPhoneNumber(request.getPhoneNumber());
+
+        if (StringUtils.hasText(request.getPassword()))
+            user.setPassword(EncodingUtils.encode(request.getPassword()));
+
+        return user;
     }
 }

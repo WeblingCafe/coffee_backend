@@ -34,7 +34,7 @@ public class MenuController {
                 .body(menuFacade.createMenu(request));
     }
 
-    @AuthRequired(roles = {MANAGER, EMPLOYEE, GUEST, DEVELOPER})
+    @AuthRequired
     @Operation (summary = "메뉴 단일 조회 (판매 가능한 메뉴만 조회)")
     @GetMapping ("/{id}")
     public ResponseEntity<MenuResponseDto.Find> findById (final @NotNull @PathVariable Long id) {
@@ -43,7 +43,7 @@ public class MenuController {
                 .body(menuFacade.findByIdAndAvailable(id));
     }
 
-    @AuthRequired(roles = {MANAGER, EMPLOYEE, GUEST, DEVELOPER})
+    @AuthRequired
     @Operation (summary = "메뉴 전체 조회 (판매 가능한 메뉴들만 조회)")
     @GetMapping ("")
     public ResponseEntity<List<MenuResponseDto.Find>> findAll() {

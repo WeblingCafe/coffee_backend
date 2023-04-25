@@ -44,4 +44,13 @@ public class UserRequestDto {
         private String password;
     }
 
+    @Getter
+    @Setter
+    public static class Update {
+
+        private String username;
+        private String nickname;
+        private String password;
+        private String phoneNumber;
+    }
 }

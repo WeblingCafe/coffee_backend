@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
+import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
 import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
@@ -28,5 +29,13 @@ public class UserFacade {
         }
 
         return UserResponseDto.Register.toDto(userService.register(request));
+    }
+
+    public UserResponseDto.Update update(final @NotNull Long userId,
+                                         final @NotNull UserRequestDto.Update request) {
+
+        User user = userService.findById(userId);
+
+        return UserRequestDto.Update.toDto(userService.update(user, request));
     }
 }

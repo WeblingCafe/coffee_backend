@@ -70,4 +70,16 @@ public class UserResponseDto {
                     .build();
         }
     }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class Update {
+        private Long userId;
+        private String email;
+        private String username;
+        private String nickname;
+        private String phoneNumber;
+
+    }
 }
