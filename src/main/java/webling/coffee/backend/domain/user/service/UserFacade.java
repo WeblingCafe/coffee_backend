@@ -38,4 +38,12 @@ public class UserFacade {
 
         return UserResponseDto.Update.toDto(userService.update(user, request));
     }
+
+    public UserResponseDto.Update updateRole(final @NotNull Long userId,
+                                             final @NotNull UserRequestDto.UpdateRole request) {
+
+        User user = userService.findById(userId);
+
+        return UserResponseDto.Update.toDto(userService.updateRole(user, request));
+    }
 }

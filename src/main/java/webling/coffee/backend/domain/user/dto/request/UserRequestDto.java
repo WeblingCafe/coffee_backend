@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import webling.coffee.backend.global.annotation.VerifyEnum;
 import webling.coffee.backend.global.enums.Team;
-import webling.coffee.backend.global.enums.UserRole;
 
 import java.time.LocalDate;
 
@@ -29,10 +28,6 @@ public class UserRequestDto {
         private String phoneNumber;
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate birthDate;
-
-        @VerifyEnum(enumClass = UserRole.class, ignoreCase = true)
-        private String userRole;
-
         @VerifyEnum(enumClass = Team.class, ignoreCase = true)
         private String team;
     }
@@ -52,5 +47,12 @@ public class UserRequestDto {
         private String nickname;
         private String password;
         private String phoneNumber;
+    }
+
+    @Getter
+    @Setter
+    public static class UpdateRole {
+
+        private String userRole;
     }
 }

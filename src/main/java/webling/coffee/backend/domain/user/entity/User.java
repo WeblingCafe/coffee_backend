@@ -78,7 +78,7 @@ public class User extends BaseTime {
                 .password(EncodingUtils.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
                 .birthDate(request.getBirthDate())
-                .userRole(UserRole.of(request.getUserRole()))
+                .userRole(UserRole.EMPLOYEE)
                 .isAvailable(true)
                 .stamps(0)
                 .teamName(Team.of(request.getTeam()))
@@ -99,6 +99,15 @@ public class User extends BaseTime {
 
         if (StringUtils.hasText(request.getPassword()))
             user.setPassword(EncodingUtils.encode(request.getPassword()));
+
+        return user;
+    }
+
+    public static User updateRole(final @NotNull User user,
+                                  final @NotNull UserRequestDto.UpdateRole request) {
+
+        if (StringUtils.hasText(request.getUserRole()))
+            user.setUserRole(UserRole.of(request.getUserRole()));
 
         return user;
     }

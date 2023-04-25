@@ -32,15 +32,11 @@ public class AuthenticationController {
             description = """
                     ## [로그인 API]
                     ### 이메일과 패스워드를 통해 로그인을 진행합니다.
-                    """,
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = """
-                            ## [REQUEST BODY]
-                            ### email : 가입된 회원의 이메일 주소입니다.
-                            ### password : 가입된 회원의 비밀번호입니다.
-                            ### 로그인에 성공하면 회원의 이메일과 이름을 반환합니다.
-                            """
-            )
+                    
+                    ## [Exceptions]
+                    ### 1. UserErrorCode.NOT_FOUND : 로그인을 시도하는 계정을 찾을 수 없을 경우 해당 예외를 리턴합니다.
+                    ### 2. UserErrorCode.PASSWORD_MISMATCH : 비밀번호가 일치하지 않을 경우 해당 예외를 리턴합니다.
+                    """
     )
     @PostMapping("/login")
     public ResponseEntity<UserResponseDto.Login> login (final @RequestBody UserRequestDto.Login request) {
@@ -52,28 +48,23 @@ public class AuthenticationController {
                 .body(memberDto);
     }
 
-
-
     @Operation(
             summary = "회원가입",
             description = """
                     ## [회원가입 API]
                     ### 회원가입을 진행합니다.
+                    ### 기본으로 회원가입 된 회원의 권한은 EMPLOYEE 로 고정됩니다.
+                    
+                    ## [Exceptions]
+                    ### 1. UserErrorCode.DUPLICATION : 중복되는 이메일 주소의 회원이 존재하는 경우 해당 예외를 리턴합니다.
+                    ### 2. EnumValueErrorCode.TEAM_VALUE_INVALID : 가입하려는 회원의 팀 정보가 enum 값으로 없을 경우 해당 예외를 리턴합니다.
                     """,
             externalDocs = @ExternalDocumentation(
                     description = """
                             ## [ENUM]
                             ### 노션 링크를 참고해주세요.
                             """,
-                    url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee"),
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = """
-                            ## [REQUEST BODY]
-                            ### email : unique 값 잆니다. 중복일 경우, 예외를 반환합니다.
-                            ### userRole : 회원의 역할입니다. enum 으로 관리되며 [매니저, 일반회원, 게스트, 개발자] 로 나뉩니다.
-                            ### team : 팀 이름은 enum 으로 관리됩니다.
-                            """
-            )
+                    url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee")
     )
     @PostMapping("")
     public ResponseEntity<UserResponseDto.Register> register (@RequestBody UserRequestDto.@Valid Register request) {

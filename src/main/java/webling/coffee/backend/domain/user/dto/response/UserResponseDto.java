@@ -78,6 +78,7 @@ public class UserResponseDto {
         private String email;
         private String username;
         private String nickname;
+        private String userRole;
         private String phoneNumber;
 
         public static Update toDto(User user) {
@@ -86,6 +87,7 @@ public class UserResponseDto {
                     .email(user.getEmail())
                     .username(user.getUsername())
                     .nickname(user.getNickname())
+                    .userRole(user.getUserRole().name())
                     .phoneNumber(user.getPhoneNumber())
                     .build();
         }

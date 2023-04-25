@@ -42,4 +42,8 @@ public class UserService {
     public User update(final @NotNull User user, final @NotNull UserRequestDto.Update request) {
         return userRepository.save(User.update(user, request));
     }
+
+    public User updateRole(final @NotNull User user, final @NotNull UserRequestDto.UpdateRole request) {
+        return userRepository.save(User.updateRole(user, request));
+    }
 }

@@ -2,10 +2,8 @@ package webling.coffee.backend.domain.user.controller;
 
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
@@ -15,6 +13,8 @@ import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
 import webling.coffee.backend.global.redis.service.RefreshTokenRedisService;
+
+import static webling.coffee.backend.global.enums.UserRole.DEVELOPER;
 
 @Slf4j
 @RestController
@@ -68,4 +68,35 @@ public class UserController {
         return ResponseEntity.ok()
                 .body(userFacade.update(authentication.getUserId(), request));
     }
+
+    @Operation(
+            summary = "권한 부여",
+            description = """
+                    ## [권한 부여 API]
+                    ### 가입한 유저에게 권한을 부여합니다.
+                    ### 부여할 수 있는 권한의 ENUM 값은 노션 링크를 참고해주세요.
+                    
+                    ## [호출 권한]
+                    ### DEVELOPER
+                    
+                    ## [Exceptions]
+                    ### UserErrorCode.NOT_FOUND : 식별자인 시퀀스로 조회한 유저가 없을 경우 예외를 리턴합니다.
+                    ### EnumValueErrorCode.USER_ROLE_VALUE_INVALID : 부여할 권한이 ENUM 값에서 찾을 수 없을 경우 예외를 리턴합니다.
+                    """,
+            externalDocs = @ExternalDocumentation(
+                    description = """
+                            ## [ENUM]
+                            ### 노션 링크를 참고해주세요.
+                            """,
+                    url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee")
+    )
+    @AuthRequired (roles = {DEVELOPER})
+    @PatchMapping ("/role/{id}")
+    public ResponseEntity<UserResponseDto.Update> updateRole (final @PathVariable Long id,
+                                                              final @RequestBody UserRequestDto.UpdateRole request) {
+
+        return ResponseEntity.ok()
+                .body(userFacade.updateRole(id, request));
+    }
+
 }
