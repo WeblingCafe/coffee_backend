@@ -2,22 +2,22 @@ package webling.coffee.backend.domain.order.controller;
 
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
 import webling.coffee.backend.domain.order.dto.response.OrderResponseDto;
 import webling.coffee.backend.domain.order.service.OrderFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -45,8 +45,8 @@ public class OrderController {
     )
     @AuthRequired
     @PostMapping("")
-    public ResponseEntity<OrderResponseDto.Create> createOrder (final @AuthUser UserAuthentication authentication,
-                                                                final @NotNull OrderRequestDto.Create request) {
+    public ResponseEntity<OrderResponseDto.Create> createOrder (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
+                                                                final @NotNull @RequestBody OrderRequestDto.Create request) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(orderFacade.create(authentication.getUserId(), request));

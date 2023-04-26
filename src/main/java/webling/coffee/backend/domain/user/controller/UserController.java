@@ -2,6 +2,7 @@ package webling.coffee.backend.domain.user.controller;
 
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class UserController {
     )
     @AuthRequired
     @PostMapping("/logout")
-    public ResponseEntity<?> logout (final @AuthUser UserAuthentication authentication) {
+    public ResponseEntity<?> logout (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication) {
 
         /**
          * 백엔드 로그아웃 설계
@@ -62,7 +63,7 @@ public class UserController {
     )
     @AuthRequired
     @PatchMapping ("/me")
-    public ResponseEntity<UserResponseDto.Update> update (final @AuthUser UserAuthentication authentication,
+    public ResponseEntity<UserResponseDto.Update> update (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
                                                           final @RequestBody UserRequestDto.Update request) {
 
         return ResponseEntity.ok()
