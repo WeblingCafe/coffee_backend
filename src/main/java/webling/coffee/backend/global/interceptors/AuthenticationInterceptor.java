@@ -47,7 +47,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             String refreshToken = jwtUtils.getRefreshToken(request);
 
             if (isTokenEmpty(accessToken) || (isTokenEmpty(refreshToken))) {
-                throw new RestBusinessException(AuthenticationErrorCode.INVALID_TOKEN);
+                throw new RestBusinessException.Failure(AuthenticationErrorCode.INVALID_TOKEN);
             }
 
             try {
@@ -60,26 +60,26 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     RefreshToken refreshTokenFromRedis = refreshTokenRedisService.findByEmail(JwtUtils.getMemberEmailByToken(refreshToken));
 
                     if (!isRefreshTokenValid(refreshToken, refreshTokenFromRedis.getRefreshTokenValue())) {
-                        throw new RestBusinessException(AuthenticationErrorCode.REFRESH_TOKEN_NOT_FOUND);
+                        throw new RestBusinessException.NotFound(AuthenticationErrorCode.REFRESH_TOKEN_NOT_FOUND);
                     }
 
                     accessToken = retrieveAccessToken(response, refreshTokenFromRedis.getRefreshTokenValue());
 
                 } catch (RestBusinessException.NotFound e1) {
                     log.error("Refresh Token is Invalid");
-                    throw new RestBusinessException(AuthenticationErrorCode.INVALID_TOKEN);
+                    throw new RestBusinessException.Failure(AuthenticationErrorCode.INVALID_TOKEN);
 
                 }
 
             } catch (JWTVerificationException e) {
                 log.error("Access Token is Invalid");
-                throw new RestBusinessException(AuthenticationErrorCode.INVALID_TOKEN);
+                throw new RestBusinessException.Failure(AuthenticationErrorCode.INVALID_TOKEN);
             }
 
             User user = userService.findById(JwtUtils.getMemberIdByToken(accessToken));
 
             if (isInvalidRole(authRequired, user.getUserRole())) {
-                throw new RestBusinessException(AuthenticationErrorCode.ACCESS_DENIED);
+                throw new RestBusinessException.Failure(AuthenticationErrorCode.ACCESS_DENIED);
             }
 
             UserContext.setAuthentication(UserAuthentication.from(user));
