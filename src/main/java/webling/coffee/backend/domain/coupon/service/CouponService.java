@@ -40,5 +40,6 @@ public class CouponService {
         for (int i = 0; i < couponAmount -1; i++) {
             coupons.set(i, Coupon.disable(coupons.get(i)));
         }
+        couponRepository.saveAll(coupons);
     }
 }

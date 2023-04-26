@@ -31,7 +31,7 @@ public class OrderFacade {
 
         couponService.useCoupons (couponService.findAllByUserAndIsAvailable(user), request.getCouponAmount());
 
-        return OrderRequestDto.Create.toDto(
+        return OrderResponseDto.Create.toDto(
                 orderService.create(
                         user,
                         userService.findById(request.getRecipientId()),
