@@ -4,18 +4,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import webling.coffee.backend.domain.cart.entity.Cart;
+import org.hibernate.annotations.DynamicUpdate;
+import webling.coffee.backend.domain.menu.entity.Menu;
+import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.global.base.BaseTime;
 import webling.coffee.backend.global.enums.OrderStatus;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter (AccessLevel.PRIVATE)
 @SuperBuilder
 @Entity
+@DynamicUpdate
 @Table(name = "order_mst")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -30,6 +30,11 @@ public class Order extends BaseTime {
     @JoinColumn (name = "USER_ID")
     private User user;
 
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "MENU_ID")
+    private Menu menu;
+
+    private String recipientEmail;
     @NotNull
     private Long totalPrice;
     private boolean isPersonalCup;
@@ -38,7 +43,19 @@ public class Order extends BaseTime {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "order")
-    private List<Cart> orderMenus = new ArrayList<>();
+    public static Order create(User user,
+                               User recipient,
+                               Menu menu,
+                               Long totalPrice,
+                               OrderRequestDto.Create request) {
+        return Order.builder()
+                .user(user)
+                .menu(menu)
+                .recipientEmail(recipient.getEmail())
+                .totalPrice(totalPrice)
+                .isPersonalCup(request.isPersonalCup())
+                .request(request.getRequest())
+                .orderStatus(OrderStatus.ORDERED)
+                .build();
+    }
 }

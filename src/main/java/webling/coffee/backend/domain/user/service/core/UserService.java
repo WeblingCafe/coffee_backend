@@ -5,11 +5,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import webling.coffee.backend.domain.coupon.entity.Coupon;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.repository.UserRepository;
+import webling.coffee.backend.global.responses.errors.codes.CouponErrorCode;
 import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor

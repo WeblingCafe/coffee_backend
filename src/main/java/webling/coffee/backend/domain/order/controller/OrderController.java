@@ -17,6 +17,8 @@ import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor

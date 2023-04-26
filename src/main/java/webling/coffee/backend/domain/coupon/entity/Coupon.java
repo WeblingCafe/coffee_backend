@@ -26,7 +26,16 @@ public class Coupon extends BaseTime {
     @VerifyEnum(enumClass = CouponType.class)
     private CouponType couponType;
 
+    private boolean isAvailable;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "USER_ID")
     private User user;
+
+    public static Coupon disable(Coupon coupon) {
+
+        coupon.setAvailable(false);
+
+        return coupon;
+    }
 }

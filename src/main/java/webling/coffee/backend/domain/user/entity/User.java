@@ -17,6 +17,7 @@ import webling.coffee.backend.global.enums.UserRole;
 import webling.coffee.backend.global.utils.EncodingUtils;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter

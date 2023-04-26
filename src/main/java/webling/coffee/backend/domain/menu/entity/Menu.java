@@ -5,13 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.util.StringUtils;
-import webling.coffee.backend.domain.cart.entity.Cart;
 import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
 import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
 import webling.coffee.backend.global.base.BaseTime;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -41,10 +37,6 @@ public class Menu extends BaseTime {
     private boolean hotAvailable;
     private boolean coldAvailable;
     private boolean isAvailable;
-
-    @Builder.Default
-    @OneToMany (mappedBy = "menu")
-    private List<Cart> orderMenus = new ArrayList<>();
 
     public static Menu create(MenuCategory category, MenuRequestDto.Create request) {
         return Menu.builder()

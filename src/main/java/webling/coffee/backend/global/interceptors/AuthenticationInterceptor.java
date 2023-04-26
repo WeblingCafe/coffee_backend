@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import webling.coffee.backend.domain.coupon.entity.Coupon;
+import webling.coffee.backend.domain.coupon.service.CouponService;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
 import webling.coffee.backend.global.annotation.AuthRequired;
@@ -24,6 +26,7 @@ import webling.coffee.backend.global.responses.errors.codes.AuthenticationErrorC
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 import webling.coffee.backend.global.utils.JwtUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -34,11 +37,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private final JwtUtils jwtUtils;
 
     private final UserService userService;
+    private final CouponService couponService;
 
     private final RefreshTokenRedisService refreshTokenRedisService;
 
     @Override
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
+
 
         if (isAuthRequired(handler)) {
             AuthRequired authRequired = Objects.requireNonNull((HandlerMethod) handler).getMethodAnnotation(AuthRequired.class);
@@ -77,12 +82,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             }
 
             User user = userService.findById(JwtUtils.getMemberIdByToken(accessToken));
+            List<Coupon> couponList = couponService.findAllByUserAndIsAvailable(user);
 
             if (isInvalidRole(authRequired, user.getUserRole())) {
                 throw new RestBusinessException.Failure(AuthenticationErrorCode.ACCESS_DENIED);
             }
 
-            UserContext.setAuthentication(UserAuthentication.from(user));
+            UserContext.setAuthentication(UserAuthentication.from(user, couponList.size()));
         }
         return true;
     }
