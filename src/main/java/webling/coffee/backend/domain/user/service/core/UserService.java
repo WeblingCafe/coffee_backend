@@ -34,13 +34,13 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User findByEmail(final String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new RestBusinessException(UserErrorCode.NOT_FOUND));
+        return userRepository.findByEmail(email).orElseThrow(() -> new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
     public User findById(final @NotNull Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RestBusinessException(UserErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND));
     }
 
     public User update(final @NotNull User user, final @NotNull UserRequestDto.Update request) {

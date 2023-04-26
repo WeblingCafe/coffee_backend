@@ -32,13 +32,14 @@ public class OrderController {
             description = """
                     ## [주문 생성 API]
                     ### 주문을 생성합니다.
-                    ###
                     
                     ## [호출 권한]
                     ### ALL
                     
                     ## [Exceptions]
-                    ### 
+                    ### 1. CouponErrorCode.EXCEEDED_AMOUNT : 사용 요청한 쿠폰 개수가 해당 USER 가 소유한 쿠폰 개수를 초과했을 시 해당 예외를 리턴합니다.
+                    ### 2. UserErrorCode.NOT_FOUND : 주문하는 USER 나, 받는 USER 를 찾을 수 없을 경우 해당 예외를 리턴합니다.
+                    ### 3. MenuErrorCode.NOT_FOUND : 현재 판매 가능한 메뉴 중 주문 하려는 메뉴를 찾을 수 없을 경우 해당 예외를 리턴합니다.
                     """,
             externalDocs = @ExternalDocumentation(description = "ENUM 정보", url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee")
     )

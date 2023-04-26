@@ -37,7 +37,13 @@ public class MenuService {
     public Menu findById(final @NotNull Long id) {
 
         return menuRepository.findById(id)
-                .orElseThrow(() -> new RestBusinessException(MenuErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new RestBusinessException.NotFound(MenuErrorCode.NOT_FOUND));
+    }
+
+    @Transactional (readOnly = true)
+    public Menu findByIdAndAvailable (final @NotNull Long id) {
+        return menuRepository.findByIdAndAvailable(id)
+                .orElseThrow(() -> new RestBusinessException.NotFound(MenuErrorCode.NOT_FOUND));
     }
 
     @Transactional(readOnly = true)

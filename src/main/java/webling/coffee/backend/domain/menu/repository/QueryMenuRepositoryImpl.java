@@ -4,8 +4,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import webling.coffee.backend.domain.menu.dto.response.MenuResponseDto;
 import webling.coffee.backend.domain.menu.dto.response.QMenuResponseDto_Find;
+import webling.coffee.backend.domain.menu.entity.Menu;
 
 import java.util.List;
+import java.util.Optional;
 
 import static webling.coffee.backend.domain.menu.entity.QMenu.menu;
 import static webling.coffee.backend.domain.menuCategory.entity.QMenuCategory.menuCategory;
@@ -32,5 +34,16 @@ public class QueryMenuRepositoryImpl implements QueryMenuRepository{
                         menu.isAvailable.isTrue()
                 )
                 .fetch();
+    }
+
+    @Override
+    public Optional<Menu> findByIdAndAvailable(Long id) {
+        return Optional.ofNullable(jpaQueryFactory.selectFrom(menu)
+                .where(
+                        menu.menuId.eq(id),
+                        menu.isAvailable.isTrue()
+                )
+                .fetchOne())
+                ;
     }
 }

@@ -35,7 +35,7 @@ public class OrderFacade {
                 orderService.create(
                         user,
                         userService.findById(request.getRecipientId()),
-                        menuService.findById(request.getMenuId()),
+                        menuService.findByIdAndAvailable(request.getMenuId()),
                         request)
         );
     }

@@ -20,7 +20,7 @@ public enum Team {
         try {
             return Team.valueOf(name.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
-            throw new RestBusinessException(EnumValueErrorCode.TEAM_VALUE_INVALID);
+            throw new RestBusinessException.NotFound(EnumValueErrorCode.TEAM_VALUE_INVALID);
         }
     }
 
