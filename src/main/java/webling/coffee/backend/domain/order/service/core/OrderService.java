@@ -8,8 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.menu.entity.Menu;
 import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
 import webling.coffee.backend.domain.order.entity.Order;
-import webling.coffee.backend.domain.order.repository.OrderRepository;
+import webling.coffee.backend.domain.order.entity.OrderCart;
+import webling.coffee.backend.domain.order.repository.order.OrderRepository;
 import webling.coffee.backend.domain.user.entity.User;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -24,6 +27,12 @@ public class OrderService {
                         final @NotNull OrderRequestDto.Create request) {
 
         return orderRepository.save(Order.create(user, recipient, menu, getTotalPrice(menu.getPrice(), request.getAmount()), request));
+    }
+
+    public void addCart (OrderCart cart, List<Order> orderList) {
+        orderList.forEach(order -> {
+            Order.addCart(order, cart);
+        });
     }
 
     private Long getTotalPrice (Long menuPrice, Long amount) {

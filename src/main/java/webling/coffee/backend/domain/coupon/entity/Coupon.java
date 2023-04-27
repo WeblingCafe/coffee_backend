@@ -1,10 +1,10 @@
 package webling.coffee.backend.domain.coupon.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import webling.coffee.backend.domain.user.entity.User;
-import webling.coffee.backend.global.annotation.VerifyEnum;
 import webling.coffee.backend.global.base.BaseTime;
 import webling.coffee.backend.global.enums.CouponType;
 
@@ -23,7 +23,6 @@ public class Coupon extends BaseTime {
     private Long couponId;
 
     @Enumerated(EnumType.STRING)
-    @VerifyEnum(enumClass = CouponType.class)
     private CouponType couponType;
 
     private boolean isAvailable;
@@ -32,10 +31,17 @@ public class Coupon extends BaseTime {
     @JoinColumn (name = "USER_ID")
     private User user;
 
+    public static Coupon toEntity(final @NotNull User user) {
+        return Coupon.builder()
+                .couponType(CouponType.COMMON)
+                .isAvailable(true)
+                .user(user)
+                .build();
+    }
+
     public static Coupon disable(Coupon coupon) {
 
         coupon.setAvailable(false);
-
         return coupon;
     }
 }

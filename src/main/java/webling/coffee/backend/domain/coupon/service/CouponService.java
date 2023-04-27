@@ -13,6 +13,8 @@ import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessExc
 
 import java.util.List;
 
+import static webling.coffee.backend.global.constant.CalculationOperators.STAMP_MAX_NUM;
+
 @Slf4j
 @Transactional
 @Service
@@ -37,9 +39,21 @@ public class CouponService {
     }
 
     private void disableCoupons (List<Coupon> coupons, Long couponAmount) {
-        for (int i = 0; i < couponAmount -1; i++) {
+        for (int i = 0; i < couponAmount; i++) {
             coupons.set(i, Coupon.disable(coupons.get(i)));
         }
         couponRepository.saveAll(coupons);
+    }
+
+    public void issueCouponByStamp(User updatedUser) {
+        int issueCouponNumber = updatedUser.getStamps() / STAMP_MAX_NUM;
+
+        if (issueCouponNumber > 0) {
+            for (int i = 0; i < issueCouponNumber; i++) {
+                couponRepository.save(Coupon.toEntity(updatedUser));
+            }
+        }
+
+        User.useStamps(updatedUser, issueCouponNumber * STAMP_MAX_NUM);
     }
 }

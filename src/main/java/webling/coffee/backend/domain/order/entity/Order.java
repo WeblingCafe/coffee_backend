@@ -34,6 +34,10 @@ public class Order extends BaseTime {
     @JoinColumn(name = "MENU_ID")
     private Menu menu;
 
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORDER_CART_ID")
+    private OrderCart orderCart;
+
     private String recipientEmail;
     @NotNull
     private Long totalPrice;
@@ -57,5 +61,9 @@ public class Order extends BaseTime {
                 .request(request.getRequest())
                 .orderStatus(OrderStatus.ORDERED)
                 .build();
+    }
+
+    public static void addCart(Order order, OrderCart cart) {
+        order.setOrderCart(cart);
     }
 }

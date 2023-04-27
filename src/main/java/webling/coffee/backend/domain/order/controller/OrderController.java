@@ -19,6 +19,8 @@ import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -28,10 +30,19 @@ public class OrderController {
     private final OrderFacade orderFacade;
 
     @Operation(
-            summary = "주문생성",
+            summary = "주문 결제",
             description = """
-                    ## [주문 생성 API]
-                    ### 주문을 생성합니다.
+                    ## [주문 결제 API]
+                    ### 주문을 생성하고 결제합니다.
+                    ### 주문 정보를 리스트로 받습니다.
+                    
+                    ## [주문 생성 description]
+                    ### 주문이 저장될 때, 다음의 로직들이 하나의 트랜잭션으로 작동합니다.
+                    ### 1. 주문당 사용하는 쿠폰 수량과 계정이 소유한 쿠폰 수량을 비교하여 쿠폰을 사용합니다. (isAvailable false 로 변경)
+                    ### 2. 요청 정보를 바탕으로 주문정보를 생성합니다. 이때, 한 주문의 총 비용을 계산합니다.
+                    ### 3. 주문정보가 생성이 되면, 장바구니를 생성합니다. 이때, 주문들이 담긴 장바구니의 총 비용을 계산합니다.
+                    ### 4. 사용한 쿠폰 만큼의 수량을 제외한 만큼 사용자의 스탬프 개수를 추가합니다.
+                    ### 5. 추가된 스탬프 개수가 20개를 넘을 시, COMMON 쿠폰을 유저에게 발급하고, 스탬프 개수를 차감합니다.
                     
                     ## [호출 권한]
                     ### ALL
@@ -45,8 +56,8 @@ public class OrderController {
     )
     @AuthRequired
     @PostMapping("")
-    public ResponseEntity<OrderResponseDto.Create> createOrder (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
-                                                                final @NotNull @RequestBody OrderRequestDto.Create request) {
+    public ResponseEntity<List<OrderResponseDto.Create>> createOrder (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
+                                                                final @NotNull @RequestBody List<OrderRequestDto.Create> request) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(orderFacade.create(authentication.getUserId(), request));

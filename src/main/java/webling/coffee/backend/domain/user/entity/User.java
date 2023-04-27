@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.util.StringUtils;
 import webling.coffee.backend.domain.coupon.entity.Coupon;
 import webling.coffee.backend.domain.order.entity.Order;
+import webling.coffee.backend.domain.order.entity.OrderCart;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.global.base.BaseTime;
 import webling.coffee.backend.global.enums.Team;
@@ -17,7 +18,6 @@ import webling.coffee.backend.global.enums.UserRole;
 import webling.coffee.backend.global.utils.EncodingUtils;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -70,6 +70,8 @@ public class User extends BaseTime {
     private List<Order> orders;
     @OneToMany(mappedBy = "user")
     private List<Coupon> coupons;
+    @OneToMany(mappedBy = "user")
+    private List<OrderCart> orderCart;
 
     public static User register(UserRequestDto.Register request) {
         return User.builder()
@@ -111,5 +113,15 @@ public class User extends BaseTime {
             user.setUserRole(UserRole.of(request.getUserRole()));
 
         return user;
+    }
+
+    public static User addStamps(final @NotNull User user, final @NotNull Integer totalAmount) {
+
+        user.setStamps(user.getStamps() + totalAmount);
+        return user;
+    }
+
+    public static void useStamps(final @NotNull User user, final @NotNull int usedStamps) {
+        user.setStamps(user.getStamps() - usedStamps);
     }
 }

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.coupon.entity.Coupon;
+import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.repository.UserRepository;
@@ -49,5 +50,10 @@ public class UserService {
 
     public User updateRole(final @NotNull User user, final @NotNull UserRequestDto.UpdateRole request) {
         return userRepository.save(User.updateRole(user, request));
+    }
+
+    public User addStamps(User user, List<OrderRequestDto.Create> request) {
+        Integer stamps = request.stream().map(a -> a.getStamps(a.getAmount(), a.getCouponAmount()).intValue()).reduce(Integer::sum).orElseGet(() -> 0);
+        return userRepository.save(User.addStamps(user, stamps));
     }
 }

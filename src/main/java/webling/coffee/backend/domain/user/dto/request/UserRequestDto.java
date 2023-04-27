@@ -5,8 +5,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
-import webling.coffee.backend.global.annotation.VerifyEnum;
-import webling.coffee.backend.global.enums.Team;
 
 import java.time.LocalDate;
 
@@ -28,7 +26,6 @@ public class UserRequestDto {
         private String phoneNumber;
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate birthDate;
-        @VerifyEnum(enumClass = Team.class, ignoreCase = true)
         private String team;
     }
 

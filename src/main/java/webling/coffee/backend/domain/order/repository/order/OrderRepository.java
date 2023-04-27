@@ -1,4 +1,4 @@
-package webling.coffee.backend.domain.order.repository;
+package webling.coffee.backend.domain.order.repository.order;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import webling.coffee.backend.domain.order.entity.Order;
