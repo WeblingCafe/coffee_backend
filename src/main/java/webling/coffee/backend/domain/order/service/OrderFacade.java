@@ -17,6 +17,7 @@ import webling.coffee.backend.domain.user.service.core.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Transactional
@@ -33,14 +34,11 @@ public class OrderFacade {
     public List<OrderResponseDto.Create> create(final @NotNull Long userId,
                                           final @NotNull List<OrderRequestDto.Create> request) {
 
-        List<OrderResponseDto.Create> orderDtoList = new ArrayList<>();
+        User user = userService.findById(userId);
         List<Order> orderEntityList = new ArrayList<>();
 
-        User user = userService.findById(userId);
-
-        request.forEach(orderRequest -> {
-
-            couponService.useCoupons (couponService.findAllByUserAndIsAvailable(user), orderRequest.getCouponAmount());
+        for (OrderRequestDto.Create orderRequest : request) {
+            couponService.useCoupons(couponService.findAllByUserAndIsAvailable(user), orderRequest.getCouponAmount());
 
             Order orderEntity = orderService.create(
                     user,
@@ -48,20 +46,18 @@ public class OrderFacade {
                     menuService.findByIdAndAvailable(orderRequest.getMenuId()),
                     orderRequest);
 
-            orderDtoList.add(OrderResponseDto.Create.toDto(orderEntity));
             orderEntityList.add(orderEntity);
-        });
+        }
 
         orderService.addCart(orderCartService.save(orderEntityList, user), orderEntityList);
-        User updatedUser = userService.addStamps(user, request);
 
-        couponService.issueCouponByStamp(updatedUser);
+        userService.addStamps(user, request);
+        couponService.issueCouponByStamp(user);
 
-        return orderDtoList;
+        return orderEntityList.stream()
+                .map(OrderResponseDto.Create::toDto)
+                .collect(Collectors.toList());
     }
-
-
-
 }
 
 
