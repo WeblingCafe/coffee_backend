@@ -1,7 +1,7 @@
 FROM openjdk:17-jdk-slim
 ARG JAR_FILE=./build/libs/backend-0.0.1-SNAPSHOT.jar
 
-ARG PINPOINT_VERSION=2.2.3
+ARG PINPOINT_VERSION=2.5.1
 
 WORKDIR /usr/local
 
