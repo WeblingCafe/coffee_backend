@@ -50,6 +50,26 @@
           "containerPort": 8080
         }
       ],
+      "environment": [
+        {
+          "name": "PINPOINT_AGENT_ID",
+          "value": "cf"
+        },
+        {
+          "name": "PINPOINT_APP_NAME",
+          "value": "webling-ip-pinpoint-prd"
+        },
+        {
+          "name": "PINPOINT_COLLECTOR_IP",
+          "value": "10.0.0.181"
+        },
+        {
+          "name": "PINPOINT_COLLECTOR_PORT",
+          "value": "9991"
+        }
+      ],
+      "mountPoints": [],
+      "volumesFrom": [],
       "essential": true
     }
   ],
