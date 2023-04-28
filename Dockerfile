@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-jdk
 ARG JAR_FILE=./build/libs/backend-0.0.1-SNAPSHOT.jar
 
 RUN wget https://repo1.maven.org/maven2/com/navercorp/pinpoint/pinpoint-agent/2.2.3/pinpoint-agent-2.2.3.tar.gz && \
