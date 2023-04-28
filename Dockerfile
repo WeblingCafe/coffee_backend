@@ -16,4 +16,4 @@ RUN apt-get update && \
 
 
 COPY ${JAR_FILE} coffee.jar
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prd", "-Duser.timezone=Asia/Seoul", "-javaagent:/pinpoint-agent/pinpoint-bootstrap-2.2.3.jar", "-Dpinpoint.agentId=cf", "-Dpinpoint.applicationName=webling-ip-pinpoint-prd" , "/coffee.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prd", "-Duser.timezone=Asia/Seoul", "-javaagent:/pinpoint-agent/pinpoint-bootstrap.jar", "-Dpinpoint.agentId=cf", "-Dpinpoint.applicationName=webling-ip-pinpoint-prd" , "/coffee.jar"]
