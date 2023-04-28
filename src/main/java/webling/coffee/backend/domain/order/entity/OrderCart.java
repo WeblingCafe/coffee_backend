@@ -25,6 +25,10 @@ public class OrderCart extends BaseTime {
     @Column(name = "ORDER_CART_ID")
     private Long orderCartId;
 
+    @NotNull
+    private Long originalPrice;
+    private Long salePrice;
+    @NotNull
     private Long totalPrice;
 
     @ManyToOne (fetch = FetchType.LAZY)

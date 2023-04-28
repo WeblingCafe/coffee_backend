@@ -28,7 +28,7 @@ public class CouponService {
         return couponRepository.findAllByUserAndIsAvailable(user);
     }
 
-    public void useCoupons(final @NotNull List<Coupon> coupons,
+    public Long useCoupons(final @NotNull List<Coupon> coupons,
                            final @NotNull Long couponAmount) {
 
         if (coupons.size() < couponAmount) {
@@ -36,6 +36,8 @@ public class CouponService {
         }
 
         disableCoupons (coupons, couponAmount);
+
+        return couponAmount;
     }
 
     private void disableCoupons (List<Coupon> coupons, Long couponAmount) {
