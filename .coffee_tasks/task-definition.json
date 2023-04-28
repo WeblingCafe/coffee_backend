@@ -52,7 +52,7 @@
       ],
       "command": [
         "java",
-        "-Dspring.profiles.active=prd",
+        "-Dspring.config.activate.on-profile=prd",
         "-Duser.timezone=Asia/Seoul",
         "-javaagent:/usr/local/pinpoint-agent-2.5.1/pinpoint-bootstrap-2.5.1.jar",
         "-Dpinpoint.agentId=cf",
@@ -74,7 +74,7 @@
       ],
       "environment": [
         {
-          "name": "SPRING_PROFILES",
+          "name": "SPRING_CONFIG_ACTIVATE_ON_PROFILE",
           "value": "prd"
         }
       ],
