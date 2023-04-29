@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.util.StringUtils;
 import webling.coffee.backend.domain.coupon.entity.Coupon;
+import webling.coffee.backend.domain.menu.entity.FavoriteMenu;
 import webling.coffee.backend.domain.order.entity.Order;
 import webling.coffee.backend.domain.order.entity.OrderCart;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
@@ -72,6 +73,8 @@ public class User extends BaseTime {
     private List<Coupon> coupons;
     @OneToMany(mappedBy = "user")
     private List<OrderCart> orderCart;
+    @OneToMany(mappedBy = "user")
+    private List<FavoriteMenu> favoriteMenuList;
 
     public static User register(UserRequestDto.Register request) {
         return User.builder()

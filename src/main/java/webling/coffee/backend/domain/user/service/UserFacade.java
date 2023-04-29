@@ -38,6 +38,8 @@ public class UserFacade {
 
         User user = userService.findById(userId);
 
+        checkUserIsAvailable(user);
+
         return UserResponseDto.Update.toDto(userService.update(user, request));
     }
 
@@ -46,11 +48,28 @@ public class UserFacade {
 
         User user = userService.findById(userId);
 
+        checkUserIsAvailable(user);
+
         return UserResponseDto.Update.toDto(userService.updateRole(user, request));
     }
 
+    @Transactional (readOnly = true)
     public List<UserResponseDto.Find> findAllByIsAvailableTrue() {
         return userService.findAllByIsAvailableTrue();
     }
 
+    @Transactional (readOnly = true)
+    public UserResponseDto.Find findById(final @NotNull Long id) {
+        User user = userService.findById(id);
+
+        checkUserIsAvailable(user);
+
+        return UserResponseDto.Find.toDto(user);
+    }
+
+    private void checkUserIsAvailable (final @NotNull User user) {
+        if (!user.getIsAvailable()) {
+            throw new RestBusinessException.Failure(UserErrorCode.NOT_AVAILABLE);
+        }
+    }
 }

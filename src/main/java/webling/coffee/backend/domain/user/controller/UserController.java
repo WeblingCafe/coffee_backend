@@ -99,6 +99,18 @@ public class UserController {
                 .body(userFacade.updateRole(id, request));
     }
 
+    @Operation(
+            summary = "가입 유저 전체 조회",
+            description = """
+                    ## [가입 유저 전체 조회 API]
+                    ### 가입된 유저 전체 정보를 조회합니다.
+                    ### 현재 유저 상태가 IsAvailable 이 true 인 유저들의 리스트를 리턴합니다.
+                    ### 만약 IsAvailable 이 true 인 유저들이 아무도 없다면, 빈 리스트를 반환합니다.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    """
+    )
     @AuthRequired
     @GetMapping ("")
     public ResponseEntity<List<UserResponseDto.Find>> findAllByIsAvailableTrue () {
@@ -106,4 +118,25 @@ public class UserController {
                 .body(userFacade.findAllByIsAvailableTrue());
     }
 
+    @Operation(
+            summary = "유저 조회",
+            description = """
+                    ## [유저 조회 API]
+                    ### 가입된 유저 정보를 조회합니다.
+                    ### 현재 유저 상태가 IsAvailable 이 true 인 유저 리스트를 리턴합니다.
+                    ### User 의 식별자인 userId 값을 pathVariable 로 받아 식별합니다.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    
+                    ###[Exceptions]
+                    ### UserErrorCode.NOT_FOUND : 식별자인 시퀀스로 조회한 유저가 없을 경우 예외를 리턴합니다.
+                    """
+    )
+    @AuthRequired
+    @GetMapping ("{id}")
+    public ResponseEntity<UserResponseDto.Find> findById (final @NotNull @PathVariable Long id) {
+        return ResponseEntity.ok()
+                .body(userFacade.findById(id));
+    }
 }

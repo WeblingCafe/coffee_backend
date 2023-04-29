@@ -8,6 +8,7 @@ import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 import static webling.coffee.backend.domain.user.entity.QUser.user;
 
@@ -44,6 +45,17 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
                         user.isAvailable.isTrue()
                 )
                 .fetch();
+    }
+
+    @Override
+    public Optional<User> findByIdAndIsAvailableTrue(final Long id) {
+        return Optional.ofNullable(jpaQueryFactory.selectFrom(user)
+                .where(
+                        user.userId.eq(id),
+                        user.isAvailable.isTrue()
+                )
+                .fetchOne())
+                ;
     }
 
 }

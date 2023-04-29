@@ -44,6 +44,12 @@ public class UserService {
                 .orElseThrow(() -> new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
+    public User findByIdAndIsAvailableTrue (final @NotNull Long id) {
+        return userRepository.findByIdAndIsAvailableTrue(id)
+                .orElseThrow(() -> new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND));
+    }
+
     public User update(final @NotNull User user, final @NotNull UserRequestDto.UpdateInfo request) {
         return userRepository.save(User.update(user, request));
     }
@@ -57,8 +63,8 @@ public class UserService {
         userRepository.save(User.addStamps(user, (int) stamps));
     }
 
+    @Transactional(readOnly = true)
     public List<UserResponseDto.Find> findAllByIsAvailableTrue() {
         return userRepository.findAllByIsAvailableTrue();
     }
-
 }
