@@ -57,7 +57,7 @@ public class SwaggerConfig {
     public GroupedOpenApi menuApi() {
         return GroupedOpenApi.builder()
                 .group("메뉴 API")
-                .pathsToMatch("/v1/menus/**")
+                .pathsToMatch("/v1/menus/**", "/v1/categories/**")
                 .addOperationCustomizer(operationCustomizer())
                 .build();
     }

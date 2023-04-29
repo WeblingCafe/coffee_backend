@@ -89,7 +89,7 @@ public class User extends BaseTime {
     }
 
     public static User update(final @NotNull User user,
-                              final @NotNull UserRequestDto.Update request) {
+                              final @NotNull UserRequestDto.UpdateInfo request) {
 
         if (StringUtils.hasText(request.getUsername()))
             user.setUsername(request.getUsername());

@@ -5,16 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import webling.coffee.backend.domain.coupon.entity.Coupon;
-import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.repository.UserRepository;
-import webling.coffee.backend.global.responses.errors.codes.CouponErrorCode;
 import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
-
-import java.util.List;
 
 import static webling.coffee.backend.global.constant.CalculationOperators.COUPON_VALUE;
 
@@ -46,7 +41,7 @@ public class UserService {
                 .orElseThrow(() -> new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND));
     }
 
-    public User update(final @NotNull User user, final @NotNull UserRequestDto.Update request) {
+    public User update(final @NotNull User user, final @NotNull UserRequestDto.UpdateInfo request) {
         return userRepository.save(User.update(user, request));
     }
 

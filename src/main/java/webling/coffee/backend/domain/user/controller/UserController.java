@@ -3,6 +3,7 @@ package webling.coffee.backend.domain.user.controller;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +65,7 @@ public class UserController {
     @AuthRequired
     @PatchMapping ("/me")
     public ResponseEntity<UserResponseDto.Update> update (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
-                                                          final @RequestBody UserRequestDto.Update request) {
+                                                          final @NotNull @RequestBody UserRequestDto.UpdateInfo request) {
 
         return ResponseEntity.ok()
                 .body(userFacade.update(authentication.getUserId(), request));
@@ -94,7 +95,7 @@ public class UserController {
     @AuthRequired (roles = {DEVELOPER})
     @PatchMapping ("/role/{id}")
     public ResponseEntity<UserResponseDto.Update> updateRole (final @PathVariable Long id,
-                                                              final @RequestBody UserRequestDto.UpdateRole request) {
+                                                              final @NotNull @RequestBody UserRequestDto.UpdateRole request) {
 
         return ResponseEntity.ok()
                 .body(userFacade.updateRole(id, request));

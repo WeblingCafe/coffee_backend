@@ -38,7 +38,7 @@ public class UserRequestDto {
 
     @Getter
     @Setter
-    public static class Update {
+    public static class UpdateInfo {
 
         private String username;
         private String nickname;

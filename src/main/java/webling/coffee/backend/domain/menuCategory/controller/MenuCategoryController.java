@@ -16,7 +16,7 @@ import static webling.coffee.backend.global.enums.UserRole.MANAGER;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/category")
+@RequestMapping("/v1/categories")
 @RequiredArgsConstructor
 public class MenuCategoryController {
 
@@ -24,7 +24,7 @@ public class MenuCategoryController {
 
     @AuthRequired (roles = {MANAGER, DEVELOPER})
     @PostMapping("")
-    public ResponseEntity<MenuCategoryResponseDto.Create> createCategory (final @NotNull MenuCategoryRequestDto.Create request) {
+    public ResponseEntity<MenuCategoryResponseDto.Create> createCategory (final @NotNull @RequestBody MenuCategoryRequestDto.Create request) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(menuCategoryFacade.create(request));
@@ -33,7 +33,7 @@ public class MenuCategoryController {
     @AuthRequired (roles = {MANAGER, DEVELOPER})
     @PatchMapping("/{id}")
     public ResponseEntity<MenuCategoryResponseDto.Update> updateCategory (final @NotNull @PathVariable(value = "id") Long categoryId,
-                                                                          final @NotNull MenuCategoryRequestDto.Update request) {
+                                                                          final @NotNull @RequestBody MenuCategoryRequestDto.Update request) {
         return ResponseEntity.ok()
                 .body(menuCategoryFacade.update(categoryId, request));
     }

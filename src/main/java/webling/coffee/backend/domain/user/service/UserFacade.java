@@ -32,7 +32,7 @@ public class UserFacade {
     }
 
     public UserResponseDto.Update update(final @NotNull Long userId,
-                                         final @NotNull UserRequestDto.Update request) {
+                                         final @NotNull UserRequestDto.UpdateInfo request) {
 
         User user = userService.findById(userId);
 
