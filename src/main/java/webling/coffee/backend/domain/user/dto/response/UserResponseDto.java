@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.annotations.QueryProjection;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -100,6 +101,8 @@ public class UserResponseDto {
 
     @Getter
     @Setter
+    @AllArgsConstructor
+    @Builder
     public static class Find {
         private Long userId;
         private String email;
@@ -123,6 +126,20 @@ public class UserResponseDto {
             this.userRole = userRole.name();
             this.stamps = stamps;
             this.teamName = teamName.name();
+        }
+
+        public static Find toDto(final User user) {
+            return Find.builder()
+                    .userId(user.getUserId())
+                    .email(user.getEmail())
+                    .username(user.getUsername())
+                    .nickname(user.getNickname())
+                    .phoneNumber(user.getPhoneNumber())
+                    .birthDate(user.getBirthDate())
+                    .userRole(user.getUserRole().name())
+                    .stamps(user.getStamps())
+                    .teamName(user.getTeamName().name())
+                    .build();
         }
     }
 }

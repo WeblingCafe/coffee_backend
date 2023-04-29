@@ -10,5 +10,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AuthRequired {
 
-    UserRole[] roles() default {MANAGER, EMPLOYEE, GUEST, DEVELOPER};
+    UserRole[] roles() default {MANAGER, BARISTA, EMPLOYEE, GUEST, DEVELOPER};
 }

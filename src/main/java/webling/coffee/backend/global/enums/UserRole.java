@@ -11,6 +11,7 @@ import java.util.Locale;
 public enum UserRole {
 
     MANAGER,
+    BARISTA,
     EMPLOYEE,
     GUEST,
     DEVELOPER,
