@@ -16,6 +16,8 @@ import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
 import webling.coffee.backend.global.redis.service.RefreshTokenRedisService;
 
+import java.util.List;
+
 import static webling.coffee.backend.global.enums.UserRole.DEVELOPER;
 
 @Slf4j
@@ -39,11 +41,7 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication) {
 
-        /**
-         * 백엔드 로그아웃 설계
-         * 1. redis 에 저장된 refresh token 값을 logout 값으로 변경?
-         * 2. 프론트에 맡기기..?
-         */
+        refreshTokenRedisService.deleteById(authentication.getEmail());
 
         return ResponseEntity.noContent().build();
     }
@@ -99,6 +97,13 @@ public class UserController {
 
         return ResponseEntity.ok()
                 .body(userFacade.updateRole(id, request));
+    }
+
+    @AuthRequired
+    @GetMapping ("")
+    public ResponseEntity<List<UserResponseDto.Find>> findAllByIsAvailableTrue () {
+        return ResponseEntity.ok()
+                .body(userFacade.findAllByIsAvailableTrue());
     }
 
 }

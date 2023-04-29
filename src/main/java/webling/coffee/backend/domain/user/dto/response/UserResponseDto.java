@@ -1,12 +1,16 @@
 package webling.coffee.backend.domain.user.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.querydsl.core.annotations.QueryProjection;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import webling.coffee.backend.domain.user.entity.User;
+import webling.coffee.backend.global.enums.Team;
+import webling.coffee.backend.global.enums.UserRole;
 
 import java.time.LocalDate;
 
@@ -52,6 +56,7 @@ public class UserResponseDto {
         private String userRole;
         private Integer stamps;
         private String teamName;
+        @JsonIgnore
         private String refreshToken;
 
         public static Login toDto(final @NotNull User user, final @NotBlank String refreshToken) {
@@ -90,6 +95,34 @@ public class UserResponseDto {
                     .userRole(user.getUserRole().name())
                     .phoneNumber(user.getPhoneNumber())
                     .build();
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class Find {
+        private Long userId;
+        private String email;
+        private String username;
+        private String nickname;
+        private String phoneNumber;
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate birthDate;
+        private String userRole;
+        private Integer stamps;
+        private String teamName;
+
+        @QueryProjection
+        public Find(final Long userId, final String email, final String username, final String nickname, final String phoneNumber, final LocalDate birthDate, final UserRole userRole, final Integer stamps, final Team teamName) {
+            this.userId = userId;
+            this.email = email;
+            this.username = username;
+            this.nickname = nickname;
+            this.phoneNumber = phoneNumber;
+            this.birthDate = birthDate;
+            this.userRole = userRole.name();
+            this.stamps = stamps;
+            this.teamName = teamName.name();
         }
     }
 }

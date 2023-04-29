@@ -12,6 +12,8 @@ import webling.coffee.backend.domain.user.service.core.UserService;
 import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
+import java.util.List;
+
 import static webling.coffee.backend.domain.user.dto.response.UserResponseDto.Register;
 
 @Slf4j
@@ -46,4 +48,9 @@ public class UserFacade {
 
         return UserResponseDto.Update.toDto(userService.updateRole(user, request));
     }
+
+    public List<UserResponseDto.Find> findAllByIsAvailableTrue() {
+        return userService.findAllByIsAvailableTrue();
+    }
+
 }

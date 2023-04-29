@@ -6,10 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
+import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.repository.UserRepository;
 import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
+
+import java.util.List;
 
 import static webling.coffee.backend.global.constant.CalculationOperators.COUPON_VALUE;
 
@@ -53,4 +56,9 @@ public class UserService {
         long stamps = totalPrice / COUPON_VALUE;
         userRepository.save(User.addStamps(user, (int) stamps));
     }
+
+    public List<UserResponseDto.Find> findAllByIsAvailableTrue() {
+        return userRepository.findAllByIsAvailableTrue();
+    }
+
 }
