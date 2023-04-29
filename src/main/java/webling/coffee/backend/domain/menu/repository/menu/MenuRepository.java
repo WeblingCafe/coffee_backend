@@ -1,4 +1,4 @@
-package webling.coffee.backend.domain.menu.repository;
+package webling.coffee.backend.domain.menu.repository.menu;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import webling.coffee.backend.domain.menu.entity.Menu;

@@ -1,6 +1,7 @@
 package webling.coffee.backend.domain.menu.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
 import webling.coffee.backend.domain.menu.dto.response.MenuResponseDto;
 import webling.coffee.backend.domain.menu.service.MenuFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
+import webling.coffee.backend.global.annotation.AuthUser;
+import webling.coffee.backend.global.context.UserAuthentication;
 
 import java.util.List;
 
@@ -32,14 +35,14 @@ public class MenuController {
                     ### 메뉴를 등록 합니다.
                     
                     ## [호출 권한]
-                    ### MANAGER, DEVELOPER
+                    ### BARISTA, DEVELOPER
                     
                     ## [Exceptions]
                     ### 1. MenuErrorCode.DUPLICATION : 메뉴 명이 중복 되었을 경우 해당 예외를 리턴합니다.
                     ### 2. MenuCategoryErrorCode.NOT_FOUND : 등록 할 메뉴의 카테고리를 찾을 수 없을 경우 해당 예외를 리턴합니다.
                     """
     )
-    @AuthRequired(roles = {MANAGER, DEVELOPER})
+    @AuthRequired(roles = {BARISTA, DEVELOPER})
     @PostMapping("")
     public ResponseEntity<MenuResponseDto.Create> createMenu (final @RequestBody MenuRequestDto.Create request) {
 
@@ -101,7 +104,7 @@ public class MenuController {
                     ### 변경가능한 내용은 request 필드를 참고해주세요.
                     
                     ## [호출 권한]
-                    ### MANAGER, DEVELOPER
+                    ### BARISTA, DEVELOPER
                     
                     ## [Exceptions]
                     ### 1. MenuErrorCode.DUPLICATION : 변경할 메뉴의 메뉴명이 이미 존재할 경우 해당 예외를 리턴합니다.
@@ -109,7 +112,7 @@ public class MenuController {
                     ### 3. MenuCategoryErrorCode.NOT_FOUND : 변경할 메뉴 카테고리를 찾지 못했을 경우 해당 예외를 리턴합니다.
                     """
     )
-    @AuthRequired (roles = {MANAGER, DEVELOPER})
+    @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping ("/{id}")
     public ResponseEntity<MenuResponseDto.Update> updateMenu (final @NotNull @PathVariable Long id, final @RequestBody MenuRequestDto.Update request) {
 
@@ -126,14 +129,14 @@ public class MenuController {
                     ### 메뉴의 식별자인 시퀀스를 통해 품절처리 할 메뉴를 조회합니다.
                     
                     ## [호출 권한]
-                    ### MANAGER, DEVELOPER
+                    ### BARISTA, DEVELOPER
                     
                     ## [Exceptions]
                     ### MenuErrorCode.NOT_FOUND : 품절 처리할 메뉴를 찾지 못했을 경우 해당 예외를 리턴합니다.
                     ### MenuErrorCode.NOT_AVAILABLE : 해당 메뉴가 이미 품절 처리 되어있을 경우 해당 예외를 리턴합니다.
                     """
     )
-    @AuthRequired (roles = {MANAGER, DEVELOPER})
+    @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping ("/soldOut/{id}")
     public ResponseEntity<MenuResponseDto.SoldOut> soldOut (final @NotNull @PathVariable Long id) {
 
@@ -150,19 +153,67 @@ public class MenuController {
                     ### 메뉴의 식별자인 시퀀스를 통해 품절처리 할 메뉴를 조회합니다.
                     
                     ## [호출 권한]
-                    ### MANAGER, DEVELOPER
+                    ### BARISTA, DEVELOPER
                     
                     ## [Exceptions]
                     ### 1. MenuErrorCode.NOT_FOUND : 판매 가능 처리 할 메뉴를 찾지 못했을 경우 해당 예외를 리턴합니다.
                     ### 2. MenuErrorCode.ALREADY_AVAILABLE : 해당 메뉴가 이미 판매가능한 경우 해당 예외를 리턴합니다.
                     """
     )
-    @AuthRequired (roles = {MANAGER, DEVELOPER})
+    @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping ("/restore/{id}")
     public ResponseEntity<MenuResponseDto.Restore> restore (final @NotNull @PathVariable Long id) {
 
         return ResponseEntity.ok()
                 .body(menuFacade.restore(id));
+    }
+
+    @Operation (
+            summary = "메뉴 즐겨찾기 등록 / 해제 API ",
+            description =
+                    """
+                    ## [메뉴 즐겨찾기 등록 / 해제 API]
+                    ### 메뉴를 즐겨찾기 등록을 하거나 해제 합니다.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    
+                    ## [Exceptions]
+                    ### 1. UserErrorCode.NOT_FOUND : 현재 로그인 된 유저 정보를 찾지 못할 때 해당 예외를 리턴합니다.
+                    ### 2. MenuErrorCode.NOT_FOUND : 해당 메뉴를 찾지 못할 경우 해당 예외를 리턴합니다.
+                    """
+    )
+    @AuthRequired
+    @PostMapping ("/me/favorite/{id}")
+    public ResponseEntity<?> saveFavoriteMenu (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
+                                               final @NotNull @PathVariable(name = "id") Long menuId) {
+
+        menuFacade.saveFavoriteMenu(authentication.getUserId(), menuId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation (
+            summary = "즐겨찾는 메뉴 리스트 조회",
+            description =
+                    """
+                    ## [즐겨찾는 메뉴 리스트 조회 API]
+                    ### 로그인된 유저의 즐겨찾는 메뉴 리스트를 조회합니다.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    
+                    ## [Exceptions]
+                    ### 1. UserErrorCode.NOT_FOUND : 현재 로그인 된 유저 정보를 찾지 못할 때 해당 예외를 리턴합니다.
+                    ### 2. MenuErrorCode.NOT_FOUND : 해당 메뉴를 찾지 못할 경우 해당 예외를 리턴합니다.
+                    """
+    )
+    @AuthRequired
+    @GetMapping("/me/favorite")
+    public ResponseEntity<List<MenuResponseDto.Find>> getFavoriteMenuList (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication){
+
+        return ResponseEntity.ok()
+                .body(menuFacade.getFavoriteMenuList(authentication.getUserId()));
     }
 
 }

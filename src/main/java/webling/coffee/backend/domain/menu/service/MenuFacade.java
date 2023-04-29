@@ -11,6 +11,8 @@ import webling.coffee.backend.domain.menu.entity.Menu;
 import webling.coffee.backend.domain.menu.service.core.MenuService;
 import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
 import webling.coffee.backend.domain.menuCategory.service.core.MenuCategoryService;
+import webling.coffee.backend.domain.user.entity.User;
+import webling.coffee.backend.domain.user.service.core.UserService;
 import webling.coffee.backend.global.responses.errors.codes.MenuErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
@@ -22,6 +24,7 @@ import java.util.List;
 @Service
 public class MenuFacade {
 
+    private final UserService userService;
     private final MenuService menuService;
     private final MenuCategoryService menuCategoryService;
 
@@ -90,4 +93,20 @@ public class MenuFacade {
 
         return MenuResponseDto.Restore.toDto(menuService.restore(menu));
     }
+
+    public void saveFavoriteMenu(final @NotNull Long userId, final @NotNull Long menuId) {
+        User user = userService.findByIdAndIsAvailableTrue(userId);
+
+        Menu menu = menuService.findByIdAndAvailable(menuId);
+
+        menuService.saveFavoriteMenu(user, menu);
+    }
+
+    public List<MenuResponseDto.Find> getFavoriteMenuList(final @NotNull Long userId) {
+
+        User user = userService.findByIdAndIsAvailableTrue(userId);
+
+        return menuService.getFavoriteMenuList(user);
+    }
+
 }

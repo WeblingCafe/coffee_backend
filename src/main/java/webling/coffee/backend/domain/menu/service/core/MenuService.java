@@ -8,13 +8,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
 import webling.coffee.backend.domain.menu.dto.response.MenuResponseDto;
+import webling.coffee.backend.domain.menu.entity.FavoriteMenu;
 import webling.coffee.backend.domain.menu.entity.Menu;
-import webling.coffee.backend.domain.menu.repository.MenuRepository;
+import webling.coffee.backend.domain.menu.repository.favoriteMenu.FavoriteMenuRepository;
+import webling.coffee.backend.domain.menu.repository.menu.MenuRepository;
 import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
+import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.global.responses.errors.codes.MenuErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -23,6 +27,8 @@ import java.util.List;
 public class MenuService {
 
     private final MenuRepository menuRepository;
+
+    private final FavoriteMenuRepository favoriteMenuRepository;
 
     public boolean isDuplicationByMenuName(final @NotBlank String menuName) {
         return menuRepository.existsByMenuName(menuName);
@@ -65,5 +71,20 @@ public class MenuService {
 
     public Menu restore(Menu menu) {
         return Menu.restore(menu);
+    }
+
+    public void saveFavoriteMenu(final User user, final Menu menu) {
+
+        FavoriteMenu favoriteMenu = favoriteMenuRepository.findByUserAndMenu(user, menu);
+
+        if (favoriteMenu != null) {
+            FavoriteMenu.updateFavorite(favoriteMenu);
+        } else {
+            favoriteMenuRepository.save(FavoriteMenu.toEntity(user, menu));
+        }
+    }
+
+    public List<MenuResponseDto.Find> getFavoriteMenuList(final @NotNull User user) {
+        return menuRepository.getFavoriteMenuList(user);
     }
 }
