@@ -27,7 +27,6 @@ public class OrderRequestDto {
         private Long userId;
         private Long recipientId;
         private Long amount;
-        private Long couponAmount;
         private boolean isCold;
         private boolean isPersonalCup;
         private String request;

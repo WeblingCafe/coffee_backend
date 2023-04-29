@@ -21,8 +21,9 @@ public class OrderCartService {
     private final OrderCartRepository orderCartRepository;
 
     public OrderCart save(final @NotNull List<Order> orderEntityList,
-                          final @NotNull User user) {
-        Long totalCount = orderEntityList.stream().map(Order::getTotalPrice).reduce(Long::sum).orElseGet(() -> 0L);
-        return orderCartRepository.save(OrderCart.toEntity(totalCount, orderEntityList, user));
+                          final @NotNull User user,
+                          final @NotNull Long couponAmount) {
+        Long originalPrice = orderEntityList.stream().map(Order::getTotalPrice).reduce(Long::sum).orElseGet(() -> 0L);
+        return orderCartRepository.save(OrderCart.toEntity(originalPrice, couponAmount, orderEntityList, user));
     }
 }

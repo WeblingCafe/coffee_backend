@@ -5,10 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicUpdate;
+import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.global.base.BaseTime;
 
 import java.util.List;
+
+import static webling.coffee.backend.global.constant.CalculationOperators.COUPON_VALUE;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -27,7 +30,9 @@ public class OrderCart extends BaseTime {
 
     @NotNull
     private Long originalPrice;
-    private Long salePrice;
+
+    private Long usedCouponAmount;
+
     @NotNull
     private Long totalPrice;
 
@@ -38,11 +43,14 @@ public class OrderCart extends BaseTime {
     @OneToMany (mappedBy = "orderCart")
     private List<Order> orderList;
 
-    public static OrderCart toEntity(final @NotNull Long totalCount,
+    public static OrderCart toEntity(final @NotNull Long originalPrice,
+                                     final @NotNull Long usedCouponAmount,
                                      final @NotNull List<Order> orderEntityList,
                                      final @NotNull User user) {
         return OrderCart.builder()
-                .totalPrice(totalCount)
+                .originalPrice(originalPrice)
+                .usedCouponAmount(usedCouponAmount)
+                .totalPrice(originalPrice - (usedCouponAmount * COUPON_VALUE))
                 .orderList(orderEntityList)
                 .user(user)
                 .build();

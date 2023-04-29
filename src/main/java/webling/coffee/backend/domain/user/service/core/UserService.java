@@ -16,6 +16,8 @@ import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessExc
 
 import java.util.List;
 
+import static webling.coffee.backend.global.constant.CalculationOperators.COUPON_VALUE;
+
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
@@ -52,8 +54,8 @@ public class UserService {
         return userRepository.save(User.updateRole(user, request));
     }
 
-    public User addStamps(User user, List<OrderRequestDto.Create> request) {
-        Integer stamps = request.stream().map(a -> a.getStamps(a.getAmount(), a.getCouponAmount()).intValue()).reduce(Integer::sum).orElseGet(() -> 0);
-        return userRepository.save(User.addStamps(user, stamps));
+    public void addStamps(User user, Long totalPrice) {;
+        long stamps = totalPrice / COUPON_VALUE;
+        userRepository.save(User.addStamps(user, (int) stamps));
     }
 }

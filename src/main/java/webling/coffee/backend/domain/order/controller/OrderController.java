@@ -57,7 +57,7 @@ public class OrderController {
     @AuthRequired
     @PostMapping("")
     public ResponseEntity<List<OrderResponseDto.Create>> createOrder (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
-                                                                final @NotNull @RequestBody List<OrderRequestDto.Create> request) {
+                                                                final @NotNull @RequestBody OrderRequestDto.Cart request) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(orderFacade.create(authentication.getUserId(), request));

@@ -10,6 +10,7 @@ import webling.coffee.backend.domain.menu.service.core.MenuService;
 import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
 import webling.coffee.backend.domain.order.dto.response.OrderResponseDto;
 import webling.coffee.backend.domain.order.entity.Order;
+import webling.coffee.backend.domain.order.entity.OrderCart;
 import webling.coffee.backend.domain.order.service.core.OrderCartService;
 import webling.coffee.backend.domain.order.service.core.OrderService;
 import webling.coffee.backend.domain.user.entity.User;
@@ -32,13 +33,12 @@ public class OrderFacade {
     private final CouponService couponService;
 
     public List<OrderResponseDto.Create> create(final @NotNull Long userId,
-                                          final @NotNull List<OrderRequestDto.Create> request) {
+                                          final @NotNull OrderRequestDto.Cart request) {
 
         User user = userService.findById(userId);
         List<Order> orderEntityList = new ArrayList<>();
 
-        for (OrderRequestDto.Create orderRequest : request) {
-            couponService.useCoupons(couponService.findAllByUserAndIsAvailable(user), orderRequest.getCouponAmount());
+        for (OrderRequestDto.Create orderRequest : request.getOrderList()) {
 
             Order orderEntity = orderService.create(
                     user,
@@ -49,9 +49,13 @@ public class OrderFacade {
             orderEntityList.add(orderEntity);
         }
 
-        orderService.addCart(orderCartService.save(orderEntityList, user), orderEntityList);
+        Long couponAmount = couponService.useCoupons(couponService.findAllByUserAndIsAvailable(user), request.getCouponAmount());
+        OrderCart cart = orderCartService.save(orderEntityList, user, couponAmount);
 
-        userService.addStamps(user, request);
+        orderService.addCart(cart, orderEntityList);
+
+        userService.addStamps(user, cart.getTotalPrice());
+
         couponService.issueCouponByStamp(user);
 
         return orderEntityList.stream()
