@@ -54,7 +54,7 @@
         "java",
         "-Dspring.config.activate.on-profile=prd",
         "-Duser.timezone=Asia/Seoul",
-        "-javaagent:/usr/local/pinpoint-agent-2.5.1/pinpoint-bootstrap-2.5.1.jar",
+        "-javaagent:/pinpoint-agent-2.5.1/pinpoint-bootstrap-2.5.1.jar",
         "-Dpinpoint.agentId=cf",
         "-Dpinpoint.applicationName=webling-cf-prd",
         "-DCOLLECTOR_IP=10.0.0.181",
@@ -84,8 +84,8 @@
     }
   ],
   "executionRoleArn": "ecsTaskExecutionRole",
-  "cpu": "1024",
-  "memory": "2048",
+  "cpu": "2048",
+  "memory": "4096",
   "networkMode": "awsvpc",
   "requiresCompatibilities": [
     "FARGATE"
