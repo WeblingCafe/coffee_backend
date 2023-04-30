@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import webling.coffee.backend.domain.coupon.dto.request.CouponRequestDto;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.global.base.BaseTime;
 import webling.coffee.backend.global.enums.CouponType;
@@ -27,15 +28,29 @@ public class Coupon extends BaseTime {
 
     private boolean isAvailable;
 
+    private String regEmail;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "USER_ID")
     private User user;
 
-    public static Coupon toEntity(final @NotNull User user) {
+    public static Coupon toEntity(final String adminEmail,
+                                  final User user,
+                                  final CouponRequestDto.Create request) {
+        return Coupon.builder()
+                .couponType(CouponType.of(request.getCouponType()))
+                .isAvailable(true)
+                .user(user)
+                .regEmail(adminEmail)
+                .build();
+    }
+
+    public static Coupon toEntityByStamp(final @NotNull User user) {
         return Coupon.builder()
                 .couponType(CouponType.COMMON)
                 .isAvailable(true)
                 .user(user)
+                .regEmail("SYSTEM")
                 .build();
     }
 

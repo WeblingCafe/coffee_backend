@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.util.StringUtils;
 import webling.coffee.backend.domain.menu.entity.Menu;
 import webling.coffee.backend.domain.menuCategory.dto.request.MenuCategoryRequestDto;
+import webling.coffee.backend.global.base.BaseTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 @Table(name = "menu_category_mst")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class MenuCategory {
+public class MenuCategory extends BaseTime {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)

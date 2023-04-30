@@ -13,7 +13,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import webling.coffee.backend.domain.coupon.entity.Coupon;
-import webling.coffee.backend.domain.coupon.service.CouponService;
+import webling.coffee.backend.domain.coupon.service.core.CouponService;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
 import webling.coffee.backend.global.annotation.AuthRequired;

@@ -68,11 +68,11 @@ public class MenuController {
                     """
     )
     @AuthRequired
-    @GetMapping ("/{id}")
-    public ResponseEntity<MenuResponseDto.Find> findById (final @NotNull @PathVariable Long id) {
+    @GetMapping ("/{menuId}")
+    public ResponseEntity<MenuResponseDto.Find> findById (final @NotNull @PathVariable Long menuId) {
 
         return ResponseEntity.ok()
-                .body(menuFacade.findByIdAndAvailable(id));
+                .body(menuFacade.findByIdAndAvailable(menuId));
     }
 
     @Operation (
@@ -113,11 +113,12 @@ public class MenuController {
                     """
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
-    @PatchMapping ("/{id}")
-    public ResponseEntity<MenuResponseDto.Update> updateMenu (final @NotNull @PathVariable Long id, final @RequestBody MenuRequestDto.Update request) {
+    @PatchMapping ("/{menuId}")
+    public ResponseEntity<MenuResponseDto.Update> updateMenu (final @NotNull @PathVariable Long menuId,
+                                                              final @RequestBody MenuRequestDto.Update request) {
 
         return ResponseEntity.ok()
-                .body(menuFacade.updateMenu(id, request));
+                .body(menuFacade.updateMenu(menuId, request));
     }
 
     @Operation (
@@ -137,11 +138,11 @@ public class MenuController {
                     """
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
-    @PatchMapping ("/soldOut/{id}")
-    public ResponseEntity<MenuResponseDto.SoldOut> soldOut (final @NotNull @PathVariable Long id) {
+    @PatchMapping ("/soldOut/{menuId}")
+    public ResponseEntity<MenuResponseDto.SoldOut> soldOut (final @NotNull @PathVariable Long menuId) {
 
         return ResponseEntity.ok()
-                .body(menuFacade.soldOut(id));
+                .body(menuFacade.soldOut(menuId));
     }
 
     @Operation (
@@ -161,11 +162,11 @@ public class MenuController {
                     """
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
-    @PatchMapping ("/restore/{id}")
-    public ResponseEntity<MenuResponseDto.Restore> restore (final @NotNull @PathVariable Long id) {
+    @PatchMapping ("/restore/{menuId}")
+    public ResponseEntity<MenuResponseDto.Restore> restore (final @NotNull @PathVariable Long menuId) {
 
         return ResponseEntity.ok()
-                .body(menuFacade.restore(id));
+                .body(menuFacade.restore(menuId));
     }
 
     @Operation (
@@ -184,9 +185,9 @@ public class MenuController {
                     """
     )
     @AuthRequired
-    @PostMapping ("/me/favorite/{id}")
+    @PostMapping ("/me/favorite/{menuId}")
     public ResponseEntity<?> saveFavoriteMenu (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
-                                               final @NotNull @PathVariable(name = "id") Long menuId) {
+                                               final @NotNull @PathVariable Long menuId) {
 
         menuFacade.saveFavoriteMenu(authentication.getUserId(), menuId);
 

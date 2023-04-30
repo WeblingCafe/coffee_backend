@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import webling.coffee.backend.domain.coupon.service.CouponService;
+import webling.coffee.backend.domain.coupon.service.core.CouponService;
 import webling.coffee.backend.domain.menu.service.core.MenuService;
 import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
 import webling.coffee.backend.domain.order.dto.response.OrderResponseDto;
