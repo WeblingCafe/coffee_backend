@@ -59,8 +59,8 @@ public class MenuCategoryController {
                     """
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
-    @PatchMapping("/{id}")
-    public ResponseEntity<MenuCategoryResponseDto.Update> updateCategory (final @NotNull @PathVariable(value = "id") Long categoryId,
+    @PatchMapping("/{categoryId}")
+    public ResponseEntity<MenuCategoryResponseDto.Update> updateCategory (final @NotNull @PathVariable Long categoryId,
                                                                           final @NotNull @RequestBody MenuCategoryRequestDto.Update request) {
         return ResponseEntity.ok()
                 .body(menuCategoryFacade.update(categoryId, request));

@@ -91,12 +91,12 @@ public class UserController {
                     url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee")
     )
     @AuthRequired (roles = {DEVELOPER})
-    @PatchMapping ("/role/{id}")
-    public ResponseEntity<UserResponseDto.Update> updateRole (final @PathVariable Long id,
+    @PatchMapping ("/role/{userId}")
+    public ResponseEntity<UserResponseDto.Update> updateRole (final @PathVariable Long userId,
                                                               final @NotNull @RequestBody UserRequestDto.UpdateRole request) {
 
         return ResponseEntity.ok()
-                .body(userFacade.updateRole(id, request));
+                .body(userFacade.updateRole(userId, request));
     }
 
     @Operation(
@@ -134,9 +134,9 @@ public class UserController {
                     """
     )
     @AuthRequired
-    @GetMapping ("{id}")
-    public ResponseEntity<UserResponseDto.Find> findById (final @NotNull @PathVariable Long id) {
+    @GetMapping ("{userId}")
+    public ResponseEntity<UserResponseDto.Find> findById (final @NotNull @PathVariable Long userId) {
         return ResponseEntity.ok()
-                .body(userFacade.findById(id));
+                .body(userFacade.findById(userId));
     }
 }

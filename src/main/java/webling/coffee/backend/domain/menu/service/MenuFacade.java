@@ -41,11 +41,11 @@ public class MenuFacade {
 
     public MenuResponseDto.Update updateMenu(final @NotNull Long id, final @NotNull MenuRequestDto.Update request) {
 
-        if (menuService.isDuplicationByMenuName(request.getMenuName())) {
+        Menu menu = menuService.findById(id);
+
+        if (menuService.isDuplicationByMenuName(request.getMenuName()) && !menu.getMenuName().equals(request.getMenuName())) {
             throw new RestBusinessException(MenuErrorCode.DUPLICATION);
         }
-
-        Menu menu = menuService.findById(id);
 
         if (request.getMenuCategoryId() != null) {
             MenuCategory menuCategory = menuCategoryService.findById(request.getMenuCategoryId());
