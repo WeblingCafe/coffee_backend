@@ -30,9 +30,5 @@ public class OrderRequestDto {
         private boolean isCold;
         private boolean isPersonalCup;
         private String request;
-
-        public Long getStamps (Long amount, Long couponAmount) {
-            return amount - couponAmount;
-        }
     }
 }

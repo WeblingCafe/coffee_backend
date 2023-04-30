@@ -11,6 +11,9 @@ import webling.coffee.backend.domain.order.entity.Order;
 import webling.coffee.backend.domain.order.entity.OrderCart;
 import webling.coffee.backend.domain.order.repository.order.OrderRepository;
 import webling.coffee.backend.domain.user.entity.User;
+import webling.coffee.backend.global.responses.errors.codes.MenuErrorCode;
+import webling.coffee.backend.global.responses.errors.codes.OrderErrorCode;
+import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class OrderService {
                         final @NotNull Menu menu,
                         final @NotNull OrderRequestDto.Create request) {
 
+        checkColdAndHotAvailable(menu, request);
         return orderRepository.save(Order.create(user, recipient, menu, getTotalPrice(menu.getPrice(), request.getAmount()), request));
     }
 
@@ -37,5 +41,17 @@ public class OrderService {
 
     private Long getTotalPrice (Long menuPrice, Long amount) {
         return menuPrice * amount;
+    }
+
+    private void checkColdAndHotAvailable (final @NotNull Menu menu,
+                                           final @NotNull OrderRequestDto.Create request) {
+
+        if (request.isCold() && !menu.isColdAvailable()) {
+            throw new RestBusinessException.Failure(MenuErrorCode.COLD_NOT_AVAILABLE);
+        }
+
+        if (!request.isCold() && !menu.isHotAvailable()) {
+            throw new RestBusinessException.Failure(MenuErrorCode.HOT_NOT_AVAILABLE);
+        }
     }
 }
