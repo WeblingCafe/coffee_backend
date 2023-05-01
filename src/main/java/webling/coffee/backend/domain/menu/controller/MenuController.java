@@ -37,6 +37,9 @@ public class MenuController {
                     ### 메뉴를 등록 합니다.
                     ### 사진을 제외한 모든 요청 객체 값은 필수 입니다.
                     
+                    ## [주의]
+                    ### swagger 문서에서 send empty value 는 클릭하지 말아주세요.
+                    
                     ## [호출 권한]
                     ### BARISTA, DEVELOPER
                     
@@ -106,6 +109,9 @@ public class MenuController {
                     ### 메뉴를 수정합니다.
                     ### 메뉴의 식별자인 시퀀스를 통해 변경할 메뉴를 조회합니다.
                     ### 변경가능한 내용은 request 필드를 참고해주세요.
+                    
+                    ## [주의]
+                    ### swagger 문서에서 send empty value 는 클릭하지 말아주세요.
                     
                     ## [호출 권한]
                     ### BARISTA, DEVELOPER

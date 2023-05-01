@@ -39,21 +39,11 @@ public class MenuRequestDto {
     @NoArgsConstructor
     @Schema (name = "menuRequestUpdate")
     public static class Update {
-        @NotNull
         private String menuName;
-
-        @NotNull
         private Long menuCategoryId;
-
-        @NotNull
         private Long price;
-
         private MultipartFile menuImage;
-
-        @NotNull
         private boolean hotAvailable;
-
-        @NotNull
         private boolean coldAvailable;
     }
 }
