@@ -1,5 +1,6 @@
 package webling.coffee.backend.domain.coupon.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,7 @@ public class CouponResponseDto {
 
         private String couponType;
 
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime regDate;
 
         private String userEmail;

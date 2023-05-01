@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
@@ -17,7 +18,8 @@ import webling.coffee.backend.global.context.UserAuthentication;
 
 import java.util.List;
 
-import static webling.coffee.backend.global.enums.UserRole.*;
+import static webling.coffee.backend.global.enums.UserRole.BARISTA;
+import static webling.coffee.backend.global.enums.UserRole.DEVELOPER;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class MenuController {
                     """
                     ## [메뉴 등록 API]
                     ### 메뉴를 등록 합니다.
+                    ### 사진을 제외한 모든 요청 객체 값은 필수 입니다.
                     
                     ## [호출 권한]
                     ### BARISTA, DEVELOPER
@@ -40,11 +43,12 @@ public class MenuController {
                     ## [Exceptions]
                     ### 1. MenuErrorCode.DUPLICATION : 메뉴 명이 중복 되었을 경우 해당 예외를 리턴합니다.
                     ### 2. MenuCategoryErrorCode.NOT_FOUND : 등록 할 메뉴의 카테고리를 찾을 수 없을 경우 해당 예외를 리턴합니다.
+                    ### 3. MenuErrorCode.PHOTO_UPLOAD_FAILED : 메뉴 등록 시, S3 서버의 문제로 사진이 업로드 되지 않을 경우 해당 예외를 리턴합니다.
                     """
     )
     @AuthRequired(roles = {BARISTA, DEVELOPER})
-    @PostMapping("")
-    public ResponseEntity<MenuResponseDto.Create> createMenu (final @RequestBody MenuRequestDto.Create request) {
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MenuResponseDto.Create> createMenu (final @ModelAttribute MenuRequestDto.Create request) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -110,12 +114,13 @@ public class MenuController {
                     ### 1. MenuErrorCode.DUPLICATION : 변경할 메뉴의 메뉴명이 이미 존재할 경우 해당 예외를 리턴합니다.
                     ### 2. MenuErrorCode.NOT_FOUND : 시퀀스를 통해 변경할 메뉴를 찾지 못했을 경우 해당 예외를 리턴합니다.
                     ### 3. MenuCategoryErrorCode.NOT_FOUND : 변경할 메뉴 카테고리를 찾지 못했을 경우 해당 예외를 리턴합니다.
+                    ### 4. MenuErrorCode.PHOTO_UPLOAD_FAILED : 메뉴 등록 시, S3 서버의 문제로 사진이 업로드 되지 않을 경우 해당 예외를 리턴합니다.
                     """
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
-    @PatchMapping ("/{menuId}")
+    @PatchMapping (value = "/{menuId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MenuResponseDto.Update> updateMenu (final @NotNull @PathVariable Long menuId,
-                                                              final @RequestBody MenuRequestDto.Update request) {
+                                                              final @ModelAttribute MenuRequestDto.Update request) {
 
         return ResponseEntity.ok()
                 .body(menuFacade.updateMenu(menuId, request));

@@ -38,19 +38,19 @@ public class Menu extends BaseTime {
     private boolean coldAvailable;
     private boolean isAvailable;
 
-    public static Menu create(MenuCategory category, MenuRequestDto.Create request) {
+    public static Menu create(String menuPhotoUrl, MenuCategory category, MenuRequestDto.Create request) {
         return Menu.builder()
                 .menuName(request.getMenuName())
                 .category(category)
                 .price(request.getPrice())
-                .menuPhotoUrl(request.getMenuPhotoUrl())
+                .menuPhotoUrl(menuPhotoUrl)
                 .hotAvailable(request.isHotAvailable())
                 .coldAvailable(request.isColdAvailable())
                 .isAvailable(true)
                 .build();
     }
 
-    public static Menu update (Menu menu, MenuRequestDto.Update request) {
+    public static Menu update (String menuPhotoUrl, Menu menu, MenuRequestDto.Update request) {
 
         if (StringUtils.hasText(request.getMenuName()))
             menu.setMenuName(request.getMenuName());
@@ -58,8 +58,8 @@ public class Menu extends BaseTime {
         if (request.getPrice() != null)
             menu.setPrice(request.getPrice());
 
-        if (StringUtils.hasText(request.getMenuPhotoUrl()))
-            menu.setMenuPhotoUrl(request.getMenuPhotoUrl());
+        if (StringUtils.hasText(menuPhotoUrl))
+            menu.setMenuPhotoUrl(menuPhotoUrl);
 
         menu.setColdAvailable(request.isColdAvailable());
 
@@ -68,9 +68,9 @@ public class Menu extends BaseTime {
         return menu;
     }
 
-    public static Menu updateWithCategory(Menu menu, MenuCategory menuCategory, MenuRequestDto.Update request) {
+    public static Menu updateWithCategory(String menuPhotoUrl, Menu menu, MenuCategory menuCategory, MenuRequestDto.Update request) {
 
-        Menu updateMenu = Menu.update(menu, request);
+        Menu updateMenu = Menu.update(menuPhotoUrl, menu, request);
 
         updateMenu.setCategory(menuCategory);
 

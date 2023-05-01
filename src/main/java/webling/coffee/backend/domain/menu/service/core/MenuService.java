@@ -16,9 +16,10 @@ import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.global.responses.errors.codes.MenuErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
+import webling.coffee.backend.global.utils.S3Upload;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -30,13 +31,20 @@ public class MenuService {
 
     private final FavoriteMenuRepository favoriteMenuRepository;
 
+    private final S3Upload s3Upload;
+
     public boolean isDuplicationByMenuName(final @NotBlank String menuName) {
         return menuRepository.existsByMenuName(menuName);
     }
 
     public Menu create(final @NotNull MenuCategory category,
                        final @NotNull MenuRequestDto.Create request) {
-        return menuRepository.save(Menu.create(category, request));
+        try {
+            Menu entity = Menu.create(request.getMenuImage() != null ? s3Upload.upload(request.getMenuImage()) : null, category, request);
+            return menuRepository.save(entity);
+        } catch (IOException e) {
+            throw new RestBusinessException.Failure(MenuErrorCode.PHOTO_UPLOAD_FAILED);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -58,11 +66,19 @@ public class MenuService {
     }
 
     public Menu updateMenuWithCategory(Menu menu, MenuCategory menuCategory, MenuRequestDto.Update request) {
-        return menuRepository.save(Menu.updateWithCategory(menu, menuCategory, request));
+        try {
+            return menuRepository.save(Menu.updateWithCategory(request.getMenuImage() != null ? s3Upload.upload(request.getMenuImage()) : null, menu, menuCategory, request));
+        } catch (IOException e){
+            throw new RestBusinessException.Failure(MenuErrorCode.PHOTO_UPLOAD_FAILED);
+        }
     }
 
     public Menu updateMenu(Menu menu, MenuRequestDto.Update request) {
-        return menuRepository.save(Menu.update(menu, request));
+        try {
+            return menuRepository.save(Menu.update(request.getMenuImage() != null ? s3Upload.upload(request.getMenuImage()) : null,menu, request));
+        } catch (IOException e){
+            throw new RestBusinessException.Failure(MenuErrorCode.PHOTO_UPLOAD_FAILED);
+        }
     }
 
     public Menu soldOut(Menu menu) {
