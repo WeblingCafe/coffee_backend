@@ -1,8 +1,11 @@
 package webling.coffee.backend.domain.board.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import webling.coffee.backend.domain.board.dto.request.BoardRequestDto;
+import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.global.base.BaseTime;
 import webling.coffee.backend.global.enums.BoardCategory;
 
@@ -29,5 +32,18 @@ public class Board extends BaseTime {
     @Enumerated (EnumType.STRING)
     private BoardCategory boardCategory;
 
+    @ManyToOne (fetch = FetchType.LAZY)
+    private User writer;
 
+    public static Board toEntity(final @NotNull User user,
+                                 final @NotNull BoardRequestDto.Create request) {
+
+        return Board.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .isAvailable(true)
+                .boardCategory(BoardCategory.of(request.getBoardCategory()))
+                .writer(user)
+                .build();
+    }
 }

@@ -72,6 +72,15 @@ public class SwaggerConfig {
     }
 
     @Bean
+    public GroupedOpenApi boardApi() {
+        return GroupedOpenApi.builder()
+                .group("게시판 API")
+                .pathsToMatch("/v1/boards/**")
+                .addOperationCustomizer(operationCustomizer())
+                .build();
+    }
+
+    @Bean
     public OperationCustomizer operationCustomizer () {
         return (operation, handlerMethod) -> {
             Parameter accessAuthorization = new Parameter()
