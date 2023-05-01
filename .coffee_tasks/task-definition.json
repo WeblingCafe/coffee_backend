@@ -50,6 +50,12 @@
           "containerPort": 8080
         }
       ],
+      "environment": [
+        {
+          "name": "JAVA_TOOL_OPTIONS",
+          "value": "-javaagent:/pinpoint/pinpoint-agent-2.5.1/pinpoint-bootstrap-2.5.1.jar"
+        }
+      ],
       "essential": true
     }
   ],
