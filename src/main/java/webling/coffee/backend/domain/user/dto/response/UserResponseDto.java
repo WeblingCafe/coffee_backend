@@ -3,6 +3,7 @@ package webling.coffee.backend.domain.user.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.annotations.QueryProjection;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class UserResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema(name = "UserResponseRegister")
     public static class Register {
         private String email;
         private String username;
@@ -46,6 +48,7 @@ public class UserResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema(name = "UserResponseLogin")
     public static class Login {
         private Long userId;
         private String email;
@@ -79,6 +82,7 @@ public class UserResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema(name = "UserResponseUpdate")
     public static class Update {
         private Long userId;
         private String email;
@@ -103,6 +107,7 @@ public class UserResponseDto {
     @Setter
     @AllArgsConstructor
     @Builder
+    @Schema(name = "UserResponseFind")
     public static class Find {
         private Long userId;
         private String email;

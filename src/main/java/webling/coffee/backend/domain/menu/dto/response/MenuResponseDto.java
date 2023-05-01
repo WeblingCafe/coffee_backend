@@ -1,6 +1,7 @@
 package webling.coffee.backend.domain.menu.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ public class MenuResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema(name = "menuResponseCreate")
     public static class Create {
         private Long menuId;
 
@@ -43,6 +45,7 @@ public class MenuResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema(name = "menuResponseUpdate")
     public static class Update {
 
         private Long menuId;
@@ -75,6 +78,7 @@ public class MenuResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema(name = "menuResponseFind")
     public static class Find {
 
         private Long menuId;
@@ -117,6 +121,7 @@ public class MenuResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema(name = "menuResponseSoldOut")
     public static class SoldOut {
         private Long menuId;
         private String menuName;
@@ -134,6 +139,7 @@ public class MenuResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema(name = "menuResponseRestore")
     public static class Restore {
         private Long menuId;
         private String menuName;

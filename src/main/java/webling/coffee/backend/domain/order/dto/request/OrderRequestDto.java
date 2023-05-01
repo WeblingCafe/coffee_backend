@@ -1,5 +1,6 @@
 package webling.coffee.backend.domain.order.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ public class OrderRequestDto {
     @Getter
     @Setter
     @NoArgsConstructor
+    @Schema(name = "orderRequestCart")
     public static class Cart {
 
         private Long couponAmount;
@@ -21,6 +23,7 @@ public class OrderRequestDto {
     @Getter
     @Setter
     @NoArgsConstructor
+    @Schema(name = "orderRequestCreate")
     public static class Create {
 
         private Long menuId;

@@ -1,5 +1,6 @@
 package webling.coffee.backend.domain.order.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ public class OrderResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema(name = "orderResponseCreate")
     public static class Create {
 
         private Long orderId;

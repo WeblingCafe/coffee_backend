@@ -1,5 +1,6 @@
 package webling.coffee.backend.domain.menuCategory.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ public class MenuCategoryResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema(name = "menuCategoryResponseCreate")
     public static class Create {
 
         private Long categoryId;
@@ -27,6 +29,7 @@ public class MenuCategoryResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema(name = "menuCategoryResponseUpdate")
     public static class Update {
 
         private Long categoryId;

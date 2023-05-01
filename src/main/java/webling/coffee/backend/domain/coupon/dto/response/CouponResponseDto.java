@@ -2,6 +2,7 @@ package webling.coffee.backend.domain.coupon.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ public class CouponResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema (name = "couponResponseCreate")
     public static class Create {
 
         private Long couponId;
@@ -38,6 +40,7 @@ public class CouponResponseDto {
     @Setter
     @AllArgsConstructor
     @Builder
+    @Schema (name = "couponResponseFind")
     public static class Find {
 
         private Long couponId;

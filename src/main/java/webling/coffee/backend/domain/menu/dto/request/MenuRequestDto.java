@@ -13,6 +13,7 @@ public class MenuRequestDto {
     @Getter
     @Setter
     @NoArgsConstructor
+    @Schema (name = "menuRequestCreate")
     public static class Create {
 
         @NotNull
@@ -36,6 +37,7 @@ public class MenuRequestDto {
     @Getter
     @Setter
     @NoArgsConstructor
+    @Schema (name = "menuRequestUpdate")
     public static class Update {
         @NotNull
         private String menuName;
