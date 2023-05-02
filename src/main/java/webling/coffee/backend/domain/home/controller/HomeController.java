@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class HomeController {
 
-    @GetMapping("/")
+    @GetMapping("/nginxHealthCheck")
     @ResponseBody
     public String nginxHealthCheckController () {
         return "healthy";
