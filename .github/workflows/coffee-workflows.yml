@@ -6,8 +6,10 @@ on:
 
 env:
   NGINX_INIT : no
+  PINPOINT_AGENT_INIT : yes
   APPLICATION_YML_PATH : ./src/main/resources/application-prd.yml
   NGINX_DOCKER_FILE_PATH : ./nginx/Dockerfile-nginx
+  PINPOINT_AGENT_DOCKER_FILE_PATH : ./pinpoint/Dockerfile-pinpoint-agent
   DOCKER_FILE_PATH : ./Dockerfile
   TASK_DEFINITION: ./.coffee_tasks/task-definition.json
   CONTAINER_NAME: coffee-backend
@@ -69,6 +71,17 @@ jobs:
         docker build -t $NGINX_ECR_REPOSITORY:latest -f ${{ env.NGINX_DOCKER_FILE_PATH }} .
         docker tag $NGINX_ECR_REPOSITORY:latest $NGINX_ECR_REGISTRY/$NGINX_ECR_REPOSITORY:latest
         docker push $NGINX_ECR_REGISTRY/$NGINX_ECR_REPOSITORY:latest
+
+    - name: build pinpoint agent docker file and push
+      if: "contains(env.PINPOINT_AGENT_INIT, 'yes')"
+      id: build-pinpoint-agent-docker-image
+      env:
+        PINPOINT_AGENT_ECR_REGISTRY: ${{ secrets.PINPOINT_AGENT_ECR_REGISTRY }}
+        PINPOINT_AGENT_ECR_REPOSITORY: ${{ secrets.PINPOINT_AGENT_ECR_REPOSITORY }}
+      run: |
+        docker build -t $PINPOINT_AGENT_ECR_REPOSITORY:latest -f ${{ env.PINPOINT_AGENT_DOCKER_FILE_PATH }} .
+        docker tag $PINPOINT_AGENT_ECR_REPOSITORY:latest $PINPOINT_AGENT_ECR_REGISTRY/$PINPOINT_AGENT_ECR_REPOSITORY:latest
+        docker push $PINPOINT_AGENT_ECR_REGISTRY/$PINPOINT_AGENT_ECR_REPOSITORY:latest
 
     - name: build coffee api docker file and push
       id: build-docker-image

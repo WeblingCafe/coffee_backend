@@ -50,13 +50,84 @@
           "containerPort": 8080
         }
       ],
+      "essential": true,
+      "mountPoints": [
+        {
+          "sourceVolume": "pinpoint-agent",
+          "containerPath": "/pinpoint-agent"
+        }
+      ]
+    },
+    {
+      "name": "pinpoint-agent",
+      "image": "/cf-api:latest",
       "environment": [
         {
-          "name": "JAVA_TOOL_OPTIONS",
-          "value": "-javaagent:/pinpoint/pinpoint-agent-2.5.1/pinpoint-bootstrap-2.5.1.jar"
+          "name": "SPRING_PROFILES",
+          "value": "prd"
+        },
+        {
+          "name": "COLLECTOR_IP",
+          "value": "10.0.0.181"
+        },
+        {
+          "name": "PROFILER_TRANSPORT_AGENT_COLLECTOR_PORT",
+          "value": "9991"
+        },
+        {
+          "name": "PROFILER_TRANSPORT_METADATA_COLLECTOR_PORT",
+          "value": "9991"
+        },
+        {
+          "name": "PROFILER_TRANSPORT_STAT_COLLECTOR_PORT",
+          "value": "9992"
+        },
+        {
+          "name": "PROFILER_TRANSPORT_SPAN_COLLECTOR_PORT",
+          "value": "9993"
+        },
+        {
+          "name": "PROFILER_SAMPLING_TYPE",
+          "value": "COUNTING"
+        },
+        {
+          "name": "PROFILER_SAMPLING_COUNTING_SAMPLING_RATE",
+          "value": "1"
+        },
+        {
+          "name": "PROFILER_SAMPLING_PERCENT_SAMPLING_RATE",
+          "value": "100"
+        },
+        {
+          "name": "PROFILER_SAMPLING_NEW_THROUGHPUT",
+          "value": "0"
+        },
+        {
+          "name": "PROFILER_SAMPLING_CONTINUE_THROUGHPUT",
+          "value": "0"
+        },
+        {
+          "name": "DEBUG_LEVEL",
+          "value": "INFO"
+        },
+        {
+          "name": "PROFILER_TRANSPORT_MODULE",
+          "value": "GRPC"
         }
       ],
-      "essential": true
+      "essential": true,
+      "mountPoints": [
+        {
+          "sourceVolume": "pinpoint-agent",
+          "containerPath": "/pinpoint-agent"
+        }
+      ]
+    }
+  ],
+  "volumes" : [
+    {
+      "name" : "pinpoint-agent",
+      "host" : {}
     }
   ],
   "executionRoleArn": "ecsTaskExecutionRole",

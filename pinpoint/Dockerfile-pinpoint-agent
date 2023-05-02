@@ -1,0 +1,1 @@
+FROM pinpointdocker/pinpoint-agent:2.5.1
