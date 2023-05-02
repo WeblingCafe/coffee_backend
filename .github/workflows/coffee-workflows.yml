@@ -6,7 +6,7 @@ on:
 
 env:
   NGINX_INIT : no
-  PINPOINT_AGENT_INIT : yes
+  PINPOINT_AGENT_INIT : no
   APPLICATION_YML_PATH : ./src/main/resources/application-prd.yml
   NGINX_DOCKER_FILE_PATH : ./nginx/Dockerfile-nginx
   PINPOINT_AGENT_DOCKER_FILE_PATH : ./pinpoint/Dockerfile-pinpoint-agent
