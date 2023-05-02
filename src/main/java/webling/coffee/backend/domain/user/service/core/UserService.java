@@ -67,4 +67,10 @@ public class UserService {
     public List<UserResponseDto.Find> findAllByIsAvailableTrue() {
         return userRepository.findAllByIsAvailableTrue();
     }
+
+    @Transactional(readOnly = true)
+    public List<User> settlementAll() {
+        return userRepository.settlementAll();
+    }
+
 }

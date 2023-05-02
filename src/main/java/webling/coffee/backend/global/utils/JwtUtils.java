@@ -79,7 +79,7 @@ public class JwtUtils {
                 .withAudience(email)
                 .withClaim("id", id)
                 .withIssuedAt(Date.from(now))
-                .withExpiresAt(Date.from(now.plus(timeout, ChronoUnit.MINUTES)))
+                .withExpiresAt(Date.from(now.plus(timeout, ChronoUnit.SECONDS)))
                 .sign(getAlgorithm(secret));
     }
 

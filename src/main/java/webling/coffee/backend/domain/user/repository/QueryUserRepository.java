@@ -15,4 +15,6 @@ public interface QueryUserRepository {
 
     Optional<User> findByIdAndIsAvailableTrue(Long id);
 
+    List<User> settlementAll();
+
 }

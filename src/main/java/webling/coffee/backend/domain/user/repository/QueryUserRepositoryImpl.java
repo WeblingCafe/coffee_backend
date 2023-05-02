@@ -10,6 +10,8 @@ import webling.coffee.backend.domain.user.entity.User;
 import java.util.List;
 import java.util.Optional;
 
+import static webling.coffee.backend.domain.order.entity.QOrder.order;
+import static webling.coffee.backend.domain.order.entity.QOrderCart.orderCart;
 import static webling.coffee.backend.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
@@ -55,6 +57,22 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
                         user.isAvailable.isTrue()
                 )
                 .fetchOne())
+                ;
+    }
+
+    @Override
+    public List<User> settlementAll() {
+        return jpaQueryFactory.selectFrom(user)
+                .leftJoin(user.orderCart, orderCart)
+                .fetchJoin()
+                .leftJoin(orderCart.orderList, order)
+                .fetchJoin()
+                .orderBy(
+                        user.userId.asc(),
+                        orderCart.regDate.asc(),
+                        order.regDate.asc()
+                )
+                .fetch()
                 ;
     }
 

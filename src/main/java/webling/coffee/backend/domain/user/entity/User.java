@@ -19,7 +19,7 @@ import webling.coffee.backend.global.enums.UserRole;
 import webling.coffee.backend.global.utils.EncodingUtils;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -68,13 +68,13 @@ public class User extends BaseTime {
     @Enumerated(EnumType.STRING)
     private Team teamName;
     @OneToMany(mappedBy = "user")
-    private List<Order> orders;
+    private Set<Order> orders;
     @OneToMany(mappedBy = "user")
-    private List<Coupon> coupons;
+    private Set<Coupon> coupons;
     @OneToMany(mappedBy = "user")
-    private List<OrderCart> orderCart;
+    private Set<OrderCart> orderCart;
     @OneToMany(mappedBy = "user")
-    private List<FavoriteMenu> favoriteMenuList;
+    private Set<FavoriteMenu> favoriteMenuList;
 
     public static User register(UserRequestDto.Register request) {
         return User.builder()

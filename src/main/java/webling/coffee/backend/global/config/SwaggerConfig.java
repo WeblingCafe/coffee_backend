@@ -54,6 +54,15 @@ public class SwaggerConfig {
     }
 
     @Bean
+    public GroupedOpenApi settlementApi() {
+        return GroupedOpenApi.builder()
+                .group("정산 API")
+                .pathsToMatch("/v1/settlement/**")
+                .addOperationCustomizer(operationCustomizer())
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi menuApi() {
         return GroupedOpenApi.builder()
                 .group("메뉴 API")
