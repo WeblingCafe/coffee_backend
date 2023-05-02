@@ -60,7 +60,7 @@
     },
     {
       "name": "pinpoint-agent",
-      "image": "/cf-api:latest",
+      "image": "012152056735.dkr.ecr.ap-northeast-2.amazonaws.com/pinpoint-agent-ip:latest",
       "environment": [
         {
           "name": "SPRING_PROFILES",
