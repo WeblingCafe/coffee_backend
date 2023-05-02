@@ -116,7 +116,7 @@
         },
         {
           "name": "PINPOINT_TRACE_EXCLUSION_URL_PATTERN",
-          "value": "/, /Core/**, /version, /favicon.ico, /geoserver/**, /apis/**, /swagger-ui/**, /v3/**"
+          "value": "/, /Core/*, /version, /favicon.ico, /geoserver/*, /apis/*, /swagger-ui/*, /v3/*"
         }
       ],
       "essential": true,
