@@ -9,6 +9,8 @@ import webling.coffee.backend.domain.user.entity.User;
 import java.time.LocalDate;
 import java.util.List;
 
+import static webling.coffee.backend.global.constant.ValidationFormats.LOCAL_DATE_PATTERN;
+
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
@@ -20,7 +22,7 @@ public class UserAuthentication {
     private String username;
     private String nickname;
     private String phoneNumber;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = LOCAL_DATE_PATTERN)
     private LocalDate birthDate;
     private String userRole;
     private Integer stamps;

@@ -16,6 +16,8 @@ import webling.coffee.backend.global.enums.UserRole;
 
 import java.time.LocalDate;
 
+import static webling.coffee.backend.global.constant.ValidationFormats.LOCAL_DATE_PATTERN;
+
 public class UserResponseDto {
 
     @Getter
@@ -27,7 +29,7 @@ public class UserResponseDto {
         private String username;
         private String nickname;
         private String phoneNumber;
-        @JsonFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = LOCAL_DATE_PATTERN)
         private LocalDate birthDate;
         private String userRole;
         private String teamName;
@@ -55,7 +57,7 @@ public class UserResponseDto {
         private String username;
         private String nickname;
         private String phoneNumber;
-        @JsonFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = LOCAL_DATE_PATTERN)
         private LocalDate birthDate;
         private String userRole;
         private Integer stamps;
@@ -114,7 +116,7 @@ public class UserResponseDto {
         private String username;
         private String nickname;
         private String phoneNumber;
-        @JsonFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = LOCAL_DATE_PATTERN)
         private LocalDate birthDate;
         private String userRole;
         private Integer stamps;

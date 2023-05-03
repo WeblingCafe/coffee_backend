@@ -13,6 +13,8 @@ import webling.coffee.backend.global.enums.CouponType;
 
 import java.time.LocalDateTime;
 
+import static webling.coffee.backend.global.constant.ValidationFormats.LOCAL_DATE_PATTERN;
+
 public class CouponResponseDto {
 
     @Getter
@@ -47,7 +49,7 @@ public class CouponResponseDto {
 
         private String couponType;
 
-        @JsonFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = LOCAL_DATE_PATTERN)
         private LocalDateTime regDate;
 
         private String userEmail;

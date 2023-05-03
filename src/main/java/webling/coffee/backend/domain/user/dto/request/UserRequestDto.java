@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+import static webling.coffee.backend.global.constant.ValidationFormats.LOCAL_DATE_PATTERN;
+
 @Getter
 @Setter
 @Valid
@@ -26,7 +28,7 @@ public class UserRequestDto {
         private String nickname;
         private String password;
         private String phoneNumber;
-        @JsonFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = LOCAL_DATE_PATTERN)
         private LocalDate birthDate;
         private String team;
     }

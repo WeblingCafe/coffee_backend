@@ -15,6 +15,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static webling.coffee.backend.global.constant.ValidationFormats.LOCAL_DATE_TIME_PATTERN;
+
 public class SettlementResponseDto {
 
     @Getter
@@ -66,7 +68,7 @@ public class SettlementResponseDto {
         private Long originalPrice;
         private Long usedCouponAmount;
         private Long totalPrice;
-        @JsonFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = LOCAL_DATE_TIME_PATTERN)
         private LocalDateTime regDate;
         private List<Order> orderList;
 
