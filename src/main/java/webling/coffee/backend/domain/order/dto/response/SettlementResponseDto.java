@@ -51,9 +51,9 @@ public class SettlementResponseDto {
                     .nickName(user.getNickname())
                     .orderCart(orderCartList)
                     .settlementPrice(orderCartList
-                                    .stream().map(Cart::getTotalPrice).reduce(Long::sum).orElse(0L))
+                                    .stream().mapToLong(Cart::getTotalPrice).sum())
                     .settlementCouponAmount(orderCartList
-                                    .stream().map(Cart::getUsedCouponAmount).reduce(Long::sum).orElse(0L))
+                                    .stream().mapToLong(Cart::getTotalPrice).sum())
                     .build();
         }
     }
