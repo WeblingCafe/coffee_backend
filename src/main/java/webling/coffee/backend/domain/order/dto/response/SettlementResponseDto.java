@@ -34,6 +34,8 @@ public class SettlementResponseDto {
 
         private Long settlementPrice;
 
+        private Long settlementCouponAmount;
+
         public static User from (final @NotNull webling.coffee.backend.domain.user.entity.User user) {
 
             List<Cart> orderCartList = new ArrayList<>(user.getOrderCart())
@@ -50,6 +52,8 @@ public class SettlementResponseDto {
                     .orderCart(orderCartList)
                     .settlementPrice(orderCartList
                                     .stream().map(Cart::getTotalPrice).reduce(Long::sum).orElseGet(() -> 0L))
+                    .settlementCouponAmount(orderCartList
+                                    .stream().map(Cart::getUsedCouponAmount).reduce(Long::sum).orElseGet(() -> 0L))
                     .build();
         }
     }
