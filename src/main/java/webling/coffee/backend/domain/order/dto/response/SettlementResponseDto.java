@@ -72,6 +72,7 @@ public class SettlementResponseDto {
                                     new ArrayList<>(orderCart.getOrderList())
                                             .stream()
                                     .map(Order::from)
+                                    .sorted(Comparator.comparing(Order::getOrderId))
                                     .collect(Collectors.toList()) : null
                             )
                     .build();
