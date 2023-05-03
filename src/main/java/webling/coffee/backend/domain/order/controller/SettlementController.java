@@ -1,6 +1,7 @@
 package webling.coffee.backend.domain.order.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,8 @@ import webling.coffee.backend.domain.order.dto.request.SettlementRequestDto;
 import webling.coffee.backend.domain.order.dto.response.SettlementResponseDto;
 import webling.coffee.backend.domain.order.service.SettlementFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
+import webling.coffee.backend.global.annotation.AuthUser;
+import webling.coffee.backend.global.context.UserAuthentication;
 
 import java.util.List;
 
@@ -33,7 +36,9 @@ public class SettlementController {
                     ### 모든 회원의 장바구니와 주문 정보를 보여줍니다.
                     ### 검색조건은 다음과 같습니다.
                     ### - 유저의 본명 (username), 유저의 닉네임 (nickname), 주문 내역의 기간
-                    ### - 주문 내역의 기간 정보가 없을 경우 지금으로부터 15일 전 주문부터 현재까지를 기본으로 조회합니다.
+                    ### - 주문 내역의 fromDate 가 null 인 경우 15일 전을 기본값으로 조회합니다.
+                    ### - 주문 내역의 toDate 가 null 인 경우 지금 시점을 기본값으로 조회합니다.
+                    ### - fromDate 와 toDate 가 모두 null 인 경우 현재시점과 15일전 사이의 모든 내역을 조회합니다.
                     
                     ## [호출 권한]
                     ### MANAGER, BARISTA, DEVELOPER
@@ -44,5 +49,32 @@ public class SettlementController {
     public ResponseEntity<List<SettlementResponseDto.User>> settlementAllBySearchOptions(final @NotNull @RequestBody SettlementRequestDto.Search request) {
         return ResponseEntity.ok()
                 .body(settlementFacade.settlementAllBySearchOptions(request));
+    }
+
+    @Operation(
+            summary = "내 정산 내역 조회 API",
+            description = """
+                    ## [내 정산 내역 조회 API]
+                    ### 나의 장바구니와 주문 정보를 보여줍니다.
+                    ### 검색조건은 다음과 같습니다.
+                    ### 주문내역의 기간
+                    ### - 주문 내역의 fromDate 가 null 인 경우 15일 전을 기본값으로 조회합니다.
+                    ### - 주문 내역의 toDate 가 null 인 경우 지금 시점을 기본값으로 조회합니다.
+                    ### - fromDate 와 toDate 가 모두 null 인 경우 현재시점과 15일전 사이의 모든 내역을 조회합니다.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    
+                    ## [Exceptions]
+                    ### UserErrorCode.NOT_FOUND : 현재 로그인한 유저 정보를 찾지 못할 경우 해당 예외를 리턴합니다.
+                    """
+    )
+    @AuthRequired
+    @PostMapping("/me")
+    public ResponseEntity<SettlementResponseDto.User> settlementMeBySearchOptions (final @NotNull @Parameter(hidden = true) @AuthUser UserAuthentication authentication,
+                                                                                   final @NotNull @RequestBody SettlementRequestDto.RegDate request) {
+
+        return ResponseEntity.ok()
+                .body(settlementFacade.settlementMeBySearchOptions(authentication.getUserId(), request));
     }
 }

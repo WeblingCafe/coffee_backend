@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import webling.coffee.backend.domain.order.entity.Order;
 import webling.coffee.backend.domain.order.entity.OrderCart;
 
 import java.time.LocalDateTime;
@@ -44,16 +43,15 @@ public class SettlementResponseDto {
                     .sorted(Comparator.comparing(Cart::getCartId))
                     .collect(Collectors.toList());
 
-
             return User.builder()
                     .userId(user.getUserId())
                     .username(user.getUsername())
                     .nickName(user.getNickname())
                     .orderCart(orderCartList)
                     .settlementPrice(orderCartList
-                                    .stream().map(Cart::getTotalPrice).reduce(Long::sum).orElseGet(() -> 0L))
+                                    .stream().map(Cart::getTotalPrice).reduce(Long::sum).orElse(0L))
                     .settlementCouponAmount(orderCartList
-                                    .stream().map(Cart::getUsedCouponAmount).reduce(Long::sum).orElseGet(() -> 0L))
+                                    .stream().map(Cart::getUsedCouponAmount).reduce(Long::sum).orElse(0L))
                     .build();
         }
     }

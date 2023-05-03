@@ -13,6 +13,7 @@ import webling.coffee.backend.domain.user.repository.UserRepository;
 import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
+import java.util.Collection;
 import java.util.List;
 
 import static webling.coffee.backend.global.constant.CalculationOperators.COUPON_VALUE;
@@ -72,6 +73,12 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<User> settlementAllBySearchOptions(final @NotNull SettlementRequestDto.Search request) {
         return userRepository.settlementAllBySearchOptions(request);
+    }
+
+    @Transactional(readOnly = true)
+    public User settlementMeBySearchOptions(final @NotNull User user,
+                                            final @NotNull SettlementRequestDto.RegDate request) {
+        return userRepository.settlementMeBySearchOptions(user, request);
     }
 
 }

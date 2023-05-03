@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.order.dto.request.SettlementRequestDto;
 import webling.coffee.backend.domain.order.dto.response.SettlementResponseDto;
+import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
 
 import java.util.Comparator;
@@ -28,4 +29,13 @@ public class SettlementFacade {
                 .sorted(Comparator.comparing(SettlementResponseDto.User::getUserId))
                 .collect(Collectors.toList());
     }
+
+    public SettlementResponseDto.User settlementMeBySearchOptions(final @NotNull Long userId,
+                                                                  final @NotNull SettlementRequestDto.RegDate request) {
+
+        User user = userService.findByIdAndIsAvailableTrue(userId);
+
+        return SettlementResponseDto.User.from(userService.settlementMeBySearchOptions(user, request));
+    }
+
 }

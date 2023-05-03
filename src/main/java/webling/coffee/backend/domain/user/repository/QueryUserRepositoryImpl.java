@@ -81,9 +81,36 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
                 ;
     }
 
+    @Override
+    public User settlementMeBySearchOptions(final User entity, final SettlementRequestDto.RegDate request) {
+        return jpaQueryFactory.selectFrom(user)
+                .leftJoin(user.orderCart, orderCart)
+                .fetchJoin()
+                .leftJoin(orderCart.orderList, order)
+                .fetchJoin()
+                .where(
+                        user.eq(entity),
+                        regDateBetween(request)
+                )
+                .fetchFirst()
+                ;
+    }
+
     private BooleanExpression regDateBetween (final @NotNull SettlementRequestDto.RegDate request) {
 
-        return request != null ? orderCart.regDate.between(request.getFromDate(), request.getToDate()) : null;
+        if (request.getFromDate() == null && request.getToDate() == null) {
+            return null;
+        }
+
+        if (request.getFromDate() == null) {
+            return orderCart.regDate.between(LocalDateTime.now().minusDays(15), request.getToDate());
+        }
+
+        if (request.getToDate() == null) {
+            return orderCart.regDate.between(request.getFromDate(), LocalDateTime.now());
+        }
+
+        return orderCart.regDate.between(request.getFromDate(), request.getToDate());
     }
 
     private BooleanExpression usernameLike (final @NotBlank String username) {

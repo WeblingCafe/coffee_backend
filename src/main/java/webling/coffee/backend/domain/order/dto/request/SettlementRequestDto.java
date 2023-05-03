@@ -1,5 +1,6 @@
 package webling.coffee.backend.domain.order.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -16,6 +17,7 @@ public class SettlementRequestDto {
 
         private String username;
         private String userNickname;
+        @JsonUnwrapped
         private RegDate regDate;
     }
 
