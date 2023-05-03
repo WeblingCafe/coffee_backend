@@ -83,8 +83,7 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
 
     private BooleanExpression regDateBetween (final @NotNull SettlementRequestDto.RegDate request) {
 
-        return request != null ? orderCart.regDate.between(request.getFromDate(), request.getToDate())
-                : orderCart.regDate.between(LocalDateTime.now().minusDays(15), LocalDateTime.now());
+        return request != null ? orderCart.regDate.between(request.getFromDate(), request.getToDate()) : null;
     }
 
     private BooleanExpression usernameLike (final @NotBlank String username) {
