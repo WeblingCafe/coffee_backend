@@ -1,12 +1,17 @@
 package webling.coffee.backend.domain.user.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.StringUtils;
+import webling.coffee.backend.domain.order.dto.request.SettlementRequestDto;
 import webling.coffee.backend.domain.user.dto.response.QUserResponseDto_Find;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.entity.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,19 +66,33 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
     }
 
     @Override
-    public List<User> settlementAll() {
+    public List<User> settlementAllBySearchOptions(final @NotNull SettlementRequestDto.Search request) {
         return jpaQueryFactory.selectFrom(user)
                 .leftJoin(user.orderCart, orderCart)
                 .fetchJoin()
                 .leftJoin(orderCart.orderList, order)
                 .fetchJoin()
-                .orderBy(
-                        user.userId.asc(),
-                        orderCart.regDate.asc(),
-                        order.regDate.asc()
+                .where(
+                    regDateBetween(request.getRegDate()),
+                    usernameLike(request.getUsername()),
+                    nicknameLike(request.getUserNickname())
                 )
                 .fetch()
                 ;
+    }
+
+    private BooleanExpression regDateBetween (final @NotNull SettlementRequestDto.RegDate request) {
+
+        return request != null ? orderCart.regDate.between(request.getFromDate(), request.getToDate())
+                : orderCart.regDate.between(LocalDateTime.now().minusDays(15), LocalDateTime.now());
+    }
+
+    private BooleanExpression usernameLike (final @NotBlank String username) {
+        return StringUtils.hasText(username) ? user.username.contains(username) : null;
+    }
+
+    private BooleanExpression nicknameLike (final @NotBlank String nickname) {
+        return StringUtils.hasText(nickname) ? user.nickname.contains(nickname) : null;
     }
 
 }

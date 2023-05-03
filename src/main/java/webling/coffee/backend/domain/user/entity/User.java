@@ -67,12 +67,20 @@ public class User extends BaseTime {
 
     @Enumerated(EnumType.STRING)
     private Team teamName;
+
+    @OrderBy("orderId asc")
     @OneToMany(mappedBy = "user")
     private Set<Order> orders;
+
+    @OrderBy("couponId asc")
     @OneToMany(mappedBy = "user")
     private Set<Coupon> coupons;
+
+    @OrderBy("orderCartId asc")
     @OneToMany(mappedBy = "user")
     private Set<OrderCart> orderCart;
+
+    @OrderBy("favoriteMenuId asc")
     @OneToMany(mappedBy = "user")
     private Set<FavoriteMenu> favoriteMenuList;
 

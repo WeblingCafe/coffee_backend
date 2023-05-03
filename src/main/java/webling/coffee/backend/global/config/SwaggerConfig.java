@@ -12,8 +12,9 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static webling.coffee.backend.global.utils.JwtUtils.ACCESS_AUTHORIZATION;
 import static webling.coffee.backend.global.utils.JwtUtils.REFRESH_AUTHORIZATION;
@@ -109,8 +110,32 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public OpenAPI springShopOpenAPI() {
+    @Profile("local")
+    public OpenAPI springShopOpenLocalAPI() {
+        OpenAPI openApi = getOpenApi();
 
+        Server local = new Server();
+        local.setUrl(localDomain);
+
+        openApi.setServers(List.of(local));
+
+        return openApi;
+    }
+
+    @Bean
+    @Profile("prd")
+    public OpenAPI springShopOpenPrdAPI() {
+        OpenAPI openApi = getOpenApi();
+
+        Server prd = new Server();
+        prd.setUrl(prdDomain);
+
+        openApi.setServers(List.of(prd));
+
+        return openApi;
+    }
+
+    private OpenAPI getOpenApi (){
         Server local = new Server();
         local.setUrl(localDomain);
 
@@ -125,8 +150,6 @@ public class SwaggerConfig {
                 .externalDocs(new ExternalDocumentation()
                         .description("Webling Coffee Application Backend Swagger Documentation")
                         .url("https://github.com/WeblingCafe/coffee_backend"));
-
-        openAPI.setServers(Arrays.asList(local, prd));
 
         return openAPI;
     }

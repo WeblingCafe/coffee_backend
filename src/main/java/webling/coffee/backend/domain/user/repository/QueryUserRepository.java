@@ -1,6 +1,8 @@
 package webling.coffee.backend.domain.user.repository;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import webling.coffee.backend.domain.order.dto.request.SettlementRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.entity.User;
 
@@ -15,6 +17,6 @@ public interface QueryUserRepository {
 
     Optional<User> findByIdAndIsAvailableTrue(Long id);
 
-    List<User> settlementAll();
+    List<User> settlementAllBySearchOptions(final @NotNull SettlementRequestDto.Search request);
 
 }

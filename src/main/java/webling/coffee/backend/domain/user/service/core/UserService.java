@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import webling.coffee.backend.domain.order.dto.request.SettlementRequestDto;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.entity.User;
@@ -69,8 +70,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<User> settlementAll() {
-        return userRepository.settlementAll();
+    public List<User> settlementAllBySearchOptions(final @NotNull SettlementRequestDto.Search request) {
+        return userRepository.settlementAllBySearchOptions(request);
     }
 
 }

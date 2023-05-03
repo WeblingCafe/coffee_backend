@@ -10,7 +10,9 @@ import lombok.Setter;
 import webling.coffee.backend.domain.order.entity.OrderCart;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class SettlementResponseDto {
@@ -27,7 +29,7 @@ public class SettlementResponseDto {
 
         private String nickName;
 
-        private Set<Cart> orderCart;
+        private List<Cart> orderCart;
 
         public static User from (final @NotNull webling.coffee.backend.domain.user.entity.User user) {
             return User.builder()
@@ -35,9 +37,11 @@ public class SettlementResponseDto {
                     .username(user.getUsername())
                     .nickName(user.getNickname())
                     .orderCart(user.getOrderCart() != null ?
-                            user.getOrderCart().stream()
+                                    new ArrayList<>(user.getOrderCart())
+                                            .stream()
                                     .map(Cart::from)
-                                    .collect(Collectors.toSet()) : null
+                                    .sorted(Comparator.comparing(Cart::getCartId))
+                                    .collect(Collectors.toList()) : null
                             )
                     .build();
         }
@@ -55,7 +59,7 @@ public class SettlementResponseDto {
         private Long totalPrice;
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime regDate;
-        private Set<Order> orderList;
+        private List<Order> orderList;
 
         public static Cart from (final @NotNull OrderCart orderCart) {
             return Cart.builder()
@@ -65,9 +69,10 @@ public class SettlementResponseDto {
                     .totalPrice(orderCart.getTotalPrice())
                     .regDate(orderCart.getRegDate())
                     .orderList(orderCart.getOrderList() != null ?
-                            orderCart.getOrderList().stream()
+                                    new ArrayList<>(orderCart.getOrderList())
+                                            .stream()
                                     .map(Order::from)
-                                    .collect(Collectors.toSet()) : null
+                                    .collect(Collectors.toList()) : null
                             )
                     .build();
         }
