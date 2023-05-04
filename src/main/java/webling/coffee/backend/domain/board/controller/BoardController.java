@@ -153,7 +153,7 @@ public class BoardController {
     )
     @AuthRequired (roles = {MANAGER, BARISTA, DEVELOPER})
     @PatchMapping ("/disable/{boardId}") //FIXME : Susccess Response 객체로 한번 더 감쌀 것. 성공 코드 ,메세지 내려보내기
-    public ResponseEntity<?> disable (final @NotNull @AuthUser UserAuthentication authentication,
+    public ResponseEntity<?> disable (final @NotNull @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
                                       final @NotNull @PathVariable Long boardId) {
 
         boardFacade.disable(authentication.getUserId(), boardId);
@@ -179,7 +179,7 @@ public class BoardController {
     )
     @AuthRequired(roles = {MANAGER, BARISTA, DEVELOPER})
     @PatchMapping("/enable/{boardId}")
-    public ResponseEntity<?> enable (final @NotNull @AuthUser UserAuthentication authentication,
+    public ResponseEntity<?> enable (final @NotNull @AuthUser @Parameter (hidden = true) UserAuthentication authentication,
                                      final @NotNull @PathVariable Long boardId) {
 
         boardFacade.enable(authentication.getUserId(), boardId);

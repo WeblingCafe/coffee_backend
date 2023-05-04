@@ -16,6 +16,7 @@ import webling.coffee.backend.global.responses.errors.codes.MenuErrorCode;
 import webling.coffee.backend.global.responses.errors.codes.OrderErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -58,6 +59,10 @@ public class OrderService {
 
     public List<Order> findOrderedAll() {
         return orderRepository.findOrderedAll();
+    }
+
+    public List<Order> findMeOrderedAll(final @NotNull Long userId) {
+        return orderRepository.findMeOrderedAll(userId);
     }
 
 }

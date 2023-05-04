@@ -70,6 +70,14 @@ public class OrderFacade {
                 .collect(Collectors.toList());
     }
 
+    public List<OrderResponseDto.Find> findMeOrderedAll(final @NotNull Long userId) {
+
+        return orderService.findMeOrderedAll(userId)
+                .stream()
+                .map(OrderResponseDto.Find::toDto)
+                .collect(Collectors.toList());
+    }
+
 }
 
 

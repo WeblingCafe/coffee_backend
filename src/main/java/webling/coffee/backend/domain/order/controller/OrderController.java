@@ -67,10 +67,43 @@ public class OrderController {
                 .body(orderFacade.create(authentication.getUserId(), request));
     }
 
+    @Operation(
+            summary = "주문된 주문 리스트 조회",
+            description =
+                    """
+                    ## [주문된 주문 리스트 조회 API]
+                    ### 주문 상태가 ORDERED 인 모든 주문정보를 조회합니다.
+                    
+                    ## [호출 권한]
+                    ### BARISTA, DEVELOPER
+                    
+                    ## [Exceptions]
+                    """
+    )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @GetMapping ("")
     public ResponseEntity<List<OrderResponseDto.Find>> findOrderedAll () {
         return ResponseEntity.ok()
                 .body(orderFacade.findOrderedAll());
+    }
+
+    @Operation(
+            summary = "내가 주문된 주문 리스트 조회",
+            description =
+                    """
+                    ## [내가 주문된 주문 리스트 조회 API]
+                    ### 로그인한 회원의 주문중 주문 상태가 ORDERED 인 모든 주문정보를 조회합니다.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    
+                    ## [Exceptions]
+                    """
+    )
+    @AuthRequired
+    @GetMapping ("/me")
+    public ResponseEntity<List<OrderResponseDto.Find>> findMeOrderedAll (final @NotNull @AuthUser @Parameter (hidden = true) UserAuthentication authentication) {
+        return ResponseEntity.ok()
+                .body(orderFacade.findMeOrderedAll(authentication.getUserId()));
     }
 }
