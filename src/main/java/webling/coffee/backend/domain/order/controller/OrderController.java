@@ -8,18 +8,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
 import webling.coffee.backend.domain.order.dto.response.OrderResponseDto;
 import webling.coffee.backend.domain.order.service.OrderFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
+import webling.coffee.backend.global.enums.UserRole;
 
 import java.util.List;
+
+import static webling.coffee.backend.global.enums.UserRole.BARISTA;
+import static webling.coffee.backend.global.enums.UserRole.DEVELOPER;
 
 @Slf4j
 @RestController
@@ -64,5 +65,12 @@ public class OrderController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(orderFacade.create(authentication.getUserId(), request));
+    }
+
+    @AuthRequired (roles = {BARISTA, DEVELOPER})
+    @GetMapping ("")
+    public ResponseEntity<List<OrderResponseDto.Find>> findOrderedAll () {
+        return ResponseEntity.ok()
+                .body(orderFacade.findOrderedAll());
     }
 }

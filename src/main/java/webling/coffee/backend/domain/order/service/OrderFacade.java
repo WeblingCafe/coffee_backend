@@ -62,6 +62,14 @@ public class OrderFacade {
                 .map(OrderResponseDto.Create::toDto)
                 .collect(Collectors.toList());
     }
+
+    public List<OrderResponseDto.Find> findOrderedAll() {
+        return orderService.findOrderedAll()
+                .stream()
+                .map(OrderResponseDto.Find::toDto)
+                .collect(Collectors.toList());
+    }
+
 }
 
 

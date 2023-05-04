@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.menu.entity.Menu;
 import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
+import webling.coffee.backend.domain.order.dto.response.OrderResponseDto;
 import webling.coffee.backend.domain.order.entity.Order;
 import webling.coffee.backend.domain.order.entity.OrderCart;
 import webling.coffee.backend.domain.order.repository.order.OrderRepository;
@@ -54,4 +55,9 @@ public class OrderService {
             throw new RestBusinessException.Failure(MenuErrorCode.HOT_NOT_AVAILABLE);
         }
     }
+
+    public List<Order> findOrderedAll() {
+        return orderRepository.findOrderedAll();
+    }
+
 }
