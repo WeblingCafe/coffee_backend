@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.board.dto.request.BoardRequestDto;
 import webling.coffee.backend.domain.board.dto.response.BoardResponseDto;
+import webling.coffee.backend.domain.board.entity.Board;
 import webling.coffee.backend.domain.board.service.core.BoardService;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
@@ -29,4 +30,13 @@ public class BoardFacade {
         return BoardResponseDto.Create.toDto(boardService.create(user, request));
     }
 
+    public BoardResponseDto.Update update(final @NotNull Long boardId,
+                                          final @NotNull Long userId,
+                                          final @NotNull BoardRequestDto.Update request) {
+
+        User user = userService.findByIdAndIsAvailableTrue(userId);
+        Board board = boardService.findByBoardIdAndWriter(boardId, user);
+
+        return BoardResponseDto.Update.toDto(boardService.update(board, request));
+    }
 }

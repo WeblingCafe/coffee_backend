@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import webling.coffee.backend.domain.board.dto.request.BoardRequestDto;
 import webling.coffee.backend.domain.board.dto.response.BoardResponseDto;
 import webling.coffee.backend.domain.board.service.BoardFacade;
@@ -57,5 +54,31 @@ public class BoardController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(boardFacade.create(authentication.getUserId(), request));
+    }
+
+    @Operation(
+            summary = "게시판 수정",
+            description =
+                    """
+                    ## [게시판 수정 API]
+                    ### 본인이 쓴 게시판을 수정합니다.
+                    ### 게시판 정보는 로그인한 회원의 정보와 게시판 식별자로 확인합니다.
+                    ### 찾아온 게시판의 제목과 내용을 수정합니다.
+                    
+                    ## [호출 권한]
+                    ### MANAGER, BARISTA, DEVELOPER
+                    
+                    ## [Exceptions]
+                    ### UserErrorCode.NOT_FOUND : 로그인한 회원의 정보를 찾을 수 없을 경우 해당 예외를 리턴합니다.
+                    ### BoardErrorCode.NOT_FOUND : 게시판 정보를 찾을 수 없을 경우 해당 예외를 리턴합니다.
+                    """
+    )
+    @AuthRequired (roles = {MANAGER, BARISTA, DEVELOPER})
+    @PostMapping("/me/{boardId}")
+    public ResponseEntity<BoardResponseDto.Update> update (final @NotNull @Parameter(hidden = true) @AuthUser UserAuthentication authentication,
+                                                           final @NotNull @PathVariable Long boardId,
+                                                           final @NotNull @RequestBody BoardRequestDto.Update request) {
+        return ResponseEntity.ok()
+                .body(boardFacade.update(boardId, authentication.getUserId(), request));
     }
 }

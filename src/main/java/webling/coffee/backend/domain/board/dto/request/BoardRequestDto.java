@@ -16,10 +16,19 @@ public class BoardRequestDto {
 
         @NotNull
         private String title;
-
         @NotNull
         private String content;
-
         private String boardCategory;
+    }
+
+    @Getter
+    @Setter
+    @Schema (name = "boardRequestUpdate")
+    public static class Update {
+
+        @NotNull
+        private String title;
+        @NotNull
+        private String content;
     }
 }

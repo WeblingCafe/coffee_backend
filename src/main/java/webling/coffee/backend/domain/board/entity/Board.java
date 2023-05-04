@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.StringUtils;
 import webling.coffee.backend.domain.board.dto.request.BoardRequestDto;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.global.base.BaseTime;
@@ -45,5 +46,17 @@ public class Board extends BaseTime {
                 .boardCategory(BoardCategory.of(request.getBoardCategory()))
                 .writer(user)
                 .build();
+    }
+
+    public static Board update(final @NotNull Board board,
+                               final @NotNull BoardRequestDto.Update request) {
+
+        if (StringUtils.hasText(request.getTitle()))
+            board.setTitle(request.getTitle());
+
+        if (StringUtils.hasText(request.getContent()))
+            board.setContent(request.getContent());
+
+        return board;
     }
 }

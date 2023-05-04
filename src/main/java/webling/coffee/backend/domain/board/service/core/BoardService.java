@@ -9,6 +9,10 @@ import webling.coffee.backend.domain.board.dto.request.BoardRequestDto;
 import webling.coffee.backend.domain.board.entity.Board;
 import webling.coffee.backend.domain.board.repository.BoardRepository;
 import webling.coffee.backend.domain.user.entity.User;
+import webling.coffee.backend.global.responses.errors.codes.BoardErrorCode;
+import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,5 +26,16 @@ public class BoardService {
                         final @NotNull BoardRequestDto.Create request) {
 
         return boardRepository.save(Board.toEntity(user, request));
+    }
+
+    public Board findByBoardIdAndWriter(final @NotNull Long boardId,
+                                                  final @NotNull User user) {
+        return boardRepository.findByBoardIdAndWriter(boardId, user)
+                .orElseThrow(() -> new RestBusinessException.NotFound(BoardErrorCode.NOT_FOUND));
+    }
+
+    public Board update(final @NotNull Board board,
+                        final @NotNull BoardRequestDto.Update request) {
+        return boardRepository.save(Board.update(board, request));
     }
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import webling.coffee.backend.domain.board.entity.Board;
+import webling.coffee.backend.global.enums.BoardCategory;
 
 public class BoardResponseDto {
 
@@ -27,6 +28,26 @@ public class BoardResponseDto {
                     .content(board.getContent())
                     .boardCategory(board.getBoardCategory().name())
                     .writer(board.getWriter().getNickname())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @Schema (name = "boardResponseUpdate")
+    public static class Update {
+        private Long boardId;
+        private String title;
+        private String content;
+        private String boardCategory;
+
+        public static Update toDto(final @NotNull Board update) {
+            return Update.builder()
+                    .boardId(update.getBoardId())
+                    .title(update.getTitle())
+                    .content(update.getContent())
+                    .boardCategory(update.getBoardCategory().name())
                     .build();
         }
     }
