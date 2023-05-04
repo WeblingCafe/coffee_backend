@@ -11,6 +11,8 @@ import webling.coffee.backend.domain.board.entity.Board;
 import webling.coffee.backend.domain.board.service.core.BoardService;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
+import webling.coffee.backend.global.responses.errors.codes.BoardErrorCode;
+import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
 import java.util.List;
 
@@ -39,10 +41,41 @@ public class BoardFacade {
         User user = userService.findByIdAndIsAvailableTrue(userId);
         Board board = boardService.findByBoardIdAndWriter(boardId, user);
 
+        if (!board.isAvailable()) {
+            throw new RestBusinessException.Failure(BoardErrorCode.IS_NOT_AVAILABLE);
+        }
+
         return BoardResponseDto.Update.toDto(boardService.update(board, request));
     }
 
     public List<BoardResponseDto.Find> findAllByCategoryNameAndIsAvailableTrue(final @NotNull String categoryName) {
         return boardService.findAllByCategoryNameAndIsAvailableTrue(categoryName);
     }
+
+    public BoardResponseDto.Find findByBoardIdAndIsAvailableTrue(final @NotNull Long boardId) {
+        return boardService.findByBoardIdAndIsAvailableTrue(boardId);
+    }
+
+    public void disable(final @NotNull Long userId, final @NotNull Long boardId) {
+        User user = userService.findByIdAndIsAvailableTrue(userId);
+        Board board = boardService.findByBoardIdAndWriter(boardId, user);
+
+        if (!board.isAvailable()) {
+            throw new RestBusinessException.Failure(BoardErrorCode.IS_NOT_AVAILABLE);
+        }
+
+        boardService.disable(board);
+    }
+
+    public void enable(final @NotNull Long userId, final @NotNull Long boardId) {
+        User user = userService.findByIdAndIsAvailableTrue(userId);
+        Board board = boardService.findByBoardIdAndWriter(boardId, user);
+
+        if (board.isAvailable()) {
+            throw new RestBusinessException.Failure(BoardErrorCode.IS_AVAILABLE);
+        }
+
+        boardService.enable(board);
+    }
+
 }

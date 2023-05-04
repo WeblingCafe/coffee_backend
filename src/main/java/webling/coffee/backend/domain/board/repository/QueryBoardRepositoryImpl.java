@@ -32,6 +32,22 @@ public class QueryBoardRepositoryImpl implements QueryBoardRepository{
                 .fetch();
     }
 
+    @Override
+    public BoardResponseDto.Find findByIdAndIsAvailableTrue(final Long boardId) {
+        return jpaQueryFactory.select(new QBoardResponseDto_Find(
+                board.boardId,
+                board.title,
+                board.content
+        ))
+                .from(board)
+                .where(
+                        board.boardId.eq(boardId),
+                        board.isAvailable.isTrue()
+                )
+                .fetchFirst()
+                ;
+    }
+
     private BooleanExpression boardCategoryEq(String categoryName) {
         return StringUtils.hasText(categoryName) ? board.boardCategory.eq(BoardCategory.of(categoryName)) : null;
     }

@@ -73,6 +73,7 @@ public class BoardController {
                     ## [Exceptions]
                     ### UserErrorCode.NOT_FOUND : 로그인한 회원의 정보를 찾을 수 없을 경우 해당 예외를 리턴합니다.
                     ### BoardErrorCode.NOT_FOUND : 게시판 정보를 찾을 수 없을 경우 해당 예외를 리턴합니다.
+                    ### BoardErrorCode.IS_NOT_AVAILABLE : 게시판이 비활성화 상태인 경우 해당 예외를 리턴합니다.
                     """
     )
     @AuthRequired (roles = {MANAGER, BARISTA, DEVELOPER})
@@ -113,5 +114,76 @@ public class BoardController {
 
         return ResponseEntity.ok()
                 .body(boardFacade.findAllByCategoryNameAndIsAvailableTrue(categoryName));
+    }
+
+    @Operation(
+            summary = "게시판 단건 조회",
+            description =
+                    """
+                    ## [게시판 단건 조회 API]
+                    ### 게시판을 조회합니다.
+                    ### 게시판의 식별자로 게시판의 정보를 불러옵니다.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    """
+    )
+    @AuthRequired
+    @PostMapping ("/{boardId}")
+    public ResponseEntity<BoardResponseDto.Find> findByBoardIdAndIsAvailableTrue (final @NotNull @PathVariable Long boardId) {
+        return ResponseEntity.ok()
+                .body(boardFacade.findByBoardIdAndIsAvailableTrue(boardId));
+    }
+
+    @Operation(
+            summary = "게시판 비활성화",
+            description =
+                    """
+                    ## [게시판 비활성화 API]
+                    ### 게시판을 비활성화 합니다.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    
+                    ## [Exceptions]
+                    ### UserErrorCode.NOT_FOUND : 로그인한 유저 정보를 찾을 수 없는 경우 해당 예외를 리턴합니다.
+                    ### BoardErrorCode.NOT_FOUND : 게시판 정보를 찾을 수 없는 경우 해당 예외를 리턴합니다.
+                    ### BoardErrorCode.IS_NOT_AVAILABLE : 게시판이 이미 비활성화 상태인 경우 해당 예외를 리턴합니다.
+                    """
+    )
+    @AuthRequired (roles = {MANAGER, BARISTA, DEVELOPER})
+    @PatchMapping ("/{boardId}") //FIXME : Susccess Response 객체로 한번 더 감쌀 것. 성공 코드 ,메세지 내려보내기
+    public ResponseEntity<?> disable (final @NotNull @AuthUser UserAuthentication authentication,
+                                      final @NotNull @PathVariable Long boardId) {
+
+        boardFacade.disable(authentication.getUserId(), boardId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(
+            summary = "게시판 활성화",
+            description =
+                    """
+                    ## [게시판 활성화 API]
+                    ### 게시판을 활성화 합니다.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    
+                    ## [Exceptions]
+                    ### UserErrorCode.NOT_FOUND : 로그인한 유저 정보를 찾을 수 없는 경우 해당 예외를 리턴합니다.
+                    ### BoardErrorCode.NOT_FOUND : 게시판 정보를 찾을 수 없는 경우 해당 예외를 리턴합니다.
+                    ### BoardErrorCode.IS_AVAILABLE : 게시판이 이미 활성화 상태인 경우 해당 예외를 리턴합니다.
+                    """
+    )
+    @AuthRequired(roles = {MANAGER, BARISTA, DEVELOPER})
+    @PatchMapping("/{boardId}")
+    public ResponseEntity<?> enable (final @NotNull @AuthUser UserAuthentication authentication,
+                                     final @NotNull @PathVariable Long boardId) {
+
+        boardFacade.enable(authentication.getUserId(), boardId);
+
+        return ResponseEntity.noContent().build();
     }
 }

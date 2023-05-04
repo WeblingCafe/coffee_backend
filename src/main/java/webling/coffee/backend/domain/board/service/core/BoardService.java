@@ -14,7 +14,6 @@ import webling.coffee.backend.global.responses.errors.codes.BoardErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -44,4 +43,17 @@ public class BoardService {
     public List<BoardResponseDto.Find> findAllByCategoryNameAndIsAvailableTrue(String categoryName) {
         return boardRepository.findAllByCategoryNameAndIsAvailableTrue(categoryName);
     }
+
+    public BoardResponseDto.Find findByBoardIdAndIsAvailableTrue(final @NotNull Long boardId) {
+        return boardRepository.findByIdAndIsAvailableTrue(boardId);
+    }
+
+    public void disable(final @NotNull Board board) {
+        Board.disable(board);
+    }
+
+    public void enable(final @NotNull Board board) {
+        Board.enable(board);
+    }
+
 }

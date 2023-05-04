@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import webling.coffee.backend.domain.board.entity.Board;
-import webling.coffee.backend.global.enums.BoardCategory;
 
 public class BoardResponseDto {
 
