@@ -16,6 +16,8 @@ import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
 
+import java.util.List;
+
 import static webling.coffee.backend.global.enums.UserRole.*;
 
 @Slf4j
@@ -80,5 +82,36 @@ public class BoardController {
                                                            final @NotNull @RequestBody BoardRequestDto.Update request) {
         return ResponseEntity.ok()
                 .body(boardFacade.update(boardId, authentication.getUserId(), request));
+    }
+
+    @Operation(
+            summary = "모든 게시판 조회",
+            description =
+                    """
+                    ## [게시판 조회 API]
+                    ### 모든 게시판을 조회합니다.
+                    ### 게시판의 카테고리에 따라 검색이 가능합니다.
+                    ### requestParam 에 아무값도 넣지 않을 경우에는 모든 게시판이 검색됩니다.
+                    ### 카테고리명은 ENUM 을 참고해주세요.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    
+                    ## [Exceptions]
+                    ### EnumValueErrorCode.BOARD_CATEGORY_VALUE_INVALID : 검색 조건에 들어간 카테고리명을 찾을 수 없는 경우 해당 예외를 리턴합니다.
+                    """,
+            externalDocs = @ExternalDocumentation(
+                    description = """
+                            ## [ENUM]
+                            ### 노션 링크를 참고해주세요.
+                            """,
+                    url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee")
+    )
+    @AuthRequired
+    @GetMapping ("")
+    public ResponseEntity<List<BoardResponseDto.Find>> findAllByIsAvailableTrue (final @RequestParam(required = false) String categoryName) {
+
+        return ResponseEntity.ok()
+                .body(boardFacade.findAllByCategoryNameAndIsAvailableTrue(categoryName));
     }
 }

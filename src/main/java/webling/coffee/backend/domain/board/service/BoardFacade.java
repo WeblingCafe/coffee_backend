@@ -12,6 +12,8 @@ import webling.coffee.backend.domain.board.service.core.BoardService;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @Transactional
@@ -38,5 +40,9 @@ public class BoardFacade {
         Board board = boardService.findByBoardIdAndWriter(boardId, user);
 
         return BoardResponseDto.Update.toDto(boardService.update(board, request));
+    }
+
+    public List<BoardResponseDto.Find> findAllByCategoryNameAndIsAvailableTrue(final @NotNull String categoryName) {
+        return boardService.findAllByCategoryNameAndIsAvailableTrue(categoryName);
     }
 }

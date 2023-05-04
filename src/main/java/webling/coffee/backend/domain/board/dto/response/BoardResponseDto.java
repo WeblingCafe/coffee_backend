@@ -1,5 +1,6 @@
 package webling.coffee.backend.domain.board.dto.response;
 
+import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -49,6 +50,23 @@ public class BoardResponseDto {
                     .content(update.getContent())
                     .boardCategory(update.getBoardCategory().name())
                     .build();
+        }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @Schema (name = "boardResponseUpdate")
+    public static class Find {
+        private Long boardId;
+        private String title;
+        private String content;
+
+        @QueryProjection
+        public Find(Long boardId, String title, String content) {
+            this.boardId = boardId;
+            this.title = title;
+            this.content = content;
         }
     }
 }

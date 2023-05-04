@@ -6,12 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.board.dto.request.BoardRequestDto;
+import webling.coffee.backend.domain.board.dto.response.BoardResponseDto;
 import webling.coffee.backend.domain.board.entity.Board;
 import webling.coffee.backend.domain.board.repository.BoardRepository;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.global.responses.errors.codes.BoardErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -37,5 +39,9 @@ public class BoardService {
     public Board update(final @NotNull Board board,
                         final @NotNull BoardRequestDto.Update request) {
         return boardRepository.save(Board.update(board, request));
+    }
+
+    public List<BoardResponseDto.Find> findAllByCategoryNameAndIsAvailableTrue(String categoryName) {
+        return boardRepository.findAllByCategoryNameAndIsAvailableTrue(categoryName);
     }
 }
