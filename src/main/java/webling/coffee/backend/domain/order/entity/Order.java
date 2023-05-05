@@ -38,6 +38,9 @@ public class Order extends BaseTime {
     @JoinColumn(name = "ORDER_CART_ID")
     private OrderCart orderCart;
 
+    @OneToOne (mappedBy = "order", fetch = FetchType.LAZY)
+    private OrderCancel orderCancel;
+
     private String recipientEmail;
     @NotNull
     private Long totalPrice;
@@ -63,7 +66,13 @@ public class Order extends BaseTime {
                 .build();
     }
 
-    public static void addCart(Order order, OrderCart cart) {
+    public static void addCart(final @NotNull Order order, final @NotNull OrderCart cart) {
         order.setOrderCart(cart);
     }
+
+    public static Order cancel(final @NotNull Order order) {
+        order.setOrderStatus(OrderStatus.CANCEL);
+        return order;
+    }
+
 }

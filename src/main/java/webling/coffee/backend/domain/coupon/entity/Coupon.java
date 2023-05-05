@@ -45,9 +45,9 @@ public class Coupon extends BaseTime {
                 .build();
     }
 
-    public static Coupon toEntityByStamp(final @NotNull User user) {
+    public static Coupon issueCoupons(final @NotNull User user, final @NotNull CouponType couponType) {
         return Coupon.builder()
-                .couponType(CouponType.COMMON)
+                .couponType(couponType)
                 .isAvailable(true)
                 .user(user)
                 .regEmail("SYSTEM")

@@ -57,12 +57,28 @@ public class OrderService {
         }
     }
 
+    @Transactional (readOnly = true)
     public List<Order> findOrderedAll() {
         return orderRepository.findOrderedAll();
     }
 
+    @Transactional (readOnly = true)
     public List<Order> findMeOrderedAll(final @NotNull Long userId) {
         return orderRepository.findMeOrderedAll(userId);
+    }
+
+    public Order findByOrderIdAndOrdered(final @NotNull Long orderId) {
+        Order order = orderRepository.findByOrderIdAndOrdered(orderId);
+
+        if (order == null) {
+            throw new RestBusinessException.NotFound(OrderErrorCode.NOT_FOUNT);
+        }
+
+        return order;
+    }
+
+    public void cancelOrder(final Order order) {
+        orderRepository.save(Order.cancel(order));
     }
 
 }

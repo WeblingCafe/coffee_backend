@@ -10,6 +10,7 @@ import webling.coffee.backend.domain.order.dto.request.SettlementRequestDto;
 import webling.coffee.backend.domain.user.dto.response.QUserResponseDto_Find;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.entity.User;
+import webling.coffee.backend.global.enums.OrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -90,6 +91,7 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
                 .fetchJoin()
                 .where(
                         user.eq(entity),
+                        order.orderStatus.eq(OrderStatus.COMPLETED),
                         regDateBetween(request)
                 )
                 .fetchFirst()

@@ -10,6 +10,8 @@ public enum CouponType {
     JOIN,
     BIRTHDAY,
     COMMON,
+    REFUND,
+
 
     ;
 

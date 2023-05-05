@@ -34,4 +34,12 @@ public class OrderRequestDto {
         private boolean isPersonalCup;
         private String request;
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @Schema(name = "orderRequestCancel")
+    public static class Cancel {
+        private String cancelMessage;
+    }
 }

@@ -55,4 +55,15 @@ public class OrderCart extends BaseTime {
                 .user(user)
                 .build();
     }
+
+    public static OrderCart refundOrder(final @NotNull OrderCart orderCart) {
+
+        if (orderCart.getUsedCouponAmount() != null) {
+            orderCart.setTotalPrice(orderCart.getTotalPrice() + (orderCart.getUsedCouponAmount() * COUPON_VALUE));
+            orderCart.setUsedCouponAmount(0L);
+        }
+
+        return orderCart;
+    }
+
 }

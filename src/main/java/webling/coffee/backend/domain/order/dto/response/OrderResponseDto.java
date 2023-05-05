@@ -61,4 +61,18 @@ public class OrderResponseDto {
         }
     }
 
+    @Getter
+    @Setter
+    @Builder
+    @Schema (name = "OrderResponseCancel")
+    public static class Cancel {
+        private Long orderId;
+        private String user;
+        private String recipient;
+        private String menuName;
+        private String cancelMessage;
+        private Long totalPrice;
+        private String request;
+    }
+
 }

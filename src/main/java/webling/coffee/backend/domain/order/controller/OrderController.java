@@ -106,4 +106,12 @@ public class OrderController {
         return ResponseEntity.ok()
                 .body(orderFacade.findMeOrderedAll(authentication.getUserId()));
     }
+
+    @AuthRequired (roles = {BARISTA, DEVELOPER})
+    @PatchMapping ("/cancel/{orderId}")
+    public ResponseEntity<OrderResponseDto.Cancel> cancelOrder (final @NotNull @PathVariable Long orderId,
+                                                                final @NotNull @RequestBody OrderRequestDto.Cancel request) {
+        return ResponseEntity.ok()
+                .body(orderFacade.cancelOrder(orderId, request));
+    }
 }

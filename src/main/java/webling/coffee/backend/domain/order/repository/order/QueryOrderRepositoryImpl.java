@@ -36,4 +36,15 @@ public class QueryOrderRepositoryImpl implements QueryOrderRepository{
                 ;
     }
 
+    @Override
+    public Order findByOrderIdAndOrdered(final Long orderId) {
+        return jpaQueryFactory.selectFrom(order)
+                .where(
+                        order.orderId.eq(orderId),
+                        order.orderStatus.eq(OrderStatus.ORDERED)
+                )
+                .fetchFirst()
+                ;
+    }
+
 }

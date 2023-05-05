@@ -10,6 +10,7 @@ import webling.coffee.backend.domain.coupon.dto.response.CouponResponseDto;
 import webling.coffee.backend.domain.coupon.entity.Coupon;
 import webling.coffee.backend.domain.coupon.repository.CouponRepository;
 import webling.coffee.backend.domain.user.entity.User;
+import webling.coffee.backend.global.enums.CouponType;
 import webling.coffee.backend.global.responses.errors.codes.CouponErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
@@ -60,7 +61,7 @@ public class CouponService {
 
         if (issueCouponNumber > 0) {
             for (int i = 0; i < issueCouponNumber; i++) {
-                couponRepository.save(Coupon.toEntityByStamp(updatedUser));
+                couponRepository.save(Coupon.issueCoupons(updatedUser, CouponType.COMMON));
             }
         }
 
@@ -70,4 +71,11 @@ public class CouponService {
     public List<CouponResponseDto.Find> findAllByMeOnStatus(final User user, final String status) {
         return couponRepository.findAllByMeOnStatus(user, status);
     }
+
+    public void refundCoupon(final @NotNull User user, final @NotNull Long usedCouponAmount) {
+        for (int i = 0; i < usedCouponAmount; i++) {
+            couponRepository.save(Coupon.issueCoupons(user, CouponType.REFUND));
+        }
+    }
+
 }

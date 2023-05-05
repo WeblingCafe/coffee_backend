@@ -26,4 +26,9 @@ public class OrderCartService {
         Long originalPrice = orderEntityList.stream().mapToLong(Order::getTotalPrice).sum();
         return orderCartRepository.save(OrderCart.toEntity(originalPrice, couponAmount, orderEntityList, user));
     }
+
+    public void refundOrder(final OrderCart orderCart) {
+        orderCartRepository.save(OrderCart.refundOrder(orderCart));
+    }
+
 }
