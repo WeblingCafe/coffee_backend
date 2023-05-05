@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import webling.coffee.backend.domain.order.entity.Order;
+import webling.coffee.backend.domain.order.entity.OrderCancel;
 
 public class OrderResponseDto {
 
@@ -72,7 +73,17 @@ public class OrderResponseDto {
         private String menuName;
         private String cancelMessage;
         private Long totalPrice;
-        private String request;
+
+        public static Cancel toDto (Order order, OrderCancel orderCancel) {
+            return Cancel.builder()
+                    .orderId(order.getOrderId())
+                    .user(order.getUser().getEmail())
+                    .recipient(order.getRecipientEmail())
+                    .menuName(order.getMenu().getMenuName())
+                    .cancelMessage(orderCancel.getCancelMessage())
+                    .totalPrice(order.getTotalPrice())
+                    .build();
+        }
     }
 
 }

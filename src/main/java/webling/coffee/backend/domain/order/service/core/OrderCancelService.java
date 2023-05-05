@@ -18,7 +18,7 @@ public class OrderCancelService {
 
     private final OrderCancelRepository orderCancelRepository;
 
-    public void saveCancelMessage(final @NotNull Order order, final @NotNull OrderRequestDto.Cancel request) {
-        orderCancelRepository.save(OrderCancel.toEntity(order, request));
+    public OrderCancel saveCancelMessage(final @NotNull Order order, final @NotNull OrderRequestDto.Cancel request) {
+        return orderCancelRepository.save(OrderCancel.toEntity(order, request));
     }
 }

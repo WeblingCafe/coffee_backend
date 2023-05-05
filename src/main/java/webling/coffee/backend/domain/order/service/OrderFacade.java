@@ -10,6 +10,7 @@ import webling.coffee.backend.domain.menu.service.core.MenuService;
 import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
 import webling.coffee.backend.domain.order.dto.response.OrderResponseDto;
 import webling.coffee.backend.domain.order.entity.Order;
+import webling.coffee.backend.domain.order.entity.OrderCancel;
 import webling.coffee.backend.domain.order.entity.OrderCart;
 import webling.coffee.backend.domain.order.service.core.OrderCancelService;
 import webling.coffee.backend.domain.order.service.core.OrderCartService;
@@ -86,11 +87,11 @@ public class OrderFacade {
     public OrderResponseDto.Cancel cancelOrder(final @NotNull Long orderId,
                                                final @NotNull OrderRequestDto.Cancel request) {
 
-        Order order = orderService.findByOrderIdAndOrdered(orderId);
+        Order cancelOrder = orderService.findByOrderIdAndOrdered(orderId);
 
         // 동시성 이슈 해결 해야함 (사용자가 주문하고 취소하는 시점에서 바리스타도 주문된 주문인줄알고 취소하는 경우)
-        orderService.cancelOrder(order);
-        orderCancelService.saveCancelMessage(order, request);
+        orderService.cancelOrder(cancelOrder);
+        OrderCancel orderCancel = orderCancelService.saveCancelMessage(cancelOrder, request);
 
         /**
          * orderCart 의 정보를 조회
@@ -101,17 +102,19 @@ public class OrderFacade {
          *
           */
 
-        OrderCart orderCart = order.getOrderCart();
-        if (orderCart.getUsedCouponAmount() > 0) {
-            couponService.refundCoupon(order.getUser(), orderCart.getUsedCouponAmount());
-            orderCartService.refundOrder(orderCart);
+        OrderCart orderCartProxy = cancelOrder.getOrderCart();
+        OrderCart orderCart = orderCartService.findByOrderCartId(orderCartProxy.getOrderCartId());
+
+        if (orderCartProxy.getUsedCouponAmount() > 0) {
+            couponService.refundCoupon(cancelOrder.getUser(), orderCartProxy.getUsedCouponAmount());
+            orderCartService.refundOrder(orderCart, cancelOrder.getTotalPrice());
         }
 
         // stamp 는 취소 수량만큼 - 시키기. stamp 값에 - 가 들어갈 수 있음 (- 인 경우 프론트단의 작업 필요)
 
-        // dto 리턴
+        userService.refundStamp (cancelOrder.getUser(), cancelOrder.getTotalPrice());
 
-        return null;
+        return OrderResponseDto.Cancel.toDto(cancelOrder, orderCancel);
     }
 
 }

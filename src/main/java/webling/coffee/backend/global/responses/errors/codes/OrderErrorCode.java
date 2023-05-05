@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum OrderErrorCode implements ErrorCode{
 
     NOT_FOUNT (HttpStatus.NOT_FOUND, "O001", "해당 주문 정보를 찾을 수 없습니다."),
+    CART_NOT_FOUNT (HttpStatus.NOT_FOUND, "O001", "해당 장바구니 정보를 찾을 수 없습니다."),
 
     ;
 

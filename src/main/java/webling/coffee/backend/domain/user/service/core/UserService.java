@@ -81,4 +81,8 @@ public class UserService {
         return userRepository.settlementMeBySearchOptions(user, request);
     }
 
+    public void refundStamp(final @NotNull User user, final @NotNull Long totalPrice) {
+        userRepository.save(User.refundStamp(user, (int) (totalPrice / COUPON_VALUE)));
+    }
+
 }

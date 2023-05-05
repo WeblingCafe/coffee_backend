@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import webling.coffee.backend.domain.order.entity.OrderCart;
+import webling.coffee.backend.global.responses.errors.codes.OrderErrorCode;
+import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
+import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,6 +42,10 @@ public class SettlementResponseDto {
 
         public static User from (final @NotNull webling.coffee.backend.domain.user.entity.User user) {
 
+            if (user == null) {
+                throw new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND_SETTLEMENT_USER_INFO);
+            }
+
             List<Cart> orderCartList = new ArrayList<>(user.getOrderCart())
                     .stream()
                     .map(Cart::from)
@@ -53,7 +60,7 @@ public class SettlementResponseDto {
                     .settlementPrice(orderCartList
                                     .stream().mapToLong(Cart::getTotalPrice).sum())
                     .settlementCouponAmount(orderCartList
-                                    .stream().mapToLong(Cart::getTotalPrice).sum())
+                                    .stream().mapToLong(Cart::getUsedCouponAmount).sum())
                     .build();
         }
     }
