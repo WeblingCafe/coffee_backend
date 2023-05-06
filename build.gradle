@@ -43,6 +43,7 @@ dependencies {
     implementation 'org.webjars:jquery:3.6.2'
 
     implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
