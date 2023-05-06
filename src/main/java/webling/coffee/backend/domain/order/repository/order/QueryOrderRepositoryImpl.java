@@ -9,6 +9,8 @@ import webling.coffee.backend.global.enums.OrderStatus;
 import java.util.List;
 
 import static webling.coffee.backend.domain.order.entity.QOrder.order;
+import static webling.coffee.backend.domain.order.entity.QOrderCart.orderCart;
+import static webling.coffee.backend.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
 public class QueryOrderRepositoryImpl implements QueryOrderRepository{
@@ -37,8 +39,12 @@ public class QueryOrderRepositoryImpl implements QueryOrderRepository{
     }
 
     @Override
-    public Order findByOrderIdAndOrdered(final Long orderId) {
+    public Order findByOrderIdAndOrderedFetchUserAndOrderCart(final Long orderId) {
         return jpaQueryFactory.selectFrom(order)
+                .join(order.user, user)
+                .fetchJoin()
+                .join(order.orderCart, orderCart)
+                .fetchJoin()
                 .where(
                         order.orderId.eq(orderId),
                         order.orderStatus.eq(OrderStatus.ORDERED)

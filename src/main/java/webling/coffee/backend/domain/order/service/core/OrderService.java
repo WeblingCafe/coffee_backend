@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.menu.entity.Menu;
 import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
-import webling.coffee.backend.domain.order.dto.response.OrderResponseDto;
 import webling.coffee.backend.domain.order.entity.Order;
 import webling.coffee.backend.domain.order.entity.OrderCart;
 import webling.coffee.backend.domain.order.repository.order.OrderRepository;
@@ -16,7 +15,6 @@ import webling.coffee.backend.global.responses.errors.codes.MenuErrorCode;
 import webling.coffee.backend.global.responses.errors.codes.OrderErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
-import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -67,8 +65,8 @@ public class OrderService {
         return orderRepository.findMeOrderedAll(userId);
     }
 
-    public Order findByOrderIdAndOrdered(final @NotNull Long orderId) {
-        Order order = orderRepository.findByOrderIdAndOrdered(orderId);
+    public Order findByOrderIdAndOrderedFetchUserAndOrderCart(final @NotNull Long orderId) {
+        Order order = orderRepository.findByOrderIdAndOrderedFetchUserAndOrderCart(orderId);
 
         if (order == null) {
             throw new RestBusinessException.NotFound(OrderErrorCode.NOT_FOUNT);

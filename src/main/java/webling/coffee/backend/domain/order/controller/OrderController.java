@@ -15,7 +15,6 @@ import webling.coffee.backend.domain.order.service.OrderFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
-import webling.coffee.backend.global.enums.UserRole;
 
 import java.util.List;
 
@@ -107,6 +106,34 @@ public class OrderController {
                 .body(orderFacade.findMeOrderedAll(authentication.getUserId()));
     }
 
+    @Operation(
+            summary = "바리스타 - 주문 취소",
+            description = """
+                    ## [바리스타 - 주문 취소 API]
+                    ### 바리스타가 주문을 취소합니다.
+                    ### 주문의 식별자인 시퀀스로 주문 정보를 가져오며, 주문 취소 사유를 적어야 취소가 가능합니다.
+                    
+                    ## [주문 취소 description]
+                    ### 주문이 취소될 때, 다음의 로직들이 하나의 트랜잭션으로 작동합니다.
+                    ### 1. 취소할 주문을 조회합니다. 이때 주문 상태가 ORDERED 인 주문을 식별자로 조회합니다.
+                    ### 2. 조회한 주문의 상태를 CANCEL 로 변경합니다.
+                    ### 3. 취소 사유를 저장합니다.
+                    ### 4. 취소할 주문이 담겼던 장바구니 정보를 조회합니다.
+                    ### 5. 취소할 주문이 주문 될 시, 쿠폰을 사용했다면 해당 쿠폰 수량만큼 주문자에게 재발급합니다.
+                    ### 6. 장바구니에 저장되었던 totalPrice 를 재계산합니다.
+                    ### - 사용된 쿠폰 만큼의 금액을 더합니다. 취소한 주문의 가격을 차감합니다.
+                    ### 7. 장바구니에 저장되었던 사용 쿠폰 수량을 초기화 시킵니다.
+                    ### 8. 주문자의 스탬프 개수를 차감합니다.
+                    ### - 이 때, 스탬프가 마이너스가 될 수 있습니다.
+                    
+                    ## [호출 권한]
+                    ### BARISTA, DEVELOPER
+                    
+                    ## [Exceptions]
+                    ### 1. OrderErrorCode.NOT_FOUNT : 취소할 주문을 찾지 못할 경우 해당 예외를 리턴합니다. 상태가 Ordered 가 아니거나, 식별자로 조회할 수 없는 경우입니다.
+                    """,
+            externalDocs = @ExternalDocumentation(description = "ENUM 정보", url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee")
+    )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping ("/cancel/{orderId}")
     public ResponseEntity<OrderResponseDto.Cancel> cancelOrder (final @NotNull @PathVariable Long orderId,

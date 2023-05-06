@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.order.dto.request.SettlementRequestDto;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
@@ -13,7 +14,6 @@ import webling.coffee.backend.domain.user.repository.UserRepository;
 import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
-import java.util.Collection;
 import java.util.List;
 
 import static webling.coffee.backend.global.constant.CalculationOperators.COUPON_VALUE;
@@ -46,7 +46,7 @@ public class UserService {
                 .orElseThrow(() -> new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public User findByIdAndIsAvailableTrue (final @NotNull Long id) {
         return userRepository.findByIdAndIsAvailableTrue(id)
                 .orElseThrow(() -> new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND));

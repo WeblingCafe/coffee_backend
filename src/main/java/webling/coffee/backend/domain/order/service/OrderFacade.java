@@ -87,36 +87,21 @@ public class OrderFacade {
     public OrderResponseDto.Cancel cancelOrder(final @NotNull Long orderId,
                                                final @NotNull OrderRequestDto.Cancel request) {
 
-        Order cancelOrder = orderService.findByOrderIdAndOrdered(orderId);
+        Order cancelOrder = orderService.findByOrderIdAndOrderedFetchUserAndOrderCart(orderId);
 
-        // 동시성 이슈 해결 해야함 (사용자가 주문하고 취소하는 시점에서 바리스타도 주문된 주문인줄알고 취소하는 경우)
         orderService.cancelOrder(cancelOrder);
         OrderCancel orderCancel = orderCancelService.saveCancelMessage(cancelOrder, request);
 
-        /**
-         * orderCart 의 정보를 조회
-         * orderCart 의 totalPrice, couponAmount, 해당 order 의 totalPrice 가 필요
-         * 1. couponAmount 가 0 인경우
-         * -> 그냥 order 만 cancel 하면 됨
-         * 2. coupon 재지급, orderCart 의 couponAmount 0, totalPrice 재계산
-         *
-          */
+        OrderCart orderCart = cancelOrder.getOrderCart();
 
-        OrderCart orderCartProxy = cancelOrder.getOrderCart();
-        OrderCart orderCart = orderCartService.findByOrderCartId(orderCartProxy.getOrderCartId());
-
-        if (orderCartProxy.getUsedCouponAmount() > 0) {
-            couponService.refundCoupon(cancelOrder.getUser(), orderCartProxy.getUsedCouponAmount());
-            orderCartService.refundOrder(orderCart, cancelOrder.getTotalPrice());
+        if (orderCart.getUsedCouponAmount() > 0) {
+            couponService.refundCoupon(cancelOrder.getUser(), orderCart.getUsedCouponAmount());
         }
-
-        // stamp 는 취소 수량만큼 - 시키기. stamp 값에 - 가 들어갈 수 있음 (- 인 경우 프론트단의 작업 필요)
-
+        orderCartService.refundOrder(orderCart, cancelOrder.getTotalPrice());
         userService.refundStamp (cancelOrder.getUser(), cancelOrder.getTotalPrice());
 
         return OrderResponseDto.Cancel.toDto(cancelOrder, orderCancel);
     }
-
 }
 
 
