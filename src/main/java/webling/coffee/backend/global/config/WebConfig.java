@@ -3,6 +3,7 @@ package webling.coffee.backend.global.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -14,6 +15,9 @@ import webling.coffee.backend.global.interceptors.RequestLogInterceptor;
 import webling.coffee.backend.global.resolver.AuthenticationArgumentResolver;
 
 import java.util.List;
+
+import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.HttpMethod.GET;
 
 @Configuration
 @RequiredArgsConstructor
@@ -42,8 +46,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedOrigins("https://coffee-api.snaps.com","http://localhost:3000")
+                .allowedMethods(GET.name(), POST.name(), PUT.name(), DELETE.name())
                 .allowedHeaders("*")
 
         ;
