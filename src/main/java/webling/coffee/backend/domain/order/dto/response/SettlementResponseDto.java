@@ -43,7 +43,7 @@ public class SettlementResponseDto {
         public static User from (final @NotNull webling.coffee.backend.domain.user.entity.User user) {
 
             if (user == null) {
-                throw new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND_SETTLEMENT_USER_INFO);
+                return User.builder().build();
             }
 
             List<Cart> orderCartList = new ArrayList<>(user.getOrderCart())
