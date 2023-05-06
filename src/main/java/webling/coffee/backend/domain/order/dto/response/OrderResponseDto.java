@@ -86,4 +86,23 @@ public class OrderResponseDto {
         }
     }
 
+    @Getter
+    @Setter
+    @Builder
+    @Schema (name = "OrderResponseComplete")
+    public static class Complete {
+        private Long orderId;
+        private String user;
+        private String recipient;
+        private String menuName;
+
+        public static Complete toDto (Order order) {
+            return Complete.builder()
+                    .orderId(order.getOrderId())
+                    .user(order.getUser().getEmail())
+                    .recipient(order.getRecipientEmail())
+                    .menuName(order.getMenu().getMenuName())
+                    .build();
+        }
+    }
 }

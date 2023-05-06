@@ -75,4 +75,8 @@ public class Order extends BaseTime {
         return order;
     }
 
+    public static Order complete(final Order order) {
+        order.setOrderStatus(OrderStatus.COMPLETED);
+        return order;
+    }
 }

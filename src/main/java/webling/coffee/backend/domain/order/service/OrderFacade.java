@@ -102,6 +102,14 @@ public class OrderFacade {
 
         return OrderResponseDto.Cancel.toDto(cancelOrder, orderCancel);
     }
+
+    public OrderResponseDto.Complete completeOrder(final @NotNull Long orderId) {
+
+        Order order = orderService.findByOrderIdAndOrderedFetchUserAndOrderCart(orderId);
+
+        User user = order.getUser(); // 호출 알림
+        return OrderResponseDto.Complete.toDto(orderService.completeOrder(order));
+    }
 }
 
 

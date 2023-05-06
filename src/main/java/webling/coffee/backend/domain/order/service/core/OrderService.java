@@ -75,8 +75,12 @@ public class OrderService {
         return order;
     }
 
-    public void cancelOrder(final Order order) {
+    public void cancelOrder(final @NotNull Order order) {
         orderRepository.save(Order.cancel(order));
+    }
+
+    public Order completeOrder(final @NotNull Order order) {
+        return orderRepository.save(Order.complete(order));
     }
 
 }

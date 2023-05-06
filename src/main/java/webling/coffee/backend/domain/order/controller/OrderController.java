@@ -131,8 +131,7 @@ public class OrderController {
                     
                     ## [Exceptions]
                     ### 1. OrderErrorCode.NOT_FOUNT : 취소할 주문을 찾지 못할 경우 해당 예외를 리턴합니다. 상태가 Ordered 가 아니거나, 식별자로 조회할 수 없는 경우입니다.
-                    """,
-            externalDocs = @ExternalDocumentation(description = "ENUM 정보", url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee")
+                    """
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping ("/cancel/{orderId}")
@@ -141,4 +140,27 @@ public class OrderController {
         return ResponseEntity.ok()
                 .body(orderFacade.cancelOrder(orderId, request));
     }
+
+    @Operation (
+            summary = "바리스타 - 호출 (주문 완성)",
+            description = """
+                    ## [바리스타 - 호출 (주문 완성) API]
+                    ### 바리스타가 주문된 메뉴를 완성하여 주문자를 호출합니다.
+                    
+                    ## [호출 (주문 완성) description]
+                    ###
+                    
+                    ## [호출 권한]
+                    ### BARISTA, DEVELOPER
+                    
+                    ## [Exceptions]
+                    """
+    )
+    @AuthRequired (roles = {BARISTA, DEVELOPER})
+    @PatchMapping ("/complete/{orderId}")
+    public ResponseEntity<OrderResponseDto.Complete> completeOrder (final @NotNull @PathVariable Long orderId) {
+        return ResponseEntity.ok()
+                .body(orderFacade.completeOrder(orderId));
+    }
+
 }

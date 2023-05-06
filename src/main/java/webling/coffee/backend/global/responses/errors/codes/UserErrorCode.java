@@ -12,7 +12,6 @@ public enum UserErrorCode implements ErrorCode{
     DUPLICATION(HttpStatus.BAD_REQUEST, "U002", "중복된 유저 입니다."),
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "U003", "비밀번호가 일치하지 않습니다."),
     NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "U004", "해당 유저는 비활성화 된 유저입니다."),
-    NOT_FOUND_SETTLEMENT_USER_INFO(HttpStatus.NOT_FOUND, "U005", "정산되는 유저 정보를 찾을 수 없습니다.")
 
     ;
 
