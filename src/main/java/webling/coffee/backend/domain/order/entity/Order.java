@@ -38,9 +38,6 @@ public class Order extends BaseTime {
     @JoinColumn(name = "ORDER_CART_ID")
     private OrderCart orderCart;
 
-    @OneToOne (mappedBy = "order", fetch = FetchType.LAZY)
-    private OrderCancel orderCancel;
-
     private String recipientEmail;
     @NotNull
     private Long totalPrice;
