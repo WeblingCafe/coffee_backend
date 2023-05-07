@@ -20,6 +20,7 @@ import webling.coffee.backend.domain.user.service.core.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -87,21 +88,34 @@ public class OrderFacade {
     public OrderResponseDto.Cancel cancelOrder(final @NotNull Long orderId,
                                                final @NotNull OrderRequestDto.Cancel request) {
 
-        Order cancelOrder = orderService.findByOrderIdAndOrderedFetchUserAndOrderCart(orderId);
+        Order orderToCancel = orderService.findByOrderIdAndOrderedFetchUserAndOrderCart(orderId);
+        orderService.cancelOrder(orderToCancel);
 
-        orderService.cancelOrder(cancelOrder);
-        OrderCancel orderCancel = orderCancelService.saveCancelMessage(cancelOrder, request);
+        OrderCancel cancellationMessage = orderCancelService.saveCancelMessage(orderToCancel, request);
 
-        OrderCart orderCart = cancelOrder.getOrderCart();
-        User user = cancelOrder.getUser();
+        refundUsedCouponAmount(orderToCancel);
+        refundOrderAmount(orderToCancel.getOrderCart(), orderToCancel.getTotalPrice());
+        refundStampAmount(orderToCancel.getUser(), orderToCancel.getTotalPrice());
 
-        if (orderCart.getUsedCouponAmount() > 0) {
-            couponService.refundCoupon(user, orderCart.getUsedCouponAmount());
+        return OrderResponseDto.Cancel.toDto(orderToCancel, cancellationMessage);
+    }
+
+    private void refundUsedCouponAmount(Order orderToCancel) {
+        OrderCart orderCart = orderToCancel.getOrderCart();
+        User user = orderToCancel.getUser();
+
+        Long usedCouponAmount = orderCart.getUsedCouponAmount();
+        if (usedCouponAmount > 0) {
+            couponService.refundCoupon(user, usedCouponAmount);
         }
-        orderCartService.refundOrder(orderCart, cancelOrder.getTotalPrice());
-        userService.refundStamp (user, cancelOrder.getTotalPrice());
+    }
 
-        return OrderResponseDto.Cancel.toDto(cancelOrder, orderCancel);
+    private void refundOrderAmount(OrderCart orderCart, Long orderTotalPrice) {
+        orderCartService.refundOrder(orderCart, orderTotalPrice);
+    }
+
+    private void refundStampAmount(User user, Long orderTotalPrice) {
+        userService.refundStamp(user, orderTotalPrice);
     }
 
     public OrderResponseDto.Complete completeOrder(final @NotNull Long orderId) {
