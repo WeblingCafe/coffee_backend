@@ -140,4 +140,9 @@ public class User extends BaseTime {
         user.setStamps(user.getStamps() - totalPrice);
         return user;
     }
+
+    public static void delete(final User user) {
+        user.setIsAvailable(false);
+    }
+
 }

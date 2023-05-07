@@ -85,4 +85,8 @@ public class UserService {
         userRepository.save(User.refundStamp(user, (int) (totalPrice / COUPON_VALUE)));
     }
 
+    public void delete(final @NotNull User user) {
+        User.delete(user);
+    }
+
 }

@@ -19,6 +19,7 @@ import webling.coffee.backend.global.redis.service.RefreshTokenRedisService;
 import java.util.List;
 
 import static webling.coffee.backend.global.enums.UserRole.DEVELOPER;
+import static webling.coffee.backend.global.enums.UserRole.MANAGER;
 
 @Slf4j
 @RestController
@@ -138,5 +139,26 @@ public class UserController {
     public ResponseEntity<UserResponseDto.Find> findById (final @NotNull @PathVariable Long userId) {
         return ResponseEntity.ok()
                 .body(userFacade.findById(userId));
+    }
+
+    @Operation(
+            summary = "유저 삭제 (비활성화)",
+            description = """
+                    ## [유저 삭제 (비활성화) API]
+                    ### 유저를 비활성화 시킵니다. (isAvailable -> false 처리)
+                    
+                    ## [호출 권한]
+                    ### MANAGER, DEVELOPER
+                    
+                    ###[Exceptions]
+                    ### UserErrorCode.NOT_FOUND : 식별자인 시퀀스로 조회한 유저가 없을 경우 예외를 리턴합니다.
+                    """
+    )
+    @AuthRequired (roles = {MANAGER, DEVELOPER})
+    @DeleteMapping ("{userId}")
+    public ResponseEntity<?> delete (final @NotNull @PathVariable Long userId) {
+
+        userFacade.delete(userId);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -72,4 +72,10 @@ public class UserFacade {
             throw new RestBusinessException.Failure(UserErrorCode.NOT_AVAILABLE);
         }
     }
+
+    public void delete(final @NotNull Long userId) {
+        User user = userService.findByIdAndIsAvailableTrue(userId);
+        userService.delete(user);
+    }
+
 }
