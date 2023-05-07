@@ -93,12 +93,13 @@ public class OrderFacade {
         OrderCancel orderCancel = orderCancelService.saveCancelMessage(cancelOrder, request);
 
         OrderCart orderCart = cancelOrder.getOrderCart();
+        User user = cancelOrder.getUser();
 
         if (orderCart.getUsedCouponAmount() > 0) {
-            couponService.refundCoupon(cancelOrder.getUser(), orderCart.getUsedCouponAmount());
+            couponService.refundCoupon(user, orderCart.getUsedCouponAmount());
         }
         orderCartService.refundOrder(orderCart, cancelOrder.getTotalPrice());
-        userService.refundStamp (cancelOrder.getUser(), cancelOrder.getTotalPrice());
+        userService.refundStamp (user, cancelOrder.getTotalPrice());
 
         return OrderResponseDto.Cancel.toDto(cancelOrder, orderCancel);
     }

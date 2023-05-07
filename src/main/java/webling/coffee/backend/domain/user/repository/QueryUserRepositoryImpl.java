@@ -74,6 +74,7 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
                 .leftJoin(orderCart.orderList, order)
                 .fetchJoin()
                 .where(
+                    order.orderStatus.eq(OrderStatus.COMPLETED),
                     regDateBetween(request.getRegDate()),
                     usernameLike(request.getUsername()),
                     nicknameLike(request.getUserNickname())

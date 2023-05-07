@@ -33,7 +33,7 @@ public class SettlementController {
             summary = "모든 회원 정산 API",
             description = """
                     ## [모든 회원 정산 API]
-                    ### 모든 회원의 장바구니와 주문 정보를 보여줍니다.
+                    ### 모든 회원의 장바구니와 주문 정보를 보여줍니다. 주문이 완료된 주문 건만 보여줍니다. (COMPLETED 상태)
                     ### 검색조건은 다음과 같습니다.
                     ### - 유저의 본명 (username), 유저의 닉네임 (nickname), 주문 내역의 기간
                     ### - 주문 내역의 fromDate 가 null 인 경우 15일 전을 기본값으로 조회합니다.
@@ -55,7 +55,7 @@ public class SettlementController {
             summary = "내 정산 내역 조회 API",
             description = """
                     ## [내 정산 내역 조회 API]
-                    ### 나의 장바구니와 주문 정보를 보여줍니다.
+                    ### 나의 장바구니와 주문 정보를 보여줍니다. 주문이 완료된 주문 건만 보여줍니다. (COMPLETED 상태)
                     ### 검색조건은 다음과 같습니다.
                     ### 주문내역의 기간
                     ### - 주문 내역의 fromDate 가 null 인 경우 15일 전을 기본값으로 조회합니다.

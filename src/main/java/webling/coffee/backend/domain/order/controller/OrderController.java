@@ -87,10 +87,10 @@ public class OrderController {
     }
 
     @Operation(
-            summary = "내가 주문된 주문 리스트 조회",
+            summary = "내가 주문한 주문 리스트 조회",
             description =
                     """
-                    ## [내가 주문된 주문 리스트 조회 API]
+                    ## [내가 주문한 주문 리스트 조회 API]
                     ### 로그인한 회원의 주문중 주문 상태가 ORDERED 인 모든 주문정보를 조회합니다.
                     
                     ## [호출 권한]
