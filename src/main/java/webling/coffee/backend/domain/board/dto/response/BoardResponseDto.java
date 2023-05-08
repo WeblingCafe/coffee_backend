@@ -3,6 +3,7 @@ package webling.coffee.backend.domain.board.dto.response;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,6 +55,7 @@ public class BoardResponseDto {
 
     @Getter
     @Setter
+    @AllArgsConstructor
     @Builder
     @Schema (name = "boardResponseUpdate")
     public static class Find {

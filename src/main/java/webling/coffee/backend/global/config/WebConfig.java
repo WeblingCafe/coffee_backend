@@ -19,6 +19,8 @@ import java.util.List;
 
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.HttpMethod.GET;
+import static webling.coffee.backend.global.utils.JwtUtils.ACCESS_AUTHORIZATION;
+import static webling.coffee.backend.global.utils.JwtUtils.REFRESH_AUTHORIZATION;
 
 @Configuration
 @RequiredArgsConstructor
@@ -55,6 +57,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(backendUrl, frontendLocalUrl)
                 .allowedMethods(GET.name(), POST.name(), PUT.name(), DELETE.name(), PATCH.name())
-                .allowedHeaders("*");
+                .allowCredentials(true)
+                .exposedHeaders(ACCESS_AUTHORIZATION, REFRESH_AUTHORIZATION)
+                .maxAge(24 * 60 * 60);
     }
 }

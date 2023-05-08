@@ -5,19 +5,18 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webling.coffee.backend.domain.coupon.dto.request.CouponRequestDto;
-import webling.coffee.backend.domain.coupon.dto.response.CouponResponseDto;
 import webling.coffee.backend.domain.coupon.service.CouponFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
+import webling.coffee.backend.global.responses.success.codes.CouponSuccessCode;
+import webling.coffee.backend.global.responses.success.response.SuccessResponse;
 
-import java.util.List;
-
-import static webling.coffee.backend.global.enums.UserRole.*;
+import static webling.coffee.backend.global.enums.UserRole.DEVELOPER;
+import static webling.coffee.backend.global.enums.UserRole.MANAGER;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,12 +43,13 @@ public class CouponController {
     )
     @AuthRequired(roles = {MANAGER, DEVELOPER})
     @PostMapping("/{userId}")
-    public ResponseEntity<CouponResponseDto.Create> create (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
-                                                            final @NotNull @PathVariable Long userId,
-                                                            final @NotNull @RequestBody CouponRequestDto.Create request) {
+    public ResponseEntity<SuccessResponse> create (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
+                                                   final @NotNull @PathVariable Long userId,
+                                                   final @NotNull @RequestBody CouponRequestDto.Create request) {
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(couponFacade.create(authentication.getEmail(), userId, request));
+        return SuccessResponse.toResponseEntity(
+                CouponSuccessCode.CREATE,
+                couponFacade.create(authentication.getEmail(), userId, request));
     }
 
     @Operation(
@@ -70,11 +70,11 @@ public class CouponController {
     )
     @AuthRequired
     @GetMapping("/me/{status}")
-    public ResponseEntity <List<CouponResponseDto.Find>> findAllByMeOnStatus (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
+    public ResponseEntity <SuccessResponse> findAllByMeOnStatus (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
                                                                               final @PathVariable (required = false) String status) {
 
-        return ResponseEntity.ok()
-                .body(couponFacade.findAllByMeOnStatus(authentication.getUserId(), status));
+        return SuccessResponse.toResponseEntity(
+                CouponSuccessCode.FIND,
+                couponFacade.findAllByMeOnStatus(authentication.getUserId(), status));
     }
-
 }
