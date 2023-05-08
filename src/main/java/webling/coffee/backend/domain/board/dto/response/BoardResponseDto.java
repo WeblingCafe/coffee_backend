@@ -60,12 +60,22 @@ public class BoardResponseDto {
         private Long boardId;
         private String title;
         private String content;
+        private boolean isAvailable;
 
         @QueryProjection
         public Find(Long boardId, String title, String content) {
             this.boardId = boardId;
             this.title = title;
             this.content = content;
+        }
+
+        public static Find toDto(final @NotNull Board board) {
+            return Find.builder()
+                    .boardId(board.getBoardId())
+                    .title(board.getTitle())
+                    .content(board.getContent())
+                    .isAvailable(board.isAvailable())
+                    .build();
         }
     }
 }

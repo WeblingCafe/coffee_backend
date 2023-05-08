@@ -48,12 +48,11 @@ public class BoardService {
         return boardRepository.findByIdAndIsAvailableTrue(boardId);
     }
 
-    public void disable(final @NotNull Board board) {
-        Board.disable(board);
+    public Board disable(final @NotNull Board board) {
+        return Board.disable(board);
     }
 
-    public void enable(final @NotNull Board board) {
-        Board.enable(board);
+    public Board enable(final @NotNull Board board) {
+        return Board.enable(board);
     }
-
 }

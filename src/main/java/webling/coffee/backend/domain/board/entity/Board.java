@@ -60,11 +60,13 @@ public class Board extends BaseTime {
         return board;
     }
 
-    public static void disable(final @NotNull Board board) {
+    public static Board disable(final @NotNull Board board) {
         board.setAvailable(false);
+        return board;
     }
 
-    public static void enable(final @NotNull Board board) {
+    public static Board enable(final @NotNull Board board) {
         board.setAvailable(true);
+        return board;
     }
 }

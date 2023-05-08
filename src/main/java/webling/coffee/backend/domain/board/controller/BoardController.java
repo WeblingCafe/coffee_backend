@@ -6,17 +6,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webling.coffee.backend.domain.board.dto.request.BoardRequestDto;
-import webling.coffee.backend.domain.board.dto.response.BoardResponseDto;
 import webling.coffee.backend.domain.board.service.BoardFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
-
-import java.util.List;
+import webling.coffee.backend.global.responses.success.codes.BoardSuccessCode;
+import webling.coffee.backend.global.responses.success.response.SuccessResponse;
 
 import static webling.coffee.backend.global.enums.UserRole.*;
 
@@ -51,11 +49,13 @@ public class BoardController {
     )
     @AuthRequired(roles = {MANAGER, BARISTA, DEVELOPER})
     @PostMapping("")
-    public ResponseEntity<BoardResponseDto.Create> create (final @NotNull @Parameter(hidden = true) @AuthUser UserAuthentication authentication,
-                                                           final @NotNull @RequestBody BoardRequestDto.Create request) {
+    public ResponseEntity<SuccessResponse> create (final @NotNull @Parameter(hidden = true) @AuthUser UserAuthentication authentication,
+                                                   final @NotNull @RequestBody BoardRequestDto.Create request) {
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(boardFacade.create(authentication.getUserId(), request));
+        return SuccessResponse
+                .toResponseEntity(
+                        BoardSuccessCode.CREATE,
+                        boardFacade.create(authentication.getUserId(), request));
     }
 
     @Operation(
@@ -78,11 +78,13 @@ public class BoardController {
     )
     @AuthRequired (roles = {MANAGER, BARISTA, DEVELOPER})
     @PostMapping("/me/{boardId}")
-    public ResponseEntity<BoardResponseDto.Update> update (final @NotNull @Parameter(hidden = true) @AuthUser UserAuthentication authentication,
+    public ResponseEntity<SuccessResponse> update (final @NotNull @Parameter(hidden = true) @AuthUser UserAuthentication authentication,
                                                            final @NotNull @PathVariable Long boardId,
                                                            final @NotNull @RequestBody BoardRequestDto.Update request) {
-        return ResponseEntity.ok()
-                .body(boardFacade.update(boardId, authentication.getUserId(), request));
+
+        return SuccessResponse.toResponseEntity(
+                BoardSuccessCode.UPDATE,
+                boardFacade.update(boardId, authentication.getUserId(), request));
     }
 
     @Operation(
@@ -110,10 +112,12 @@ public class BoardController {
     )
     @AuthRequired
     @GetMapping ("")
-    public ResponseEntity<List<BoardResponseDto.Find>> findAllByIsAvailableTrue (final @RequestParam(required = false) String categoryName) {
+    public ResponseEntity<SuccessResponse> findAllByIsAvailableTrue (final @RequestParam(required = false) String categoryName) {
 
-        return ResponseEntity.ok()
-                .body(boardFacade.findAllByCategoryNameAndIsAvailableTrue(categoryName));
+        return SuccessResponse.toResponseEntity(
+                BoardSuccessCode.FIND_ALL_AVAILABLE_TRUE,
+                boardFacade.findAllByCategoryNameAndIsAvailableTrue(categoryName)
+        );
     }
 
     @Operation(
@@ -130,9 +134,11 @@ public class BoardController {
     )
     @AuthRequired
     @PostMapping ("/{boardId}")
-    public ResponseEntity<BoardResponseDto.Find> findByBoardIdAndIsAvailableTrue (final @NotNull @PathVariable Long boardId) {
-        return ResponseEntity.ok()
-                .body(boardFacade.findByBoardIdAndIsAvailableTrue(boardId));
+    public ResponseEntity<SuccessResponse> findByBoardIdAndIsAvailableTrue (final @NotNull @PathVariable Long boardId) {
+
+        return SuccessResponse.toResponseEntity(
+                BoardSuccessCode.FIND_AVAILABLE_TRUE,
+                boardFacade.findByBoardIdAndIsAvailableTrue(boardId));
     }
 
     @Operation(
@@ -152,13 +158,13 @@ public class BoardController {
                     """
     )
     @AuthRequired (roles = {MANAGER, BARISTA, DEVELOPER})
-    @PatchMapping ("/disable/{boardId}") //FIXME : Susccess Response 객체로 한번 더 감쌀 것. 성공 코드 ,메세지 내려보내기
-    public ResponseEntity<?> disable (final @NotNull @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
+    @PatchMapping ("/disable/{boardId}")
+    public ResponseEntity<SuccessResponse> disable (final @NotNull @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
                                       final @NotNull @PathVariable Long boardId) {
 
-        boardFacade.disable(authentication.getUserId(), boardId);
-
-        return ResponseEntity.noContent().build();
+        return SuccessResponse.toResponseEntity(
+                BoardSuccessCode.DISABLE,
+                boardFacade.disable(authentication.getUserId(), boardId));
     }
 
     @Operation(
@@ -179,11 +185,11 @@ public class BoardController {
     )
     @AuthRequired(roles = {MANAGER, BARISTA, DEVELOPER})
     @PatchMapping("/enable/{boardId}")
-    public ResponseEntity<?> enable (final @NotNull @AuthUser @Parameter (hidden = true) UserAuthentication authentication,
+    public ResponseEntity<SuccessResponse> enable (final @NotNull @AuthUser @Parameter (hidden = true) UserAuthentication authentication,
                                      final @NotNull @PathVariable Long boardId) {
 
-        boardFacade.enable(authentication.getUserId(), boardId);
-
-        return ResponseEntity.noContent().build();
+        return SuccessResponse.toResponseEntity(
+                BoardSuccessCode.ENABLE,
+                boardFacade.enable(authentication.getUserId(), boardId));
     }
 }

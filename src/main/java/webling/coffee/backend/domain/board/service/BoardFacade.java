@@ -56,7 +56,7 @@ public class BoardFacade {
         return boardService.findByBoardIdAndIsAvailableTrue(boardId);
     }
 
-    public void disable(final @NotNull Long userId, final @NotNull Long boardId) {
+    public BoardResponseDto.Find disable(final @NotNull Long userId, final @NotNull Long boardId) {
         User user = userService.findByIdAndIsAvailableTrue(userId);
         Board board = boardService.findByBoardIdAndWriter(boardId, user);
 
@@ -64,10 +64,10 @@ public class BoardFacade {
             throw new RestBusinessException.Failure(BoardErrorCode.IS_NOT_AVAILABLE);
         }
 
-        boardService.disable(board);
+        return BoardResponseDto.Find.toDto(boardService.disable(board));
     }
 
-    public void enable(final @NotNull Long userId, final @NotNull Long boardId) {
+    public BoardResponseDto.Find enable(final @NotNull Long userId, final @NotNull Long boardId) {
         User user = userService.findByIdAndIsAvailableTrue(userId);
         Board board = boardService.findByBoardIdAndWriter(boardId, user);
 
@@ -75,7 +75,6 @@ public class BoardFacade {
             throw new RestBusinessException.Failure(BoardErrorCode.IS_AVAILABLE);
         }
 
-        boardService.enable(board);
+        return BoardResponseDto.Find.toDto(boardService.enable(board));
     }
-
 }

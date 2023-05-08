@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +14,8 @@ import webling.coffee.backend.domain.authentication.service.AuthenticationFacade
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.service.UserFacade;
+import webling.coffee.backend.global.responses.success.codes.AuthSuccessCode;
+import webling.coffee.backend.global.responses.success.response.SuccessResponse;
 import webling.coffee.backend.global.utils.JwtUtils;
 
 @Slf4j
@@ -39,13 +40,16 @@ public class AuthenticationController {
                     """
     )
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDto.Login> login (final @RequestBody UserRequestDto.Login request) {
+    public ResponseEntity<SuccessResponse> login (final @RequestBody UserRequestDto.Login request) {
 
         UserResponseDto.Login memberDto = authenticationFacade.login(request);
 
-        return ResponseEntity.ok()
-                .headers(jwtUtils.getAuthHeaders(memberDto.getUserId(), memberDto.getEmail(), memberDto.getRefreshToken()))
-                .body(memberDto);
+        return SuccessResponse
+                .toResponseEntity(
+                        jwtUtils.getAuthHeaders(memberDto.getUserId(), memberDto.getEmail(), memberDto.getRefreshToken()),
+                        AuthSuccessCode.LOGIN,
+                        memberDto
+                        );
     }
 
     @Operation(
@@ -67,10 +71,10 @@ public class AuthenticationController {
                     url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee")
     )
     @PostMapping("")
-    public ResponseEntity<UserResponseDto.Register> register (@RequestBody UserRequestDto.@Valid Register request) {
+    public ResponseEntity<SuccessResponse> register (@RequestBody UserRequestDto.@Valid Register request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(userFacade.register(request));
+        return SuccessResponse.toResponseEntity(
+                AuthSuccessCode.REGISTER,
+                userFacade.register(request));
     }
 }
