@@ -9,14 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
-import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.service.UserFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
 import webling.coffee.backend.global.redis.service.RefreshTokenRedisService;
-
-import java.util.List;
+import webling.coffee.backend.global.responses.success.codes.UserSuccessCode;
+import webling.coffee.backend.global.responses.success.response.SuccessResponse;
 
 import static webling.coffee.backend.global.enums.UserRole.DEVELOPER;
 import static webling.coffee.backend.global.enums.UserRole.MANAGER;
@@ -40,11 +39,9 @@ public class UserController {
     )
     @AuthRequired
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(final @AuthUser @Parameter(hidden = true) UserAuthentication authentication) {
-
+    public ResponseEntity<SuccessResponse> logout(final @AuthUser @Parameter(hidden = true) UserAuthentication authentication) {
         refreshTokenRedisService.deleteById(authentication.getEmail());
-
-        return ResponseEntity.noContent().build();
+        return SuccessResponse.toResponseEntity(UserSuccessCode.LOGOUT);
     }
 
     @Operation(
@@ -63,11 +60,12 @@ public class UserController {
     )
     @AuthRequired
     @PatchMapping("/me")
-    public ResponseEntity<UserResponseDto.Update> update(final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
+    public ResponseEntity<SuccessResponse> update(final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
                                                          final @NotNull @RequestBody UserRequestDto.UpdateInfo request) {
 
-        return ResponseEntity.ok()
-                .body(userFacade.update(authentication.getUserId(), request));
+        return SuccessResponse.toResponseEntity(
+                UserSuccessCode.UPDATE,
+                userFacade.update(authentication.getUserId(), request));
     }
 
     @Operation(
@@ -93,11 +91,12 @@ public class UserController {
     )
     @AuthRequired(roles = {DEVELOPER})
     @PatchMapping("/role/{userId}")
-    public ResponseEntity<UserResponseDto.Update> updateRole(final @PathVariable Long userId,
+    public ResponseEntity<SuccessResponse> updateRole(final @PathVariable Long userId,
                                                              final @NotNull @RequestBody UserRequestDto.UpdateRole request) {
 
-        return ResponseEntity.ok()
-                .body(userFacade.updateRole(userId, request));
+        return SuccessResponse.toResponseEntity(
+                UserSuccessCode.UPDATE_ROLE,
+                userFacade.updateRole(userId, request));
     }
 
     @Operation(
@@ -114,9 +113,10 @@ public class UserController {
     )
     @AuthRequired
     @GetMapping("")
-    public ResponseEntity<List<UserResponseDto.Find>> findAllByIsAvailableTrue() {
-        return ResponseEntity.ok()
-                .body(userFacade.findAllByIsAvailableTrue());
+    public ResponseEntity<SuccessResponse> findAllByIsAvailableTrue() {
+        return SuccessResponse.toResponseEntity(
+                UserSuccessCode.FIND,
+                userFacade.findAllByIsAvailableTrue());
     }
 
     @Operation(
@@ -136,9 +136,10 @@ public class UserController {
     )
     @AuthRequired
     @GetMapping("{userId}")
-    public ResponseEntity<UserResponseDto.Find> findById(final @NotNull @PathVariable Long userId) {
-        return ResponseEntity.ok()
-                .body(userFacade.findById(userId));
+    public ResponseEntity<SuccessResponse> findById(final @NotNull @PathVariable Long userId) {
+        return SuccessResponse.toResponseEntity(
+                UserSuccessCode.FIND,
+                userFacade.findById(userId));
     }
 
     @Operation(
@@ -156,10 +157,9 @@ public class UserController {
     )
     @AuthRequired(roles = {MANAGER, DEVELOPER})
     @DeleteMapping("{userId}")
-    public ResponseEntity<?> delete(final @NotNull @PathVariable Long userId) {
-
+    public ResponseEntity<SuccessResponse> delete(final @NotNull @PathVariable Long userId) {
         userFacade.delete(userId);
-        return ResponseEntity.noContent().build();
+        return SuccessResponse.toResponseEntity(UserSuccessCode.DELETE);
     }
 
 }

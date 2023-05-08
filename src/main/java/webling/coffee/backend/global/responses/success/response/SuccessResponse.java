@@ -30,6 +30,22 @@ public class SuccessResponse {
         this.responseObject = responseObject;
     }
 
+    private SuccessResponse (final @NotNull SuccessCode successCode) {
+        this.status = successCode.getHttpStatus().value();
+        this.success = successCode.getHttpStatus().getReasonPhrase();
+        this.code = successCode.getSuccessCode();
+        this.successMessage = successCode.getMessage();
+    }
+
+    public static ResponseEntity<SuccessResponse> toResponseEntity (final @NotNull SuccessCode successCode) {
+
+        log.info("Success Response - success code : {}, success message : {}",
+                successCode.getSuccessCode(), successCode.getMessage());
+
+        return ResponseEntity
+                .status(successCode.getHttpStatus())
+                .body(new SuccessResponse(successCode));
+    }
 
     public static ResponseEntity<SuccessResponse> toResponseEntity (final @NotNull SuccessCode successCode,
                                                                     final @NotNull Object responseObject) {
