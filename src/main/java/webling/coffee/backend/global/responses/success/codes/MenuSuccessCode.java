@@ -16,7 +16,8 @@ public enum MenuSuccessCode implements SuccessCode {
     FAVORITE(HttpStatus.OK, "MS006", "해당 메뉴가 즐겨찾기 등록 되었습니다."),
     NOT_FAVORITE(HttpStatus.OK, "MS007", "해당 메뉴가 즐겨찾기 해제 되었습니다."),
     FIND_FAVORITE(HttpStatus.OK, "MS008", "즐겨찾기 메뉴 리스트 조회에 성공했습니다."),
-
+    CATEGORY_CREATE(HttpStatus.CREATED, "MS009", "메뉴 카테고리 등록에 성공했습니다."),
+    CATEGORY_UPDATE(HttpStatus.OK, "MS010", "메뉴 카테고리 수정에 성공했습니다."),
     ;
 
     private final HttpStatus httpStatus;

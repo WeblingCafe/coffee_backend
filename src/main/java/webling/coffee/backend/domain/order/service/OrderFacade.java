@@ -41,30 +41,31 @@ public class OrderFacade {
                                           final @NotNull OrderRequestDto.Cart request) {
 
         User user = userService.findById(userId);
-        List<Order> orderEntityList = new ArrayList<>();
-
-        for (OrderRequestDto.Create orderRequest : request.getOrderList()) {
-
-            Order orderEntity = orderService.create(
-                    user,
-                    userService.findById(orderRequest.getRecipientId()),
-                    menuService.findByIdAndAvailable(orderRequest.getMenuId()),
-                    orderRequest);
-
-            orderEntityList.add(orderEntity);
-        }
+        List<Order> orderEntityList = createOrderList(user, request);
 
         Long couponAmount = couponService.useCoupons(couponService.findAllByUserAndIsAvailable(user), request.getCouponAmount());
         OrderCart cart = orderCartService.save(orderEntityList, user, couponAmount);
 
         orderService.addCart(cart, orderEntityList);
-
         userService.addStamps(user, cart.getTotalPrice());
-
         couponService.issueCouponByStamp(user);
 
         return orderEntityList.stream()
                 .map(OrderResponseDto.Create::toDto)
+                .collect(Collectors.toList());
+    }
+
+    private List<Order> createOrderList (final @NotNull User user,
+                                         final @NotNull OrderRequestDto.Cart request) {
+
+        return request.getOrderList().stream()
+                .map(orderRequest ->
+                        orderService.create(
+                            user,
+                            userService.findById(orderRequest.getRecipientId()),
+                            menuService.findByIdAndAvailable(orderRequest.getMenuId()),
+                            orderRequest)
+                )
                 .collect(Collectors.toList());
     }
 

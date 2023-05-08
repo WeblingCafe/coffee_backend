@@ -4,15 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webling.coffee.backend.domain.menuCategory.dto.request.MenuCategoryRequestDto;
-import webling.coffee.backend.domain.menuCategory.dto.response.MenuCategoryResponseDto;
 import webling.coffee.backend.domain.menuCategory.service.MenuCategoryFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
+import webling.coffee.backend.global.responses.success.codes.MenuSuccessCode;
+import webling.coffee.backend.global.responses.success.response.SuccessResponse;
 
-import static webling.coffee.backend.global.enums.UserRole.*;
+import static webling.coffee.backend.global.enums.UserRole.BARISTA;
+import static webling.coffee.backend.global.enums.UserRole.DEVELOPER;
 
 @Slf4j
 @RestController
@@ -37,10 +38,11 @@ public class MenuCategoryController {
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PostMapping("")
-    public ResponseEntity<MenuCategoryResponseDto.Create> createCategory (final @NotNull @RequestBody MenuCategoryRequestDto.Create request) {
+    public ResponseEntity<SuccessResponse> createCategory (final @NotNull @RequestBody MenuCategoryRequestDto.Create request) {
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(menuCategoryFacade.create(request));
+        return SuccessResponse.toResponseEntity(
+                MenuSuccessCode.CATEGORY_CREATE,
+                menuCategoryFacade.create(request));
     }
 
     @Operation(
@@ -60,9 +62,11 @@ public class MenuCategoryController {
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping("/{categoryId}")
-    public ResponseEntity<MenuCategoryResponseDto.Update> updateCategory (final @NotNull @PathVariable Long categoryId,
+    public ResponseEntity<SuccessResponse> updateCategory (final @NotNull @PathVariable Long categoryId,
                                                                           final @NotNull @RequestBody MenuCategoryRequestDto.Update request) {
-        return ResponseEntity.ok()
-                .body(menuCategoryFacade.update(categoryId, request));
+
+        return SuccessResponse.toResponseEntity(
+                MenuSuccessCode.UPDATE,
+                menuCategoryFacade.update(categoryId, request));
     }
 }

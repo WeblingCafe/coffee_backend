@@ -6,17 +6,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webling.coffee.backend.domain.order.dto.request.OrderRequestDto;
-import webling.coffee.backend.domain.order.dto.response.OrderResponseDto;
 import webling.coffee.backend.domain.order.service.OrderFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
-
-import java.util.List;
+import webling.coffee.backend.global.responses.success.codes.OrderSuccessCode;
+import webling.coffee.backend.global.responses.success.response.SuccessResponse;
 
 import static webling.coffee.backend.global.enums.UserRole.BARISTA;
 import static webling.coffee.backend.global.enums.UserRole.DEVELOPER;
@@ -59,11 +57,12 @@ public class OrderController {
     )
     @AuthRequired
     @PostMapping("")
-    public ResponseEntity<List<OrderResponseDto.Create>> createOrder (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
-                                                                final @NotNull @RequestBody OrderRequestDto.Cart request) {
+    public ResponseEntity<SuccessResponse> createOrder (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
+                                                        final @NotNull @RequestBody OrderRequestDto.Cart request) {
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(orderFacade.create(authentication.getUserId(), request));
+        return SuccessResponse.toResponseEntity(
+                OrderSuccessCode.CREATE,
+                orderFacade.create(authentication.getUserId(), request));
     }
 
     @Operation(
@@ -81,9 +80,11 @@ public class OrderController {
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @GetMapping ("")
-    public ResponseEntity<List<OrderResponseDto.Find>> findOrderedAll () {
-        return ResponseEntity.ok()
-                .body(orderFacade.findOrderedAll());
+    public ResponseEntity<SuccessResponse> findOrderedAll () {
+
+        return SuccessResponse.toResponseEntity(
+                OrderSuccessCode.ORDERED_ORDER_FIND,
+                orderFacade.findOrderedAll());
     }
 
     @Operation(
@@ -101,9 +102,11 @@ public class OrderController {
     )
     @AuthRequired
     @GetMapping ("/me")
-    public ResponseEntity<List<OrderResponseDto.Find>> findMeOrderedAll (final @NotNull @AuthUser @Parameter (hidden = true) UserAuthentication authentication) {
-        return ResponseEntity.ok()
-                .body(orderFacade.findMeOrderedAll(authentication.getUserId()));
+    public ResponseEntity<SuccessResponse> findMeOrderedAll (final @NotNull @AuthUser @Parameter (hidden = true) UserAuthentication authentication) {
+
+        return SuccessResponse.toResponseEntity(
+                OrderSuccessCode.ORDERED_ORDER_ME_FIND,
+                orderFacade.findMeOrderedAll(authentication.getUserId()));
     }
 
     @Operation(
@@ -135,10 +138,12 @@ public class OrderController {
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping ("/cancel/{orderId}")
-    public ResponseEntity<OrderResponseDto.Cancel> cancelOrder (final @NotNull @PathVariable Long orderId,
+    public ResponseEntity<SuccessResponse> cancelOrder (final @NotNull @PathVariable Long orderId,
                                                                 final @NotNull @RequestBody OrderRequestDto.Cancel request) {
-        return ResponseEntity.ok()
-                .body(orderFacade.cancelOrder(orderId, request));
+
+        return SuccessResponse.toResponseEntity(
+                OrderSuccessCode.CANCEL,
+                orderFacade.cancelOrder(orderId, request));
     }
 
     @Operation (
@@ -158,9 +163,10 @@ public class OrderController {
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping ("/complete/{orderId}")
-    public ResponseEntity<OrderResponseDto.Complete> completeOrder (final @NotNull @PathVariable Long orderId) {
-        return ResponseEntity.ok()
-                .body(orderFacade.completeOrder(orderId));
-    }
+    public ResponseEntity<SuccessResponse> completeOrder (final @NotNull @PathVariable Long orderId) {
 
+        return SuccessResponse.toResponseEntity(
+                OrderSuccessCode.COMPLETED,
+                orderFacade.completeOrder(orderId));
+    }
 }
