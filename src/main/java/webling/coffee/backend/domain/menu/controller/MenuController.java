@@ -11,10 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
 import webling.coffee.backend.domain.menu.dto.response.MenuResponseDto;
+import webling.coffee.backend.domain.menu.entity.FavoriteMenu;
 import webling.coffee.backend.domain.menu.service.MenuFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
+import webling.coffee.backend.global.responses.success.codes.MenuSuccessCode;
+import webling.coffee.backend.global.responses.success.response.SuccessResponse;
 
 import java.util.List;
 
@@ -51,11 +54,11 @@ public class MenuController {
     )
     @AuthRequired(roles = {BARISTA, DEVELOPER})
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<MenuResponseDto.Create> createMenu (final @ModelAttribute MenuRequestDto.Create request) {
+    public ResponseEntity<SuccessResponse> createMenu (final @ModelAttribute MenuRequestDto.Create request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(menuFacade.createMenu(request));
+        return SuccessResponse.toResponseEntity(
+                MenuSuccessCode.CREATE,
+                menuFacade.createMenu(request));
     }
 
     @Operation (
@@ -76,10 +79,11 @@ public class MenuController {
     )
     @AuthRequired
     @GetMapping ("/{menuId}")
-    public ResponseEntity<MenuResponseDto.Find> findById (final @NotNull @PathVariable Long menuId) {
+    public ResponseEntity<SuccessResponse> findById (final @NotNull @PathVariable Long menuId) {
 
-        return ResponseEntity.ok()
-                .body(menuFacade.findByIdAndAvailable(menuId));
+        return SuccessResponse.toResponseEntity(
+                MenuSuccessCode.FIND,
+                menuFacade.findByIdAndAvailable(menuId));
     }
 
     @Operation (
@@ -95,10 +99,11 @@ public class MenuController {
     )
     @AuthRequired
     @GetMapping ("")
-    public ResponseEntity<List<MenuResponseDto.Find>> findAll() {
+    public ResponseEntity<SuccessResponse> findAll() {
 
-        return ResponseEntity.ok()
-                .body(menuFacade.findAllAndAvailable());
+        return SuccessResponse.toResponseEntity(
+                MenuSuccessCode.FIND,
+                menuFacade.findAllAndAvailable());
     }
 
     @Operation (
@@ -125,11 +130,12 @@ public class MenuController {
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping (value = "/{menuId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<MenuResponseDto.Update> updateMenu (final @NotNull @PathVariable Long menuId,
+    public ResponseEntity<SuccessResponse> updateMenu (final @NotNull @PathVariable Long menuId,
                                                               final @ModelAttribute MenuRequestDto.Update request) {
 
-        return ResponseEntity.ok()
-                .body(menuFacade.updateMenu(menuId, request));
+        return SuccessResponse.toResponseEntity(
+                MenuSuccessCode.UPDATE,
+                menuFacade.updateMenu(menuId, request));
     }
 
     @Operation (
@@ -150,10 +156,11 @@ public class MenuController {
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping ("/soldOut/{menuId}")
-    public ResponseEntity<MenuResponseDto.SoldOut> soldOut (final @NotNull @PathVariable Long menuId) {
+    public ResponseEntity<SuccessResponse> soldOut (final @NotNull @PathVariable Long menuId) {
 
-        return ResponseEntity.ok()
-                .body(menuFacade.soldOut(menuId));
+        return SuccessResponse.toResponseEntity(
+                MenuSuccessCode.SOLD_OUT,
+                menuFacade.soldOut(menuId));
     }
 
     @Operation (
@@ -174,10 +181,11 @@ public class MenuController {
     )
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping ("/restore/{menuId}")
-    public ResponseEntity<MenuResponseDto.Restore> restore (final @NotNull @PathVariable Long menuId) {
+    public ResponseEntity<SuccessResponse> restore (final @NotNull @PathVariable Long menuId) {
 
-        return ResponseEntity.ok()
-                .body(menuFacade.restore(menuId));
+        return SuccessResponse.toResponseEntity(
+                MenuSuccessCode.RESTORE,
+                menuFacade.restore(menuId));
     }
 
     @Operation (
@@ -197,12 +205,20 @@ public class MenuController {
     )
     @AuthRequired
     @PostMapping ("/me/favorite/{menuId}")
-    public ResponseEntity<?> saveFavoriteMenu (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
-                                               final @NotNull @PathVariable Long menuId) {
+    public ResponseEntity<SuccessResponse> saveFavoriteMenu (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
+                                                             final @NotNull @PathVariable Long menuId) {
 
-        menuFacade.saveFavoriteMenu(authentication.getUserId(), menuId);
+        FavoriteMenu favoriteMenu = menuFacade.saveFavoriteMenu(authentication.getUserId(), menuId);
 
-        return ResponseEntity.noContent().build();
+        if (favoriteMenu.isFavorite()) {
+            return SuccessResponse.toResponseEntity(
+                    MenuSuccessCode.FAVORITE,
+                    MenuResponseDto.Favorite.toDto(favoriteMenu));
+        } else {
+            return SuccessResponse.toResponseEntity(
+                    MenuSuccessCode.NOT_FAVORITE,
+                    MenuResponseDto.Favorite.toDto(favoriteMenu));
+        }
     }
 
     @Operation (
@@ -222,10 +238,10 @@ public class MenuController {
     )
     @AuthRequired
     @GetMapping("/me/favorite")
-    public ResponseEntity<List<MenuResponseDto.Find>> getFavoriteMenuList (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication){
+    public ResponseEntity<SuccessResponse> getFavoriteMenuList (final @AuthUser @Parameter(hidden = true) UserAuthentication authentication){
 
-        return ResponseEntity.ok()
-                .body(menuFacade.getFavoriteMenuList(authentication.getUserId()));
+        return SuccessResponse.toResponseEntity(
+                MenuSuccessCode.FIND_FAVORITE,
+                menuFacade.getFavoriteMenuList(authentication.getUserId()));
     }
-
 }

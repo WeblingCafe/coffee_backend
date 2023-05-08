@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import webling.coffee.backend.domain.menu.entity.FavoriteMenu;
 import webling.coffee.backend.domain.menu.entity.Menu;
 
 public class MenuResponseDto {
@@ -13,7 +14,7 @@ public class MenuResponseDto {
     @Getter
     @Setter
     @Builder
-    @Schema(name = "menuResponseCreate")
+    @Schema(name = "MenuResponseCreate")
     public static class Create {
         private Long menuId;
 
@@ -45,7 +46,7 @@ public class MenuResponseDto {
     @Getter
     @Setter
     @Builder
-    @Schema(name = "menuResponseUpdate")
+    @Schema(name = "MenuResponseUpdate")
     public static class Update {
 
         private Long menuId;
@@ -78,7 +79,7 @@ public class MenuResponseDto {
     @Getter
     @Setter
     @Builder
-    @Schema(name = "menuResponseFind")
+    @Schema(name = "MenuResponseFind")
     public static class Find {
 
         private Long menuId;
@@ -121,7 +122,7 @@ public class MenuResponseDto {
     @Getter
     @Setter
     @Builder
-    @Schema(name = "menuResponseSoldOut")
+    @Schema(name = "MenuResponseSoldOut")
     public static class SoldOut {
         private Long menuId;
         private String menuName;
@@ -139,7 +140,7 @@ public class MenuResponseDto {
     @Getter
     @Setter
     @Builder
-    @Schema(name = "menuResponseRestore")
+    @Schema(name = "MenuResponseRestore")
     public static class Restore {
         private Long menuId;
         private String menuName;
@@ -150,6 +151,24 @@ public class MenuResponseDto {
                     .menuId(menu.getMenuId())
                     .menuName(menu.getMenuName())
                     .isAvailable(menu.isAvailable())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @Schema (name = "MenuResponseFavorite")
+    public static class Favorite {
+        private String MenuName;
+        private String userEmail;
+        private boolean favorite;
+
+        public static Favorite toDto (FavoriteMenu favoriteMenu) {
+            return Favorite.builder()
+                    .MenuName(favoriteMenu.getMenu().getMenuName())
+                    .userEmail(favoriteMenu.getUser() .getEmail())
+                    .favorite(favoriteMenu.isFavorite())
                     .build();
         }
     }

@@ -39,7 +39,8 @@ public class FavoriteMenu extends BaseTime {
                 .build();
     }
 
-    public static void updateFavorite(final FavoriteMenu favoriteMenu) {
+    public static FavoriteMenu updateFavorite(final FavoriteMenu favoriteMenu) {
         favoriteMenu.setFavorite(!favoriteMenu.isFavorite());
+        return favoriteMenu;
     }
 }

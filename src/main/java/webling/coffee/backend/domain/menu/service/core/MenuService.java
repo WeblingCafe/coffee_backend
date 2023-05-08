@@ -89,14 +89,14 @@ public class MenuService {
         return Menu.restore(menu);
     }
 
-    public void saveFavoriteMenu(final User user, final Menu menu) {
+    public FavoriteMenu saveFavoriteMenu(final User user, final Menu menu) {
 
         FavoriteMenu favoriteMenu = favoriteMenuRepository.findByUserAndMenu(user, menu);
 
         if (favoriteMenu != null) {
-            FavoriteMenu.updateFavorite(favoriteMenu);
+            return FavoriteMenu.updateFavorite(favoriteMenu);
         } else {
-            favoriteMenuRepository.save(FavoriteMenu.toEntity(user, menu));
+            return favoriteMenuRepository.save(FavoriteMenu.toEntity(user, menu));
         }
     }
 

@@ -17,7 +17,6 @@ public enum BoardSuccessCode implements SuccessCode {
 
     ;
 
-
     private final HttpStatus httpStatus;
 
     private final String successCode;

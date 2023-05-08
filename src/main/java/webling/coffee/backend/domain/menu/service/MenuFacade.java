@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
 import webling.coffee.backend.domain.menu.dto.response.MenuResponseDto;
+import webling.coffee.backend.domain.menu.entity.FavoriteMenu;
 import webling.coffee.backend.domain.menu.entity.Menu;
 import webling.coffee.backend.domain.menu.service.core.MenuService;
 import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
@@ -94,12 +95,12 @@ public class MenuFacade {
         return MenuResponseDto.Restore.toDto(menuService.restore(menu));
     }
 
-    public void saveFavoriteMenu(final @NotNull Long userId, final @NotNull Long menuId) {
+    public FavoriteMenu saveFavoriteMenu(final @NotNull Long userId, final @NotNull Long menuId) {
         User user = userService.findByIdAndIsAvailableTrue(userId);
 
         Menu menu = menuService.findByIdAndAvailable(menuId);
 
-        menuService.saveFavoriteMenu(user, menu);
+        return menuService.saveFavoriteMenu(user, menu);
     }
 
     public List<MenuResponseDto.Find> getFavoriteMenuList(final @NotNull Long userId) {
