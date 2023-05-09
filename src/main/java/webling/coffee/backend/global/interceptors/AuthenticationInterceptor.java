@@ -81,7 +81,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 throw new RestBusinessException.Failure(AuthenticationErrorCode.INVALID_TOKEN);
             }
 
-            User user = userService.findById(JwtUtils.getMemberIdByToken(accessToken));
+            User user = userService.findById(JwtUtils.getMemberIdByAccessToken(accessToken));
             List<Coupon> couponList = couponService.findAllByUserAndIsAvailable(user);
 
             if (isInvalidRole(authRequired, user.getUserRole())) {
@@ -110,7 +110,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                                         final @NotBlank String token) {
 
         String retrieveAccessToken = jwtUtils.generateAccessToken(
-                JwtUtils.getMemberIdByToken(token),
+                JwtUtils.getMemberIdByRefreshToken(token),
                 JwtUtils.getMemberEmailByToken(token));
 
         jwtUtils.setAuthorization (response, retrieveAccessToken);

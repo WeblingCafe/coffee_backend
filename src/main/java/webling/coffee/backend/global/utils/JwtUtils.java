@@ -9,7 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -22,6 +25,7 @@ public class JwtUtils {
 
     public static final String ACCESS_AUTHORIZATION = "Access-" + AUTHORIZATION;
     public static final String REFRESH_AUTHORIZATION = "Refresh-" + AUTHORIZATION;
+    public static final String SET_COOKIE = "Set-Cookie";
     public static final String BEARER_TOKEN_PREFIX = "Bearer ";
     private final String issuer;
     private final String secret;
@@ -41,7 +45,16 @@ public class JwtUtils {
     public HttpHeaders getAuthHeaders(Long id, String email, String refreshToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(ACCESS_AUTHORIZATION, generateAccessToken(id, email));
-        headers.add(REFRESH_AUTHORIZATION, refreshToken);
+
+        ResponseCookie cookie = ResponseCookie.from(REFRESH_AUTHORIZATION, refreshToken)
+                        .maxAge(7 * 24 * 60 * 60)
+                        .path("/")
+                        .secure(true)
+                        .sameSite("None")
+                        .httpOnly(true)
+                        .build();
+
+        headers.add(SET_COOKIE, cookie.toString());
         return headers;
     }
 
@@ -50,36 +63,49 @@ public class JwtUtils {
     }
 
     public String generateAccessToken(Long id, String email) {
-        return generateToken(id,
+        return generateAccessToken(id,
                 email,
                 accessTokenTimeout);
     }
 
     public String generateRefreshToken(Long id, String email) {
-        return generateToken(id,
+        return generateRefreshToken(id,
                 email,
                 refreshTokenTimeout);
     }
 
-    public static Long getMemberIdByToken (String token) {
+    public static Long getMemberIdByAccessToken (String token) {
         return JWT.decode(getToken(token))
                 .getClaim("id").asLong();
     }
 
+    public static Long getMemberIdByRefreshToken (String token) {
+        return JWT.decode(getToken(BEARER_TOKEN_PREFIX + token))
+                .getClaim("id").asLong();
+    }
+
     public static String getMemberEmailByToken (String token) {
-        return JWT.decode(getToken(token))
+        return JWT.decode(getToken(BEARER_TOKEN_PREFIX + token))
                 .getAudience().get(0);
     }
 
-    private String generateToken(Long id, String email, long timeout) {
+    private String generateAccessToken(Long id, String email, long timeout) {
+        return BEARER_TOKEN_PREFIX + generateJwtToken(id, email, timeout, ChronoUnit.SECONDS);
+    }
+
+    private String generateRefreshToken(Long id, String email, long timeout) {
+        return generateJwtToken(id, email, timeout, ChronoUnit.MINUTES);
+    }
+
+    private String generateJwtToken(Long id, String email, long timeout, ChronoUnit chronoUnit) {
         final Instant now = Instant.now();
 
-        return BEARER_TOKEN_PREFIX + JWT.create()
+        return JWT.create()
                 .withIssuer(issuer)
                 .withAudience(email)
                 .withClaim("id", id)
                 .withIssuedAt(Date.from(now))
-                .withExpiresAt(Date.from(now.plus(timeout, ChronoUnit.SECONDS)))
+                .withExpiresAt(Date.from(now.plus(timeout, chronoUnit)))
                 .sign(getAlgorithm(secret));
     }
 
