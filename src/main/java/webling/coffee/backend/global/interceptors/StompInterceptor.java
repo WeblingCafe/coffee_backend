@@ -2,9 +2,6 @@ package webling.coffee.backend.global.interceptors;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -25,7 +22,7 @@ import static webling.coffee.backend.global.utils.JwtUtils.REFRESH_AUTHORIZATION
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class StompHandler implements ChannelInterceptor {
+public class StompInterceptor implements ChannelInterceptor {
 
     private final JwtUtils jwtUtils;
 
