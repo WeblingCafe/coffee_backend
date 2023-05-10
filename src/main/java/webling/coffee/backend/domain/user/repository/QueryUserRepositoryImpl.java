@@ -30,7 +30,8 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
     public boolean checkUserByEmail(final @NotBlank String email) {
         return jpaQueryFactory.selectFrom(user)
                 .where(
-                        user.email.eq(email)
+                        user.email.eq(email),
+                        user.isAvailable.isTrue()
                 )
                 .fetchOne() != null
                 ;

@@ -37,7 +37,7 @@ public class User extends BaseTime {
     private Long userId;
 
     @Email
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
