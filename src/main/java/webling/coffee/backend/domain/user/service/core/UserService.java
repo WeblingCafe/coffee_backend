@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import webling.coffee.backend.domain.order.dto.request.SettlementRequestDto;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
@@ -46,9 +45,15 @@ public class UserService {
                 .orElseThrow(() -> new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND));
     }
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = true)
     public User findByIdAndIsAvailableTrue (final @NotNull Long id) {
         return userRepository.findByIdAndIsAvailableTrue(id)
+                .orElseThrow(() -> new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public User findByIdFetchCoupon (final @NotNull Long id){
+        return userRepository.findByIdFetchCoupon(id)
                 .orElseThrow(() -> new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND));
     }
 

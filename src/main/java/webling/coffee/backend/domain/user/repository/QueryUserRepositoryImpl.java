@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static webling.coffee.backend.domain.coupon.entity.QCoupon.coupon;
 import static webling.coffee.backend.domain.order.entity.QOrder.order;
 import static webling.coffee.backend.domain.order.entity.QOrderCart.orderCart;
 import static webling.coffee.backend.domain.user.entity.QUser.user;
@@ -64,6 +65,19 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
                 )
                 .fetchOne())
                 ;
+    }
+
+    @Override
+    public Optional<User> findByIdFetchCoupon(Long id) {
+        return Optional.ofNullable(jpaQueryFactory.selectFrom(user)
+                .join(user.coupons, coupon)
+                .fetchJoin()
+                .where(
+                        user.userId.eq(id),
+                        coupon.isAvailable.isTrue()
+                )
+                .fetchOne()
+        );
     }
 
     @Override

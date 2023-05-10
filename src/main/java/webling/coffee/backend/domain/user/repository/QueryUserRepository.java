@@ -21,4 +21,5 @@ public interface QueryUserRepository {
 
     User settlementMeBySearchOptions(final @NotNull User user, final @NotNull SettlementRequestDto.RegDate request);
 
+    Optional<User> findByIdFetchCoupon(Long id);
 }

@@ -81,14 +81,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 throw new RestBusinessException.Failure(AuthenticationErrorCode.INVALID_TOKEN);
             }
 
-            User user = userService.findById(JwtUtils.getMemberIdByAccessToken(accessToken));
-            List<Coupon> couponList = couponService.findAllByUserAndIsAvailable(user);
+            User user = userService.findByIdFetchCoupon(JwtUtils.getMemberIdByAccessToken(accessToken));
 
             if (isInvalidRole(authRequired, user.getUserRole())) {
                 throw new RestBusinessException.Failure(AuthenticationErrorCode.ACCESS_DENIED);
             }
 
-            UserContext.setAuthentication(UserAuthentication.from(user, couponList.size()));
+            UserContext.setAuthentication(UserAuthentication.from(user, user.getCoupons().size()));
         }
         return true;
     }
