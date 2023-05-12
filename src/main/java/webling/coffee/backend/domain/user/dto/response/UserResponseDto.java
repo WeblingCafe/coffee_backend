@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import webling.coffee.backend.domain.user.entity.User;
-import webling.coffee.backend.global.enums.Team;
 import webling.coffee.backend.global.enums.UserRole;
 
 import java.time.LocalDate;

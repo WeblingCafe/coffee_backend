@@ -82,7 +82,6 @@ public class AuthenticationController {
                     
                     ## [Exceptions]
                     ### 1. UserErrorCode.DUPLICATION : 중복되는 이메일 주소의 회원이 존재하는 경우 해당 예외를 리턴합니다.
-                    ### 2. EnumValueErrorCode.TEAM_VALUE_INVALID : 가입하려는 회원의 팀 정보가 enum 값으로 없을 경우 해당 예외를 리턴합니다.
                     """,
             externalDocs = @ExternalDocumentation(
                     description = """

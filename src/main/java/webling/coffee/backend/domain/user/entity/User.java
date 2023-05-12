@@ -14,7 +14,6 @@ import webling.coffee.backend.domain.order.entity.Order;
 import webling.coffee.backend.domain.order.entity.OrderCart;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.global.base.BaseTime;
-import webling.coffee.backend.global.enums.Team;
 import webling.coffee.backend.global.enums.UserRole;
 import webling.coffee.backend.global.utils.EncodingUtils;
 
