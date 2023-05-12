@@ -27,9 +27,9 @@ public class UserAuthentication {
     private String userRole;
     private Integer stamps;
     private String teamName;
-    private Integer couponAmount;
+    private Long couponAmount;
 
-    public static UserAuthentication from (User user, Integer couponAmount) {
+    public static UserAuthentication from (User user) {
         return UserAuthentication.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
@@ -40,7 +40,7 @@ public class UserAuthentication {
                 .userRole(user.getUserRole().name())
                 .stamps(user.getStamps())
                 .teamName(user.getTeamName().name())
-                .couponAmount(couponAmount)
+                .couponAmount(user.getCoupons().stream().filter(Coupon::isAvailable).count())
                 .build();
     }
 }

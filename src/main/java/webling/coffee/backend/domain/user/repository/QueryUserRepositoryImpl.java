@@ -74,8 +74,7 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
                 .join(user.coupons, coupon)
                 .fetchJoin()
                 .where(
-                        user.userId.eq(id),
-                        coupon.isAvailable.isTrue()
+                        user.userId.eq(id)
                 )
                 .fetchOne()
         );

@@ -56,10 +56,6 @@ public class JwtUtils {
         return headers;
     }
 
-    public void setAuthorization(HttpServletResponse response, String retrieveAccessToken) {
-        response.setHeader(ACCESS_AUTHORIZATION, retrieveAccessToken);
-    }
-
     public String generateAccessToken(Long id, String email) {
         return generateAccessToken(id,
                 email,
@@ -113,10 +109,6 @@ public class JwtUtils {
 
     public String getAccessToken(HttpServletRequest request) {
         return request.getHeader(ACCESS_AUTHORIZATION);
-    }
-
-    public String getRefreshToken(HttpServletRequest request) {
-        return request.getHeader(REFRESH_AUTHORIZATION);
     }
 
     public void verifyToken (String token) {

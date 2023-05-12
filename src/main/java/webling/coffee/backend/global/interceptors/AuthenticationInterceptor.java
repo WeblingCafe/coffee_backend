@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import webling.coffee.backend.domain.coupon.entity.Coupon;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
 import webling.coffee.backend.global.annotation.AuthRequired;
@@ -61,7 +62,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 throw new RestBusinessException.Failure(AuthenticationErrorCode.ACCESS_DENIED);
             }
 
-            UserContext.setAuthentication(UserAuthentication.from(user, user.getCoupons().size()));
+            UserContext.setAuthentication(UserAuthentication.from(user));
         }
         return true;
     }
