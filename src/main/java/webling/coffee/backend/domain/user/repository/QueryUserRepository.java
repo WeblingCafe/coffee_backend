@@ -20,6 +20,4 @@ public interface QueryUserRepository {
     List<User> settlementAllBySearchOptions(final @NotNull SettlementRequestDto.Search request);
 
     User settlementMeBySearchOptions(final @NotNull User user, final @NotNull SettlementRequestDto.RegDate request);
-
-    Optional<User> findByIdFetchCoupon(Long id);
 }

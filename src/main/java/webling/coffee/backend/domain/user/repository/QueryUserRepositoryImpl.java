@@ -67,18 +67,6 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
     }
 
     @Override
-    public Optional<User> findByIdFetchCoupon(Long id) {
-        return Optional.ofNullable(jpaQueryFactory.selectFrom(user)
-                .join(user.coupons, coupon)
-                .fetchJoin()
-                .where(
-                        user.userId.eq(id)
-                )
-                .fetchOne()
-        );
-    }
-
-    @Override
     public List<User> settlementAllBySearchOptions(final @NotNull SettlementRequestDto.Search request) {
         return jpaQueryFactory.selectFrom(user)
                 .leftJoin(user.orderCart, orderCart)

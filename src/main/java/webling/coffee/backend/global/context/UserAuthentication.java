@@ -3,7 +3,6 @@ package webling.coffee.backend.global.context;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import webling.coffee.backend.domain.coupon.entity.Coupon;
 import webling.coffee.backend.domain.user.entity.User;
 
 import java.time.LocalDate;
@@ -24,9 +23,9 @@ public class UserAuthentication {
     private LocalDate birthDate;
     private String userRole;
     private Integer stamps;
-    private Long couponAmount;
+    private int couponAmount;
 
-    public static UserAuthentication from (User user) {
+    public static UserAuthentication from (User user, int couponAmount) {
         return UserAuthentication.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
@@ -35,7 +34,7 @@ public class UserAuthentication {
                 .birthDate(user.getBirthDate())
                 .userRole(user.getUserRole().name())
                 .stamps(user.getStamps())
-                .couponAmount(user.getCoupons().stream().filter(Coupon::isAvailable).count())
+                .couponAmount(couponAmount)
                 .build();
     }
 }

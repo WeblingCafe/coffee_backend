@@ -51,12 +51,6 @@ public class UserService {
                 .orElseThrow(() -> new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND));
     }
 
-    @Transactional(readOnly = true)
-    public User findByIdFetchCoupon (final @NotNull Long id){
-        return userRepository.findByIdFetchCoupon(id)
-                .orElseThrow(() -> new RestBusinessException.NotFound(UserErrorCode.NOT_FOUND));
-    }
-
     public User update(final @NotNull User user, final @NotNull UserRequestDto.UpdateInfo request) {
         return userRepository.save(User.update(user, request));
     }

@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import webling.coffee.backend.domain.coupon.entity.Coupon;
+import webling.coffee.backend.domain.coupon.service.core.CouponService;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
 import webling.coffee.backend.global.annotation.AuthRequired;
@@ -20,6 +22,7 @@ import webling.coffee.backend.global.responses.errors.codes.AuthenticationErrorC
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 import webling.coffee.backend.global.utils.JwtUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -28,8 +31,8 @@ import java.util.Objects;
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     private final JwtUtils jwtUtils;
-
     private final UserService userService;
+    private final CouponService couponService;
 
     @Override
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
@@ -55,13 +58,14 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 throw new RestBusinessException.Failure(AuthenticationErrorCode.INVALID_TOKEN);
             }
 
-            User user = userService.findByIdFetchCoupon(JwtUtils.getMemberIdByAccessToken(accessToken));
+            User user = userService.findByIdAndIsAvailableTrue(JwtUtils.getMemberIdByAccessToken(accessToken));
+            List<Coupon> couponList = couponService.findAllByUserAndIsAvailable(user);
 
             if (isInvalidRole(authRequired, user.getUserRole())) {
                 throw new RestBusinessException.Failure(AuthenticationErrorCode.ACCESS_DENIED);
             }
 
-            UserContext.setAuthentication(UserAuthentication.from(user));
+            UserContext.setAuthentication(UserAuthentication.from(user, couponList.size()));
         }
         return true;
     }
