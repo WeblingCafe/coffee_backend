@@ -51,9 +51,6 @@ public class User extends BaseTime {
     private String password;
 
     @Column(nullable = false)
-    private String phoneNumber;
-
-    @Column(nullable = false)
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
@@ -64,9 +61,6 @@ public class User extends BaseTime {
     private Boolean isAvailable;
 
     private Integer stamps;
-
-    @Enumerated(EnumType.STRING)
-    private Team teamName;
 
     @OrderBy("orderId asc")
     @OneToMany(mappedBy = "user")
@@ -90,12 +84,10 @@ public class User extends BaseTime {
                 .username(request.getUsername())
                 .nickname(request.getNickname())
                 .password(EncodingUtils.encode(request.getPassword()))
-                .phoneNumber(request.getPhoneNumber())
                 .birthDate(request.getBirthDate())
                 .userRole(UserRole.EMPLOYEE)
                 .isAvailable(true)
                 .stamps(0)
-                .teamName(Team.of(request.getTeam()))
                 .build();
     }
 
@@ -107,9 +99,6 @@ public class User extends BaseTime {
 
         if (StringUtils.hasText(request.getNickname()))
             user.setNickname(request.getNickname());
-
-        if (StringUtils.hasText(request.getPhoneNumber()))
-            user.setPhoneNumber(request.getPhoneNumber());
 
         if (StringUtils.hasText(request.getPassword()))
             user.setPassword(EncodingUtils.encode(request.getPassword()));

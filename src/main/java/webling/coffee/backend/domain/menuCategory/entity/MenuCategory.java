@@ -9,7 +9,6 @@ import webling.coffee.backend.domain.menu.entity.Menu;
 import webling.coffee.backend.domain.menuCategory.dto.request.MenuCategoryRequestDto;
 import webling.coffee.backend.global.base.BaseTime;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -32,7 +31,7 @@ public class MenuCategory extends BaseTime {
     private boolean isAvailable;
 
     @OneToMany(mappedBy = "category")
-    private List<Menu> menuList = new ArrayList<>();
+    private List<Menu> menuList;
 
     public static MenuCategory create(final @NotNull MenuCategoryRequestDto.Create request) {
         return MenuCategory.builder()

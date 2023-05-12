@@ -44,11 +44,9 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
                 user.email,
                 user.username,
                 user.nickname,
-                user.phoneNumber,
                 user.birthDate,
                 user.userRole,
-                user.stamps,
-                user.teamName
+                user.stamps
         ))
                 .from(user)
                 .where(
