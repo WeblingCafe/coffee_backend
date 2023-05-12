@@ -91,7 +91,7 @@ public class AuthenticationController {
                             """,
                     url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee")
     )
-    @PostMapping("")
+    @PostMapping("/register")
     public ResponseEntity<SuccessResponse> register (@RequestBody UserRequestDto.@Valid Register request) {
 
         return SuccessResponse.toResponseEntity(

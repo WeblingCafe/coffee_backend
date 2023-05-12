@@ -11,7 +11,7 @@ import webling.coffee.backend.global.utils.JsonUtil;
 
 import java.util.Enumeration;
 
-import static webling.coffee.backend.global.constant.FileFormat.*;
+import static webling.coffee.backend.global.constant.UrlTypes.*;
 
 @Slf4j
 @Configuration
@@ -78,6 +78,7 @@ public class RequestLogInterceptor implements HandlerInterceptor {
                 !request.getRequestURL().toString().contains(JS) &&
                 !request.getRequestURL().toString().contains(HTML) &&
                 !request.getRequestURL().toString().contains(SWAGGER) &&
+                !request.getRequestURL().toString().contains(API_DOCS) &&
                 !request.getHeader("user-agent").contains("ELB-HealthChecker");
     }
 
