@@ -1,5 +1,6 @@
 package webling.coffee.backend.domain.authentication.service;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +13,11 @@ import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
 import webling.coffee.backend.global.redis.entity.RefreshToken;
 import webling.coffee.backend.global.redis.service.RefreshTokenRedisService;
+import webling.coffee.backend.global.responses.errors.codes.AuthenticationErrorCode;
 import webling.coffee.backend.global.responses.errors.codes.UserErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 import webling.coffee.backend.global.utils.EncodingUtils;
+import webling.coffee.backend.global.utils.JwtUtils;
 
 @Slf4j
 @Transactional
@@ -23,8 +26,8 @@ import webling.coffee.backend.global.utils.EncodingUtils;
 public class AuthenticationFacade {
 
     private final UserService userService;
-
     private final RefreshTokenRedisService refreshTokenRedisService;
+    private final JwtUtils jwtUtils;
 
     @Value("${jwt.refresh.timeout-of-minutes}")
     private int refreshTokenExpirationTime;
@@ -43,8 +46,19 @@ public class AuthenticationFacade {
         return UserResponseDto.Login.toDto (user, refreshToken.getRefreshTokenValue());
     }
 
-    public void logout(final Long userId) {
-        User user = userService.findById(userId);
+    public String retrieveAccessToken (final @NotBlank String refreshToken) {
+        RefreshToken refreshTokenFromRedis = refreshTokenRedisService.findByEmail(JwtUtils.getMemberEmailByRefreshToken(refreshToken));
+
+        if (!isRefreshTokenValid(refreshToken, refreshTokenFromRedis.getRefreshTokenValue())) {
+            throw new RestBusinessException.NotFound(AuthenticationErrorCode.INVALID_REFRESH_TOKEN);
+        }
+
+        return jwtUtils.generateAccessToken(
+                JwtUtils.getMemberIdByRefreshToken(refreshToken),
+                JwtUtils.getMemberEmailByRefreshToken(refreshToken));
     }
 
+    private boolean isRefreshTokenValid (String refreshToken, String refreshTokenFromRedis) {
+        return refreshToken.equals(refreshTokenFromRedis);
+    }
 }

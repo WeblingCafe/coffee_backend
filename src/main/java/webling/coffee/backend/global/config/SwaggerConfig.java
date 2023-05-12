@@ -98,13 +98,7 @@ public class SwaggerConfig {
                     .name(ACCESS_AUTHORIZATION)
                     .required(true);
 
-            Parameter refreshAuthorization = new Parameter()
-                    .in(ParameterIn.HEADER.toString())
-                    .name(REFRESH_AUTHORIZATION)
-                    .required(true);
-
             operation.addParametersItem(accessAuthorization);
-            operation.addParametersItem(refreshAuthorization);
             return operation;
         };
     }

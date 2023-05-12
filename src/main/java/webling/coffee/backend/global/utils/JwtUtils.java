@@ -11,8 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -84,7 +82,7 @@ public class JwtUtils {
                 .getClaim("id").asLong();
     }
 
-    public static String getMemberEmailByToken (String token) {
+    public static String getMemberEmailByRefreshToken(String token) {
         return JWT.decode(getToken(BEARER_TOKEN_PREFIX + token))
                 .getAudience().get(0);
     }

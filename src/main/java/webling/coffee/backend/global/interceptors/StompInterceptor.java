@@ -43,7 +43,7 @@ public class StompInterceptor implements ChannelInterceptor {
                 log.debug("Access Token is Expired");
 
                 try {
-                    RefreshToken refreshTokenFromRedis = refreshTokenRedisService.findByEmail(JwtUtils.getMemberEmailByToken(refreshToken));
+                    RefreshToken refreshTokenFromRedis = refreshTokenRedisService.findByEmail(JwtUtils.getMemberEmailByRefreshToken(refreshToken));
 
                     if (!isRefreshTokenValid(refreshToken, refreshTokenFromRedis.getRefreshTokenValue())) {
                         throw new RestBusinessException.NotFound(AuthenticationErrorCode.REFRESH_TOKEN_NOT_FOUND);

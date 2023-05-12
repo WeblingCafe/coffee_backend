@@ -18,10 +18,16 @@ public class UserRequestDto {
 
     @Getter
     @Setter
+    @Schema (name = "UserRequestToken")
+    public static class Token {
+        private String refreshToken;
+    }
+
+    @Getter
+    @Setter
     @Valid
     @Schema(name = "UserRequestRegister")
     public static class Register {
-
         @Email
         private String email;
         private String username;

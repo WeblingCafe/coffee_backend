@@ -9,8 +9,10 @@ import org.springframework.http.HttpStatus;
 public enum AuthSuccessCode implements SuccessCode {
 
     LOGIN (HttpStatus.OK, "AS001", "로그인에 성공했습니다."),
-    REGISTER(HttpStatus.CREATED, "AS002", "회원가입에 성공했습니다.");
+    REGISTER(HttpStatus.CREATED, "AS002", "회원가입에 성공했습니다."),
+    RETRIEVE_ACCESS_TOKEN(HttpStatus.OK, "AS003", "ACCESS TOKEN 재발급에 성공했습니다."),
 
+    ;
 
     private final HttpStatus httpStatus;
 

@@ -29,6 +29,27 @@ public class AuthenticationController {
     private final JwtUtils jwtUtils;
 
     @Operation(
+            summary = "ACCESS TOKEN 재발급",
+            description = """
+                    ## [ACCESS TOKEN 재발급 API]
+                    ### REFRESH TOKEN 으로 ACCESS TOKEN 을 재발급합니다.
+                    
+                    ## [Exceptions]
+                    ### 1. AuthenticationErrorCode.REFRESH_TOKEN_NOT_FOUND : email 로 조회하여 Redis 에 저장된 Refresh Token 찾지 못할 경우 해당 예외를 리턴합니다.
+                    ### 2. AuthenticationErrorCode.INVALID_REFRESH_TOKEN : Redis 에 저장된 Refresh Token 과 일치하지 않을 경우 해당 예외를 리턴합니다.
+                    """
+    )
+    @PostMapping("/retrieve-token")
+    public ResponseEntity<SuccessResponse> retrieveAccessToken (final @RequestBody UserRequestDto.Token request) {
+
+        return SuccessResponse
+                .toResponseEntity(
+                        AuthSuccessCode.RETRIEVE_ACCESS_TOKEN,
+                        authenticationFacade.retrieveAccessToken(request.getRefreshToken())
+                );
+    }
+
+    @Operation(
             summary = "로그인",
             description = """
                     ## [로그인 API]

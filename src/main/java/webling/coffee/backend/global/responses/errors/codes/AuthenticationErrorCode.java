@@ -12,8 +12,8 @@ public enum AuthenticationErrorCode implements ErrorCode{
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "A002", "접근 권한이 없습니다."),
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "A003", "유효하지 않은 리프레쉬 토큰입니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "A004", "리프레쉬 토큰이 일치하지 않습니다. 탈취당한 아이디일 가능성이 있으니 유의하십시오."),
-
-    ;
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "A005", "만료된 토큰입니다."),
+    EMPTY_TOKEN(HttpStatus.BAD_REQUEST, "A006","토큰 값이 비어있습니다.");
 
     private final HttpStatus httpStatus;
 
