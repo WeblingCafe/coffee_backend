@@ -11,10 +11,10 @@ import webling.coffee.backend.global.interceptors.StompInterceptor;
 
 @Configuration
 @EnableWebSocketMessageBroker
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final StompInterceptor stompInterceptor;
+//    private final StompInterceptor stompInterceptor;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -24,12 +24,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/sub");
-        registry.setApplicationDestinationPrefixes("/pub");
+        registry.setApplicationDestinationPrefixes("/app"); // @MessageMapping 어노테이션이 달린 메소드로 라우팅 된다.
+        registry.enableSimpleBroker("/topic");
     }
 
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(stompInterceptor);
-    }
+//    @Override
+//    public void configureClientInboundChannel(ChannelRegistration registration) {
+//        registration.interceptors(stompInterceptor);
+//    }
 }

@@ -1,26 +1,26 @@
 package webling.coffee.backend.domain.order.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import webling.coffee.backend.domain.order.dto.request.ChatMessage;
 
 @Controller
-@RequiredArgsConstructor
 public class AlarmSocketController {
 
-    private final SimpMessageSendingOperations messageTemplate;
-
-    @GetMapping("/alarm/coffee")
-    public String alarmTest() {
-        return "/stomp";
+    @MessageMapping("/chat.sendMessage")
+    @SendTo("/topic/public")
+    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
+        return chatMessage;
     }
 
-    @MessageMapping("/{userId}")
-    public void message(@DestinationVariable("userId") Long userId) {
-        messageTemplate.convertAndSend("/sub/" + userId, "alarm socket connection completed.");
+    @MessageMapping("/chat.addUser")
+    @SendTo("/topic/public")
+    public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor){
+        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
+        return chatMessage;
     }
 
 }
