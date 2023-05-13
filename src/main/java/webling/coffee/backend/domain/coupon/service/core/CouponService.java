@@ -56,6 +56,10 @@ public class CouponService {
         couponRepository.saveAll(coupons);
     }
 
+    public void issueJoinCoupon (User user) {
+        couponRepository.save(Coupon.issueCoupons(user, CouponType.JOIN));
+    }
+
     public void issueCouponByStamp(User updatedUser) {
         int issueCouponNumber = updatedUser.getStamps() / STAMP_MAX_NUM;
 

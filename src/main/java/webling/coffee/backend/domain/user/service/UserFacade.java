@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import webling.coffee.backend.domain.coupon.service.core.CouponService;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
 import webling.coffee.backend.domain.user.entity.User;
@@ -23,6 +24,7 @@ import static webling.coffee.backend.domain.user.dto.response.UserResponseDto.Re
 public class UserFacade {
 
     private final UserService userService;
+    private final CouponService couponService;
 
     public Register register(final @NotNull UserRequestDto.Register request) {
 
@@ -30,7 +32,10 @@ public class UserFacade {
             throw new RestBusinessException(UserErrorCode.DUPLICATION);
         }
 
-        return UserResponseDto.Register.toDto(userService.register(request));
+        User user = userService.register(request);
+        couponService.issueJoinCoupon(user);
+
+        return UserResponseDto.Register.toDto(user);
     }
 
     public UserResponseDto.Update update(final @NotNull Long userId,
