@@ -26,33 +26,19 @@ public class StompInterceptor implements ChannelInterceptor {
 
     private final JwtUtils jwtUtils;
 
-    private final RefreshTokenRedisService refreshTokenRedisService;
-
     @Override
     public Message<?> preSend(final Message<?> message, final MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if (accessor.getCommand() == StompCommand.CONNECT) {
 
             String accessToken = (String) accessor.getHeader(ACCESS_AUTHORIZATION);
-            String refreshToken = (String) accessor.getHeader(REFRESH_AUTHORIZATION);
 
             try {
                 jwtUtils.verifyToken(accessToken);
 
             } catch (TokenExpiredException e) {
                 log.debug("Access Token is Expired");
-
-                try {
-                    RefreshToken refreshTokenFromRedis = refreshTokenRedisService.findByEmail(JwtUtils.getMemberEmailByRefreshToken(refreshToken));
-
-                    if (!isRefreshTokenValid(refreshToken, refreshTokenFromRedis.getRefreshTokenValue())) {
-                        throw new RestBusinessException.NotFound(AuthenticationErrorCode.REFRESH_TOKEN_NOT_FOUND);
-                    }
-
-                } catch (RestBusinessException.NotFound e1) {
-                    log.error("Refresh Token is Invalid");
-                    throw new RestBusinessException.Failure(AuthenticationErrorCode.INVALID_TOKEN);
-                }
+                throw new RestBusinessException.Failure(AuthenticationErrorCode.INVALID_TOKEN);
 
             } catch (JWTVerificationException e) {
                 log.error("Access Token is Invalid");
@@ -62,7 +48,4 @@ public class StompInterceptor implements ChannelInterceptor {
         return message;
     }
 
-    private boolean isRefreshTokenValid (String refreshToken, String refreshTokenFromRedis) {
-        return refreshToken.equals(refreshTokenFromRedis);
-    }
 }

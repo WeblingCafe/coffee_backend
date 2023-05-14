@@ -11,10 +11,10 @@ import webling.coffee.backend.global.interceptors.StompInterceptor;
 
 @Configuration
 @EnableWebSocketMessageBroker
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-//    private final StompInterceptor stompInterceptor;
+    private final StompInterceptor stompInterceptor;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -28,8 +28,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.enableSimpleBroker("/topic");
     }
 
-//    @Override
-//    public void configureClientInboundChannel(ChannelRegistration registration) {
-//        registration.interceptors(stompInterceptor);
-//    }
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(stompInterceptor);
+    }
 }
