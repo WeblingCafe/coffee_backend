@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -84,14 +83,14 @@ public class JwtUtils {
     }
 
     private String generateAccessToken(Long id, String email, long timeout) {
-        return BEARER_TOKEN_PREFIX + generateJwtToken(id, email, timeout, ChronoUnit.SECONDS);
+        return BEARER_TOKEN_PREFIX + generateJwtToken(id, email, timeout);
     }
 
     private String generateRefreshToken(Long id, String email, long timeout) {
-        return generateJwtToken(id, email, timeout, ChronoUnit.MINUTES);
+        return generateJwtToken(id, email, timeout);
     }
 
-    private String generateJwtToken(Long id, String email, long timeout, ChronoUnit chronoUnit) {
+    private String generateJwtToken(Long id, String email, long timeout) {
         final Instant now = Instant.now();
 
         return JWT.create()
@@ -99,7 +98,7 @@ public class JwtUtils {
                 .withAudience(email)
                 .withClaim("id", id)
                 .withIssuedAt(Date.from(now))
-                .withExpiresAt(Date.from(now.plus(timeout, chronoUnit)))
+                .withExpiresAt(Date.from(now.plus(timeout, ChronoUnit.MINUTES)))
                 .sign(getAlgorithm(secret));
     }
 
