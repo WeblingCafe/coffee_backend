@@ -6,10 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import webling.coffee.backend.domain.authentication.service.AuthenticationFacade;
 import webling.coffee.backend.domain.user.dto.request.UserRequestDto;
 import webling.coffee.backend.domain.user.dto.response.UserResponseDto;
@@ -17,6 +14,8 @@ import webling.coffee.backend.domain.user.service.UserFacade;
 import webling.coffee.backend.global.responses.success.codes.AuthSuccessCode;
 import webling.coffee.backend.global.responses.success.response.SuccessResponse;
 import webling.coffee.backend.global.utils.JwtUtils;
+
+import static webling.coffee.backend.global.utils.JwtUtils.REFRESH_AUTHORIZATION;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,12 +39,12 @@ public class AuthenticationController {
                     """
     )
     @PostMapping("/retrieve-token")
-    public ResponseEntity<SuccessResponse> retrieveAccessToken (final @RequestBody UserRequestDto.Token request) {
+    public ResponseEntity<SuccessResponse> retrieveAccessToken (final @RequestHeader(value = REFRESH_AUTHORIZATION) String refreshToken) {
 
         return SuccessResponse
                 .toResponseEntity(
                         AuthSuccessCode.RETRIEVE_ACCESS_TOKEN,
-                        authenticationFacade.retrieveAccessToken(request.getRefreshToken())
+                        authenticationFacade.retrieveAccessToken(refreshToken)
                 );
     }
 
