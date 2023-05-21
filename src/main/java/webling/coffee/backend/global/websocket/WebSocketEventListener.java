@@ -1,4 +1,4 @@
-package webling.coffee.backend.domain.order.controller;
+package webling.coffee.backend.global.websocket;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

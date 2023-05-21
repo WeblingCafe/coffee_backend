@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -18,7 +17,6 @@ import webling.coffee.backend.global.resolver.AuthenticationArgumentResolver;
 import java.util.List;
 
 import static org.springframework.http.HttpMethod.*;
-import static org.springframework.http.HttpMethod.GET;
 import static webling.coffee.backend.global.utils.JwtUtils.ACCESS_AUTHORIZATION;
 import static webling.coffee.backend.global.utils.JwtUtils.REFRESH_AUTHORIZATION;
 

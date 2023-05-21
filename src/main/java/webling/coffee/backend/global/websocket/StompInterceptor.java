@@ -1,4 +1,4 @@
-package webling.coffee.backend.global.interceptors;
+package webling.coffee.backend.global.websocket;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
@@ -10,14 +10,11 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
-import webling.coffee.backend.global.redis.entity.RefreshToken;
-import webling.coffee.backend.global.redis.service.RefreshTokenRedisService;
 import webling.coffee.backend.global.responses.errors.codes.AuthenticationErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 import webling.coffee.backend.global.utils.JwtUtils;
 
 import static webling.coffee.backend.global.utils.JwtUtils.ACCESS_AUTHORIZATION;
-import static webling.coffee.backend.global.utils.JwtUtils.REFRESH_AUTHORIZATION;
 
 @Slf4j
 @Component

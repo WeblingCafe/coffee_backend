@@ -62,4 +62,14 @@ public class UserRequestDto {
 
         private String userRole;
     }
+
+    @Getter
+    @Setter
+    @Schema (name = "UserRequestLoginAlert")
+    public static class LoginAlert {
+
+        private String userEmail;
+
+    }
+
 }
