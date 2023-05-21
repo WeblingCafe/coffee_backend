@@ -42,4 +42,14 @@ public class OrderRequestDto {
     public static class Cancel {
         private String cancelMessage;
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @Schema(name = "orderRequestCreateAlert")
+    public static class OrderCreateAlert {
+        private Long cartId;
+        private List<Long> orderIdList;
+    }
+
 }
