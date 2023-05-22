@@ -43,4 +43,21 @@ public class MenuCategoryResponseDto {
                     .build();
         }
     }
+
+    @Getter
+    @Setter
+    @Builder
+    @Schema(name = "menuCategoryResponseFind")
+    public static class Find {
+        private Long categoryId;
+
+        private String categoryName;
+
+        public static Find toDto (MenuCategory menuCategory) {
+            return Find.builder()
+                    .categoryId(menuCategory.getMenuCategoryId())
+                    .categoryName(menuCategory.getCategoryName())
+                    .build();
+        }
+    }
 }

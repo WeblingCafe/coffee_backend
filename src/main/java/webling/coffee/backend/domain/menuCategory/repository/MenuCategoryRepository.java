@@ -7,7 +7,7 @@ import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
 
 import java.util.Optional;
 
-public interface MenuCategoryRepository extends JpaRepository<MenuCategory, Long> {
+public interface MenuCategoryRepository extends JpaRepository<MenuCategory, Long>, QueryMenuCategoryRepository {
 
     Optional<MenuCategory> findByMenuCategoryId(final @NotNull Long categoryId);
 

@@ -106,6 +106,46 @@ public class MenuController {
                 menuFacade.findAllAndAvailable());
     }
 
+    @Operation(
+            summary = "카테고리 별 메뉴 리스트 전체 조회",
+            description = """
+                    ## [카테고리 별 메뉴 리스트 전체 조회 API]
+                    ### 카테고리 별로 전체 메뉴리스트를 조회 합니다.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    """
+    )
+    @AuthRequired
+    @GetMapping("/category")
+    public ResponseEntity<SuccessResponse> findAllByCategoryId () {
+
+        return SuccessResponse.toResponseEntity(
+                MenuSuccessCode.FIND,
+                menuFacade.findAllByCategory()
+        );
+    }
+
+    @Operation(
+            summary = "특정 카테고리 별 메뉴 리스트 조회",
+            description = """
+                    ## [특정 카테고리 별 메뉴 리스트 조회 API]
+                    ### 특정 카테고리 별로 메뉴리스트를 조회 합니다.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    """
+    )
+    @AuthRequired
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<SuccessResponse> findAllByCategoryId (final @NotNull @PathVariable Long categoryId) {
+
+        return SuccessResponse.toResponseEntity(
+            MenuSuccessCode.FIND,
+            menuFacade.findAllByCategoryId(categoryId)
+        );
+    }
+
     @Operation (
             summary = "메뉴 수정",
             description =
@@ -131,7 +171,7 @@ public class MenuController {
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping (value = "/{menuId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SuccessResponse> updateMenu (final @NotNull @PathVariable Long menuId,
-                                                              final @ModelAttribute MenuRequestDto.Update request) {
+                                                       final @ModelAttribute MenuRequestDto.Update request) {
 
         return SuccessResponse.toResponseEntity(
                 MenuSuccessCode.UPDATE,

@@ -12,6 +12,8 @@ import webling.coffee.backend.domain.menuCategory.repository.MenuCategoryReposit
 import webling.coffee.backend.global.responses.errors.codes.MenuCategoryErrorCode;
 import webling.coffee.backend.global.responses.errors.exceptions.RestBusinessException;
 
+import java.util.List;
+
 @Slf4j
 @Transactional
 @Service
@@ -37,5 +39,17 @@ public class MenuCategoryService {
 
     public MenuCategory update(final @NotNull MenuCategory menuCategory, final @NotNull MenuCategoryRequestDto.Update request) {
         return menuCategoryRepository.save(MenuCategory.update(menuCategory, request));
+    }
+
+    public List<MenuCategory> findAll() {
+        return menuCategoryRepository.findAll();
+    }
+
+    public List<MenuCategory> findAllByCategoryId(Long categoryId) {
+        return menuCategoryRepository.findAllByCategoryId(categoryId);
+    }
+
+    public List<MenuCategory> findAllByCategory() {
+        return menuCategoryRepository.findAllByCategory();
     }
 }

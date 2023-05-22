@@ -63,10 +63,30 @@ public class MenuCategoryController {
     @AuthRequired (roles = {BARISTA, DEVELOPER})
     @PatchMapping("/{categoryId}")
     public ResponseEntity<SuccessResponse> updateCategory (final @NotNull @PathVariable Long categoryId,
-                                                                          final @NotNull @RequestBody MenuCategoryRequestDto.Update request) {
+                                                           final @NotNull @RequestBody MenuCategoryRequestDto.Update request) {
 
         return SuccessResponse.toResponseEntity(
-                MenuSuccessCode.UPDATE,
+                MenuSuccessCode.CATEGORY_UPDATE,
                 menuCategoryFacade.update(categoryId, request));
+    }
+
+    @Operation(
+            summary = "메뉴 카테고리 전체 조회",
+            description = """
+                    ## [메뉴 카테고리 전체 조회 API]
+                    ### 메뉴 카테고리를 전체 조회 합니다.
+                    
+                    ## [호출 권한]
+                    ### ALL
+                    """
+    )
+    @AuthRequired
+    @GetMapping("")
+    public ResponseEntity<SuccessResponse> findAll () {
+
+        return SuccessResponse.toResponseEntity(
+                MenuSuccessCode.CATEGORY_FIND_ALL,
+                menuCategoryFacade.findAll()
+        );
     }
 }

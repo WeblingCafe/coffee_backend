@@ -8,6 +8,10 @@ import lombok.Getter;
 import lombok.Setter;
 import webling.coffee.backend.domain.menu.entity.FavoriteMenu;
 import webling.coffee.backend.domain.menu.entity.Menu;
+import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MenuResponseDto {
 
@@ -116,6 +120,24 @@ public class MenuResponseDto {
             this.menuPhotoUrl = menuPhotoUrl;
             this.hotAvailable = hotAvailable;
             this.coldAvailable = coldAvailable;
+        }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @Schema(name = "MenuResponseFindByCategory")
+    public static class FindByCategory {
+        private Long categoryId;
+        private String menuCategoryName;
+        private List<Find> menuDtoList;
+
+        public static FindByCategory toDto (MenuCategory menuCategory) {
+            return FindByCategory.builder()
+                    .categoryId(menuCategory.getMenuCategoryId())
+                    .menuCategoryName(menuCategory.getCategoryName())
+                    .menuDtoList(menuCategory.getMenuList().stream().map(Find::toDto).collect(Collectors.toList()))
+                    .build();
         }
     }
 
