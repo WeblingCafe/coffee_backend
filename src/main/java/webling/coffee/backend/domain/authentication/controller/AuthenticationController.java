@@ -39,7 +39,7 @@ public class AuthenticationController {
                     """
     )
     @PostMapping("/retrieve-token")
-    public ResponseEntity<SuccessResponse> retrieveAccessToken (final @RequestHeader(value = REFRESH_AUTHORIZATION) String refreshToken) {
+    public ResponseEntity<SuccessResponse> retrieveAccessToken (final @CookieValue(name = REFRESH_AUTHORIZATION) String refreshToken) {
 
         return SuccessResponse
                 .toResponseEntity(
