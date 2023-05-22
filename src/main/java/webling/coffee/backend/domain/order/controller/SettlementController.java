@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import webling.coffee.backend.domain.order.dto.request.SettlementRequestDto;
-import webling.coffee.backend.domain.order.dto.response.SettlementResponseDto;
 import webling.coffee.backend.domain.order.service.SettlementFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
-
-import java.util.List;
+import webling.coffee.backend.global.responses.success.codes.OrderSuccessCode;
+import webling.coffee.backend.global.responses.success.response.SuccessResponse;
 
 import static webling.coffee.backend.global.enums.UserRole.*;
 
@@ -46,9 +45,11 @@ public class SettlementController {
     )
     @AuthRequired (roles = {MANAGER, BARISTA, DEVELOPER})
     @PostMapping("")
-    public ResponseEntity<List<SettlementResponseDto.User>> settlementAllBySearchOptions(final @NotNull @RequestBody SettlementRequestDto.Search request) {
-        return ResponseEntity.ok()
-                .body(settlementFacade.settlementAllBySearchOptions(request));
+    public ResponseEntity<SuccessResponse> settlementAllBySearchOptions(final @NotNull @RequestBody SettlementRequestDto.Search request) {
+        return SuccessResponse.toResponseEntity(
+                OrderSuccessCode.SETTLEMENT,
+                settlementFacade.settlementAllBySearchOptions(request)
+        );
     }
 
     @Operation(
@@ -71,10 +72,12 @@ public class SettlementController {
     )
     @AuthRequired
     @PostMapping("/me")
-    public ResponseEntity<SettlementResponseDto.User> settlementMeBySearchOptions (final @NotNull @Parameter(hidden = true) @AuthUser UserAuthentication authentication,
+    public ResponseEntity<SuccessResponse> settlementMeBySearchOptions (final @NotNull @Parameter(hidden = true) @AuthUser UserAuthentication authentication,
                                                                                    final @NotNull @RequestBody SettlementRequestDto.RegDate request) {
 
-        return ResponseEntity.ok()
-                .body(settlementFacade.settlementMeBySearchOptions(authentication.getUserId(), request));
+        return SuccessResponse.toResponseEntity(
+                OrderSuccessCode.SETTLEMENT,
+                settlementFacade.settlementMeBySearchOptions(authentication.getUserId(), request)
+        );
     }
 }
