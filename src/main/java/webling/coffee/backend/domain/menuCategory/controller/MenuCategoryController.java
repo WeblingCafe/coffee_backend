@@ -80,7 +80,6 @@ public class MenuCategoryController {
                     ### ALL
                     """
     )
-    @AuthRequired
     @GetMapping("")
     public ResponseEntity<SuccessResponse> findAll () {
 

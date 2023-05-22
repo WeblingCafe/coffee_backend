@@ -96,7 +96,7 @@ public class SwaggerConfig {
             Parameter accessAuthorization = new Parameter()
                     .in(ParameterIn.HEADER.toString())
                     .name(ACCESS_AUTHORIZATION)
-                    .required(true);
+                    .required(false);
 
             operation.addParametersItem(accessAuthorization);
             return operation;

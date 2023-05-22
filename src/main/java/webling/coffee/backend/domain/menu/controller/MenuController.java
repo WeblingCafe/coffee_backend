@@ -97,7 +97,6 @@ public class MenuController {
                     ### ALL
                     """
     )
-    @AuthRequired
     @GetMapping ("")
     public ResponseEntity<SuccessResponse> findAll() {
 
