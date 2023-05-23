@@ -3,6 +3,7 @@ package webling.coffee.backend.domain.user.controller;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import webling.coffee.backend.global.annotation.AuthRequired;
 import webling.coffee.backend.global.annotation.AuthUser;
 import webling.coffee.backend.global.context.UserAuthentication;
 import webling.coffee.backend.global.redis.service.RefreshTokenRedisService;
+import webling.coffee.backend.global.responses.success.codes.AuthSuccessCode;
 import webling.coffee.backend.global.responses.success.codes.UserSuccessCode;
 import webling.coffee.backend.global.responses.success.response.SuccessResponse;
 
@@ -27,8 +29,36 @@ import static webling.coffee.backend.global.enums.UserRole.MANAGER;
 public class UserController {
 
     private final UserFacade userFacade;
-
     private final RefreshTokenRedisService refreshTokenRedisService;
+
+    @Operation(
+            summary = "회원가입 - 관리자 권한",
+            description = """
+                    ## [회원가입 - 관리자 권한 API]
+                    ### 관리자가 카페테리아 어플리케이션에 회원을 등록합니다.
+                    
+                    ## [호출 권한]
+                    ### MANAGER, DEVELOPER
+                    
+                    ## [Exceptions]
+                    ### 1. UserErrorCode.DUPLICATION : 중복되는 이메일 주소의 회원이 존재하는 경우 해당 예외를 리턴합니다.
+                    """,
+            externalDocs = @ExternalDocumentation(
+                    description = """
+                            ## [ENUM]
+                            ### 노션 링크를 참고해주세요.
+                            """,
+                    url = "https://www.notion.so/API-ENUM-c65d84ea50a249dd972d7c8c296750ee")
+    )
+    @AuthRequired (roles = {MANAGER, DEVELOPER})
+    @PostMapping("/register")
+    public ResponseEntity<SuccessResponse> register(final @NotNull @RequestBody UserRequestDto.@Valid Register request) {
+
+        return SuccessResponse.toResponseEntity(
+                UserSuccessCode.REGISTER,
+                userFacade.register(request)
+        );
+    }
 
     @Operation(
             summary = "로그아웃",
@@ -61,7 +91,7 @@ public class UserController {
     @AuthRequired
     @PatchMapping("/me")
     public ResponseEntity<SuccessResponse> update(final @AuthUser @Parameter(hidden = true) UserAuthentication authentication,
-                                                         final @NotNull @RequestBody UserRequestDto.UpdateInfo request) {
+                                                  final @NotNull @RequestBody UserRequestDto.UpdateInfo request) {
 
         return SuccessResponse.toResponseEntity(
                 UserSuccessCode.UPDATE,
