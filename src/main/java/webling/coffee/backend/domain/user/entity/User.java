@@ -124,8 +124,8 @@ public class User extends BaseTime {
         user.setStamps(user.getStamps() - usedStamps);
     }
 
-    public static User refundStamp(final User user, final Integer totalPrice) {
-        user.setStamps(user.getStamps() - totalPrice);
+    public static User refundStamp(final User user, final Integer refundStampAmount) {
+        user.setStamps(user.getStamps() - refundStampAmount);
         return user;
     }
 

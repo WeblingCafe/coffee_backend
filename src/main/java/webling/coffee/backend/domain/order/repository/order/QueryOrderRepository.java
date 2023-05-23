@@ -11,6 +11,7 @@ public interface QueryOrderRepository {
 
     List<Order> findMeOrderedAll(final @NotNull Long userId);
 
-    Order findByOrderIdAndOrderedFetchUserAndOrderCart(Long orderId);
+    Order findByOrderIdAndOrderedFetchUserAndOrderCart(final @NotNull Long orderId);
 
+    Order findByUserIdAndOrderIdAndOrderedFetchUserAndOrderCart(final @NotNull Long userId, final @NotNull Long orderId);
 }

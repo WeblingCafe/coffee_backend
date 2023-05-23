@@ -69,7 +69,18 @@ public class OrderService {
         Order order = orderRepository.findByOrderIdAndOrderedFetchUserAndOrderCart(orderId);
 
         if (order == null) {
-            throw new RestBusinessException.NotFound(OrderErrorCode.NOT_FOUNT);
+            throw new RestBusinessException.NotFound(OrderErrorCode.NOT_FOUND);
+        }
+
+        return order;
+    }
+
+    public Order findByUserIdAndOrderIdAndOrderedFetchUserAndOrderCart(final @NotNull Long userId,
+                                                                       final @NotNull Long orderId) {
+        Order order = orderRepository.findByUserIdAndOrderIdAndOrderedFetchUserAndOrderCart(userId, orderId);
+
+        if (order == null) {
+            throw new RestBusinessException.NotFound(OrderErrorCode.NOT_FOUND);
         }
 
         return order;

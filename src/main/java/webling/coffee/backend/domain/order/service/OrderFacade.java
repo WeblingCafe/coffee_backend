@@ -18,9 +18,7 @@ import webling.coffee.backend.domain.order.service.core.OrderService;
 import webling.coffee.backend.domain.user.entity.User;
 import webling.coffee.backend.domain.user.service.core.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -89,16 +87,16 @@ public class OrderFacade {
     public OrderResponseDto.Cancel cancelOrder(final @NotNull Long orderId,
                                                final @NotNull OrderRequestDto.Cancel request) {
 
-        Order orderToCancel = orderService.findByOrderIdAndOrderedFetchUserAndOrderCart(orderId);
-        orderService.cancelOrder(orderToCancel);
+        return cancelOrderProcess(
+                orderService.findByOrderIdAndOrderedFetchUserAndOrderCart(orderId),
+                request);
+    }
 
-        OrderCancel cancellationMessage = orderCancelService.saveCancelMessage(orderToCancel, request);
-
-        refundUsedCouponAmount(orderToCancel);
-        refundOrderAmount(orderToCancel.getOrderCart(), orderToCancel.getTotalPrice());
-        refundStampAmount(orderToCancel.getUser(), orderToCancel.getTotalPrice());
-
-        return OrderResponseDto.Cancel.toDto(orderToCancel, cancellationMessage);
+    @Transactional
+    public OrderResponseDto.Cancel cancelOrder(Long userId, Long orderId, OrderRequestDto.Cancel request) {
+        return cancelOrderProcess(
+                orderService.findByUserIdAndOrderIdAndOrderedFetchUserAndOrderCart(userId, orderId),
+                request);
     }
 
     private void refundUsedCouponAmount(Order orderToCancel) {
@@ -117,6 +115,19 @@ public class OrderFacade {
 
     private void refundStampAmount(User user, Long orderTotalPrice) {
         userService.refundStamp(user, orderTotalPrice);
+    }
+
+    private OrderResponseDto.Cancel cancelOrderProcess (final @NotNull Order orderToCancel,
+                                                        final @NotNull OrderRequestDto.Cancel request) {
+        orderService.cancelOrder(orderToCancel);
+
+        OrderCancel cancellationMessage = orderCancelService.saveCancelMessage(orderToCancel, request);
+
+        refundUsedCouponAmount(orderToCancel);
+        refundOrderAmount(orderToCancel.getOrderCart(), orderToCancel.getTotalPrice());
+        refundStampAmount(orderToCancel.getUser(), orderToCancel.getTotalPrice());
+
+        return OrderResponseDto.Cancel.toDto(orderToCancel, cancellationMessage);
     }
 
     public OrderResponseDto.Complete completeOrder(final @NotNull Long orderId) {

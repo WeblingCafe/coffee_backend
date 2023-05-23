@@ -53,4 +53,19 @@ public class QueryOrderRepositoryImpl implements QueryOrderRepository{
                 ;
     }
 
+    @Override
+    public Order findByUserIdAndOrderIdAndOrderedFetchUserAndOrderCart(Long userId, Long orderId) {
+        return jpaQueryFactory.selectFrom(order)
+                .join(order.user, user)
+                .fetchJoin()
+                .join(order.orderCart, orderCart)
+                .fetchJoin()
+                .where(
+                        user.userId.eq(userId),
+                        order.orderId.eq(orderId),
+                        order.orderStatus.eq(OrderStatus.ORDERED)
+                )
+                .fetchFirst()
+                ;
+    }
 }
