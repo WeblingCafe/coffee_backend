@@ -38,8 +38,9 @@ public class OrderAlertController {
      * 주문 완료시 유저에게 웹소켓 통한 알림
      * @param userId
      */
-    @MessageMapping("/alert/order/complete/{userId}")
-    public void orderCompleted(@DestinationVariable("userId") Long userId) {
+    @MessageMapping("/alert/complete/{userId}/order/{orderId}")
+    public void orderCompleted(@DestinationVariable("userId") Long userId,
+                               @DestinationVariable("orderId") Long orderId) {
         messagingTemplate.convertAndSend("/topic/" + userId, "alarm socket connection completed.");
     }
 
@@ -47,8 +48,9 @@ public class OrderAlertController {
      * 주문 취소 (by 바리스타) 유저에게 웹소켓 통한 알림
      * @param userId
      */
-    @MessageMapping("/alert/order/cancel/{userId}")
-    public void orderCancelByBarista(@DestinationVariable("userId") Long userId) {
+    @MessageMapping("/alert/cancel/{userId}/order/{orderId}")
+    public void orderCancelByBarista(@DestinationVariable("userId") Long userId,
+                                     @DestinationVariable("orderId") Long orderId) {
         messagingTemplate.convertAndSend("/topic/" + userId, "alarm socket connection completed.");
     }
 
