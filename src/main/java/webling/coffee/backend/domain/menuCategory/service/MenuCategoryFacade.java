@@ -43,9 +43,17 @@ public class MenuCategoryFacade {
         return MenuCategoryResponseDto.Update.toDto(menuCategoryService.update(menuCategory, request));
     }
 
+    public MenuCategoryResponseDto.Delete delete(final @NotNull Long categoryId) {
+        MenuCategory menuCategory = menuCategoryService.findById(categoryId);
+
+        return MenuCategoryResponseDto.Delete.toDto(menuCategoryService.delete(menuCategory));
+    }
+
     public List<MenuCategoryResponseDto.Find> findAll() {
         return menuCategoryService.findAll().stream()
                 .map(MenuCategoryResponseDto.Find::toDto)
                 .collect(Collectors.toList());
     }
+
+
 }

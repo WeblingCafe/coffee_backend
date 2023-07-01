@@ -47,4 +47,10 @@ public class MenuCategory extends BaseTime {
 
         return menuCategory;
     }
+
+    public static MenuCategory delete(final @NotNull MenuCategory menuCategory) {
+        menuCategory.setAvailable(false);
+        return menuCategory;
+    }
+
 }

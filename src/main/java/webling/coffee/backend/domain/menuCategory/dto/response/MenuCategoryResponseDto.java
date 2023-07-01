@@ -47,6 +47,27 @@ public class MenuCategoryResponseDto {
     @Getter
     @Setter
     @Builder
+    @Schema(name = "menuCategoryResponseDelete")
+    public static class Delete {
+
+        private Long categoryId;
+
+        private String categoryName;
+
+        private boolean isAvailable;
+
+        public static Delete toDto (MenuCategory menuCategory) {
+            return Delete.builder()
+                    .categoryId(menuCategory.getMenuCategoryId())
+                    .categoryName(menuCategory.getCategoryName())
+                    .isAvailable(menuCategory.isAvailable())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Setter
+    @Builder
     @Schema(name = "menuCategoryResponseFind")
     public static class Find {
         private Long categoryId;

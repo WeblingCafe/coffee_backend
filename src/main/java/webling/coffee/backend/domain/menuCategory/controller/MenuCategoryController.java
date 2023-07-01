@@ -71,6 +71,29 @@ public class MenuCategoryController {
     }
 
     @Operation(
+            summary = "메뉴 카테고리 삭제 (비활성화)",
+            description = """
+                    ## [메뉴 카테고리 삭제 API]
+                    ### 기존의 메뉴 카테고리를 삭제합니다.
+                    ### 메뉴 카테고리의 isAvailable 값을 false 로 변경합니다.
+                    
+                    ## [호출 권한]
+                    ### BARISTA, DEVELOPER
+                    
+                    ## [Exceptions]
+                    ### MenuCategoryErrorCode.NOT_FOUND : 삭제하려는 메뉴카테고리를 찾을 수 없는 경우 해당 예외를 리턴합니다.
+                    """
+    )
+    @AuthRequired (roles = {BARISTA, DEVELOPER})
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<SuccessResponse> deleteCategory (final @NotNull @PathVariable Long categoryId) {
+
+        return SuccessResponse.toResponseEntity(
+                MenuSuccessCode.CATEGORY_DELETE,
+                menuCategoryFacade.delete(categoryId));
+    }
+
+    @Operation(
             summary = "메뉴 카테고리 전체 조회",
             description = """
                     ## [메뉴 카테고리 전체 조회 API]

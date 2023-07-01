@@ -41,6 +41,10 @@ public class MenuCategoryService {
         return menuCategoryRepository.save(MenuCategory.update(menuCategory, request));
     }
 
+    public MenuCategory delete(final MenuCategory menuCategory) {
+        return menuCategoryRepository.save(MenuCategory.delete(menuCategory));
+    }
+
     public List<MenuCategory> findAll() {
         return menuCategoryRepository.findAll();
     }
@@ -52,4 +56,5 @@ public class MenuCategoryService {
     public List<MenuCategory> findAllByCategory() {
         return menuCategoryRepository.findAllByCategory();
     }
+
 }
