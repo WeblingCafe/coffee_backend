@@ -30,7 +30,6 @@ public class BoardFacade {
                                           final @NotNull BoardRequestDto.Create request) {
 
         User user = userService.findByIdAndIsAvailableTrue(userId);
-
         return BoardResponseDto.Create.toDto(boardService.create(user, request));
     }
 
