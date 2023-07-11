@@ -73,7 +73,6 @@ public class BoardFacade {
         if (board.isAvailable()) {
             throw new RestBusinessException.Failure(BoardErrorCode.IS_AVAILABLE);
         }
-
         return BoardResponseDto.Find.toDto(boardService.enable(board));
     }
 }
