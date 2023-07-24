@@ -58,7 +58,7 @@ public class MenuFacade {
 
     }
 
-    @Transactional (readOnly = true)
+    @Transactional(readOnly = true)
     public MenuResponseDto.Find findByIdAndAvailable(Long id) {
         Menu menu = menuService.findById(id);
 
@@ -66,10 +66,10 @@ public class MenuFacade {
             throw new RestBusinessException(MenuErrorCode.NOT_AVAILABLE);
         }
 
-        return MenuResponseDto.Find.toDto (menu);
+        return MenuResponseDto.Find.toDto(menu);
     }
 
-    @Transactional (readOnly = true)
+    @Transactional(readOnly = true)
     public List<MenuResponseDto.Find> findAllAndAvailable(final @NotNull MenuRequestDto.Search request) {
         return menuService.findAllAvailable(request);
     }
@@ -111,8 +111,10 @@ public class MenuFacade {
         return menuService.getFavoriteMenuList(user);
     }
 
-    public List<MenuResponseDto.FindByCategory> findAllByCategory() {
-        return menuCategoryService.findAllByCategory().stream().map(MenuResponseDto.FindByCategory::toDto).collect(Collectors.toList());
+    public List<MenuResponseDto.FindByCategory> findAllByCategory(final @NotNull MenuRequestDto.Search request) {
+        return menuCategoryService.findAllByCategory(request).stream()
+                .map(MenuResponseDto.FindByCategory::toDto)
+                .collect(Collectors.toList());
     }
 
     public List<MenuResponseDto.FindByCategory> findAllByCategoryId(final Long categoryId) {

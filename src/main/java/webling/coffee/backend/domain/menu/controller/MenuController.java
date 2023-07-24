@@ -117,11 +117,11 @@ public class MenuController {
     )
     @AuthRequired
     @GetMapping("/category")
-    public ResponseEntity<SuccessResponse> findAllByCategoryId () {
+    public ResponseEntity<SuccessResponse> findAllByCategoryId (@ModelAttribute MenuRequestDto.Search request) {
 
         return SuccessResponse.toResponseEntity(
                 MenuSuccessCode.FIND,
-                menuFacade.findAllByCategory()
+                menuFacade.findAllByCategory(request)
         );
     }
 

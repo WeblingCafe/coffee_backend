@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
 import webling.coffee.backend.domain.menuCategory.dto.request.MenuCategoryRequestDto;
 import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
 import webling.coffee.backend.domain.menuCategory.repository.MenuCategoryRepository;
@@ -53,8 +54,8 @@ public class MenuCategoryService {
         return menuCategoryRepository.findAllByCategoryId(categoryId);
     }
 
-    public List<MenuCategory> findAllByCategory() {
-        return menuCategoryRepository.findAllByCategory();
+    public List<MenuCategory> findAllByCategory(final @NotNull MenuRequestDto.Search request) {
+        return menuCategoryRepository.findAllByCategory(request);
     }
 
 }

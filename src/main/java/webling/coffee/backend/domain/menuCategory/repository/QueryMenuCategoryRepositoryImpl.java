@@ -1,7 +1,9 @@
 package webling.coffee.backend.domain.menuCategory.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
 import webling.coffee.backend.domain.menuCategory.entity.MenuCategory;
 
 import java.util.List;
@@ -27,10 +29,12 @@ public class QueryMenuCategoryRepositoryImpl implements QueryMenuCategoryReposit
     }
 
     @Override
-    public List<MenuCategory> findAllByCategory() {
+    public List<MenuCategory> findAllByCategory(final @NotNull MenuRequestDto.Search request) {
         return jpaQueryFactory.selectFrom(menuCategory)
                 .join(menuCategory.menuList, menu)
                 .fetchJoin()
+                .limit(request.getPage())
+                .offset(request.getOffSet())
                 .fetch();
     }
 }
