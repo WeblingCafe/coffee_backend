@@ -61,8 +61,8 @@ public class MenuService {
     }
 
     @Transactional(readOnly = true)
-    public List<MenuResponseDto.Find> findAllAvailable() {
-        return menuRepository.findAllAvailable();
+    public List<MenuResponseDto.Find> findAllAvailable(final @NotNull MenuRequestDto.Search request) {
+        return menuRepository.findAllAvailable(request);
     }
 
     public Menu updateMenuWithCategory(Menu menu, MenuCategory menuCategory, MenuRequestDto.Update request) {

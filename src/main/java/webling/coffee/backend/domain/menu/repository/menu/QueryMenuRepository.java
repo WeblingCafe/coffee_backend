@@ -1,6 +1,7 @@
 package webling.coffee.backend.domain.menu.repository.menu;
 
 import jakarta.validation.constraints.NotNull;
+import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
 import webling.coffee.backend.domain.menu.dto.response.MenuResponseDto;
 import webling.coffee.backend.domain.menu.entity.Menu;
 import webling.coffee.backend.domain.user.entity.User;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 public interface QueryMenuRepository {
 
-    List<MenuResponseDto.Find> findAllAvailable ();
+    List<MenuResponseDto.Find> findAllAvailable (final @NotNull MenuRequestDto.Search request);
 
     Optional<Menu> findByIdAndAvailable(final @NotNull Long id);
 

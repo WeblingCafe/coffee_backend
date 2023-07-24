@@ -1,7 +1,9 @@
 package webling.coffee.backend.domain.menu.repository.menu;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import webling.coffee.backend.domain.menu.dto.request.MenuRequestDto;
 import webling.coffee.backend.domain.menu.dto.response.MenuResponseDto;
 import webling.coffee.backend.domain.menu.dto.response.QMenuResponseDto_Find;
 import webling.coffee.backend.domain.menu.entity.Menu;
@@ -20,7 +22,7 @@ public class QueryMenuRepositoryImpl implements QueryMenuRepository{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<MenuResponseDto.Find> findAllAvailable() {
+    public List<MenuResponseDto.Find> findAllAvailable(final @NotNull MenuRequestDto.Search request) {
         return jpaQueryFactory.select(new QMenuResponseDto_Find(
                 menu.menuId,
                 menu.menuName,
@@ -35,6 +37,8 @@ public class QueryMenuRepositoryImpl implements QueryMenuRepository{
                 .where(
                         menu.isAvailable.isTrue()
                 )
+                .limit(request.getSize())
+                .offset(request.getOffSet())
                 .fetch();
     }
 

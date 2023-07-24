@@ -98,11 +98,11 @@ public class MenuController {
                     """
     )
     @GetMapping ("")
-    public ResponseEntity<SuccessResponse> findAll() {
+    public ResponseEntity<SuccessResponse> findAll(@ModelAttribute MenuRequestDto.Search request) {
 
         return SuccessResponse.toResponseEntity(
                 MenuSuccessCode.FIND,
-                menuFacade.findAllAndAvailable());
+                menuFacade.findAllAndAvailable(request));
     }
 
     @Operation(

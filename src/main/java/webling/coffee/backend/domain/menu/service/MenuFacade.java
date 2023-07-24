@@ -70,8 +70,8 @@ public class MenuFacade {
     }
 
     @Transactional (readOnly = true)
-    public List<MenuResponseDto.Find> findAllAndAvailable() {
-        return menuService.findAllAvailable();
+    public List<MenuResponseDto.Find> findAllAndAvailable(final @NotNull MenuRequestDto.Search request) {
+        return menuService.findAllAvailable(request);
     }
 
     public MenuResponseDto.SoldOut soldOut(Long id) {
