@@ -47,8 +47,9 @@ public class BoardFacade {
         return BoardResponseDto.Update.toDto(boardService.update(board, request));
     }
 
-    public List<BoardResponseDto.Find> findAllByCategoryNameAndIsAvailableTrue(final @NotNull String categoryName) {
-        return boardService.findAllByCategoryNameAndIsAvailableTrue(categoryName);
+    public List<BoardResponseDto.Find> findAllByCategoryNameAndIsAvailableTrue(final @NotNull String categoryName,
+                                                                               final @NotNull BoardRequestDto.Search request) {
+        return boardService.findAllByCategoryNameAndIsAvailableTrue(categoryName, request);
     }
 
     public BoardResponseDto.Find findByBoardIdAndIsAvailableTrue(final @NotNull Long boardId) {

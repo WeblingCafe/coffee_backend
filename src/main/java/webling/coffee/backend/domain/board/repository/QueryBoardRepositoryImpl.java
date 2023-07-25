@@ -2,8 +2,10 @@ package webling.coffee.backend.domain.board.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
+import webling.coffee.backend.domain.board.dto.request.BoardRequestDto;
 import webling.coffee.backend.domain.board.dto.response.BoardResponseDto;
 import webling.coffee.backend.domain.board.dto.response.QBoardResponseDto_Find;
 import webling.coffee.backend.global.enums.BoardCategory;
@@ -18,7 +20,7 @@ public class QueryBoardRepositoryImpl implements QueryBoardRepository{
     private final JPAQueryFactory jpaQueryFactory ;
 
     @Override
-    public List<BoardResponseDto.Find> findAllByCategoryNameAndIsAvailableTrue(String categoryName) {
+    public List<BoardResponseDto.Find> findAllByCategoryNameAndIsAvailableTrue(String categoryName, final @NotNull BoardRequestDto.Search request) {
         return jpaQueryFactory.select(new QBoardResponseDto_Find(
                 board.boardId,
                 board.title,
@@ -29,6 +31,8 @@ public class QueryBoardRepositoryImpl implements QueryBoardRepository{
                     board.isAvailable.isTrue(),
                     boardCategoryEq(categoryName)
                 )
+                .limit(request.getSize())
+                .offset(request.getOffSet())
                 .fetch();
     }
 
