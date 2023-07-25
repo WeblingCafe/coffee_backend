@@ -112,11 +112,12 @@ public class BoardController {
     )
     @AuthRequired
     @GetMapping ("")
-    public ResponseEntity<SuccessResponse> findAllByIsAvailableTrue (final @RequestParam(required = false) String categoryName) {
+    public ResponseEntity<SuccessResponse> findAllByIsAvailableTrue (final @RequestParam(required = false) String categoryName,
+                                                                     final @ModelAttribute BoardRequestDto.Search request) {
 
         return SuccessResponse.toResponseEntity(
                 BoardSuccessCode.FIND_ALL_AVAILABLE_TRUE,
-                boardFacade.findAllByCategoryNameAndIsAvailableTrue(categoryName)
+                boardFacade.findAllByCategoryNameAndIsAvailableTrue(categoryName, request)
         );
     }
 

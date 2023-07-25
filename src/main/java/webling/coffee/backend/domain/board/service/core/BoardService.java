@@ -40,8 +40,8 @@ public class BoardService {
         return boardRepository.save(Board.update(board, request));
     }
 
-    public List<BoardResponseDto.Find> findAllByCategoryNameAndIsAvailableTrue(String categoryName) {
-        return boardRepository.findAllByCategoryNameAndIsAvailableTrue(categoryName);
+    public List<BoardResponseDto.Find> findAllByCategoryNameAndIsAvailableTrue(String categoryName, final @NotNull BoardRequestDto.Search request) {
+        return boardRepository.findAllByCategoryNameAndIsAvailableTrue(categoryName, request);
     }
 
     public BoardResponseDto.Find findByBoardIdAndIsAvailableTrue(final @NotNull Long boardId) {
