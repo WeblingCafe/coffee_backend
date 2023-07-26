@@ -76,7 +76,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User settlementMeBySearchOptions(final @NotNull User user,
-                                            final @NotNull SettlementRequestDto.RegDate request) {
+                                            final @NotNull SettlementRequestDto.BaseField request) {
         return userRepository.settlementMeBySearchOptions(user, request);
     }
 

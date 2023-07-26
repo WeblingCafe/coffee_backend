@@ -6,6 +6,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class SettlementRequestDto {
 
     @Getter
@@ -18,15 +21,24 @@ public class SettlementRequestDto {
         private String username;
         private String userNickname;
         @JsonUnwrapped
-        private RegDate regDate;
+        private BaseField baseField;
     }
 
     @Getter
     @Setter
     @NoArgsConstructor
-    @Schema(name = "SettlementRequestRegDate")
-    public static class RegDate {
+    @Schema(name = "SettlementRequestBaseField")
+    public static class BaseField {
+
+        private static final int MAX_SIZE = 200;
+
+        private Integer page = 1;
+        private Integer size = 10;
         private LocalDateTime fromDate;
         private LocalDateTime toDate;
+
+        public long getOffSet () {
+            return (long) (max(1, page) -1) * min(size, MAX_SIZE);
+        }
     }
 }

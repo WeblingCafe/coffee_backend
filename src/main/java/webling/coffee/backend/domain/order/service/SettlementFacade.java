@@ -31,7 +31,7 @@ public class SettlementFacade {
     }
 
     public SettlementResponseDto.User settlementMeBySearchOptions(final @NotNull Long userId,
-                                                                  final @NotNull SettlementRequestDto.RegDate request) {
+                                                                  final @NotNull SettlementRequestDto.BaseField request) {
 
         User user = userService.findByIdAndIsAvailableTrue(userId);
 

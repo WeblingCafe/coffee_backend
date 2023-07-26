@@ -6,10 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import webling.coffee.backend.domain.order.dto.request.SettlementRequestDto;
 import webling.coffee.backend.domain.order.service.SettlementFacade;
 import webling.coffee.backend.global.annotation.AuthRequired;
@@ -71,9 +68,9 @@ public class SettlementController {
                     """
     )
     @AuthRequired
-    @PostMapping("/me")
+    @GetMapping("/me")
     public ResponseEntity<SuccessResponse> settlementMeBySearchOptions (final @NotNull @Parameter(hidden = true) @AuthUser UserAuthentication authentication,
-                                                                                   final @NotNull @RequestBody SettlementRequestDto.RegDate request) {
+                                                                                   final @NotNull @RequestBody SettlementRequestDto.BaseField request) {
 
         return SuccessResponse.toResponseEntity(
                 OrderSuccessCode.SETTLEMENT,
