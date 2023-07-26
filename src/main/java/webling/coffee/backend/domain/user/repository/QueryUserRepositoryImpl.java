@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static webling.coffee.backend.domain.coupon.entity.QCoupon.coupon;
 import static webling.coffee.backend.domain.order.entity.QOrder.order;
 import static webling.coffee.backend.domain.order.entity.QOrderCart.orderCart;
 import static webling.coffee.backend.domain.user.entity.QUser.user;
@@ -75,7 +74,7 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
                 .fetchJoin()
                 .where(
                     order.orderStatus.eq(OrderStatus.COMPLETED),
-                    regDateBetween(request.getRegDate()),
+                    regDateBetween(request.getBaseField()),
                     usernameLike(request.getUsername()),
                     nicknameLike(request.getUserNickname())
                 )
@@ -84,7 +83,7 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
     }
 
     @Override
-    public User settlementMeBySearchOptions(final User entity, final SettlementRequestDto.RegDate request) {
+    public User settlementMeBySearchOptions(final User entity, final SettlementRequestDto.BaseField request) {
         return jpaQueryFactory.selectFrom(user)
                 .leftJoin(user.orderCart, orderCart)
                 .fetchJoin()
@@ -95,11 +94,13 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
                         order.orderStatus.eq(OrderStatus.COMPLETED),
                         regDateBetween(request)
                 )
+                .limit(request.getSize())
+                .offset(request.getOffSet())
                 .fetchFirst()
                 ;
     }
 
-    private BooleanExpression regDateBetween (final @NotNull SettlementRequestDto.RegDate request) {
+    private BooleanExpression regDateBetween (final @NotNull SettlementRequestDto.BaseField request) {
 
         if (request.getFromDate() == null && request.getToDate() == null) {
             return null;
