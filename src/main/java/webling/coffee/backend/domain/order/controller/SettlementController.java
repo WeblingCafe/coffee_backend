@@ -35,6 +35,7 @@ public class SettlementController {
                     ### - 주문 내역의 fromDate 가 null 인 경우 15일 전을 기본값으로 조회합니다.
                     ### - 주문 내역의 toDate 가 null 인 경우 지금 시점을 기본값으로 조회합니다.
                     ### - fromDate 와 toDate 가 모두 null 인 경우 현재시점과 15일전 사이의 모든 내역을 조회합니다.
+                    ### - pagination 추가 (page, size)
                     
                     ## [호출 권한]
                     ### MANAGER, BARISTA, DEVELOPER
@@ -59,6 +60,7 @@ public class SettlementController {
                     ### - 주문 내역의 fromDate 가 null 인 경우 15일 전을 기본값으로 조회합니다.
                     ### - 주문 내역의 toDate 가 null 인 경우 지금 시점을 기본값으로 조회합니다.
                     ### - fromDate 와 toDate 가 모두 null 인 경우 현재시점과 15일전 사이의 모든 내역을 조회합니다.
+                    ### - pagination 추가 (page, size)
                     
                     ## [호출 권한]
                     ### ALL
