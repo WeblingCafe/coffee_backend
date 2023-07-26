@@ -78,6 +78,8 @@ public class QueryUserRepositoryImpl implements QueryUserRepository{
                     usernameLike(request.getUsername()),
                     nicknameLike(request.getUserNickname())
                 )
+                .limit(request.getBaseField().getSize())
+                .offset(request.getBaseField().getOffSet())
                 .fetch()
                 ;
     }

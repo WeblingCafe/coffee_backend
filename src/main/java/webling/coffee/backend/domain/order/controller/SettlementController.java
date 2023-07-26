@@ -41,8 +41,8 @@ public class SettlementController {
                     """
     )
     @AuthRequired (roles = {MANAGER, BARISTA, DEVELOPER})
-    @PostMapping("")
-    public ResponseEntity<SuccessResponse> settlementAllBySearchOptions(final @NotNull @RequestBody SettlementRequestDto.Search request) {
+    @GetMapping("")
+    public ResponseEntity<SuccessResponse> settlementAllBySearchOptions(final @NotNull @ModelAttribute SettlementRequestDto.Search request) {
         return SuccessResponse.toResponseEntity(
                 OrderSuccessCode.SETTLEMENT,
                 settlementFacade.settlementAllBySearchOptions(request)
