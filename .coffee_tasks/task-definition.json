@@ -135,8 +135,8 @@
     }
   ],
   "executionRoleArn": "ecsTaskExecutionRole",
-  "cpu": "2048",
-  "memory": "4096",
+  "cpu": "512",
+  "memory": "1024",
   "networkMode": "awsvpc",
   "requiresCompatibilities": [
     "FARGATE"
