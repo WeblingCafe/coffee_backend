@@ -45,7 +45,7 @@ jwt:
   issuer: coffee
   secret: coffee-secret
   access:
-    timeout-of-minutes: 5
+    timeout-of-minutes: 525600
   refresh:
     timeout-of-minutes: 525600
 
